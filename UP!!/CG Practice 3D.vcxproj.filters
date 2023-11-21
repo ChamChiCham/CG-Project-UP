@@ -25,6 +25,9 @@
     <Filter Include="Struct">
       <UniqueIdentifier>{f658d6aa-59c9-447c-9fee-fc8a262b7097}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{92090633-3a46-4ecd-84a6-abe7b60ff993}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -38,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="CShapeDataMgr.cpp">
       <Filter>CShapeDataMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="CShapeDataMgr.h">
       <Filter>CShapeDataMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>resource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
