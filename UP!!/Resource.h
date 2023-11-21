@@ -63,7 +63,21 @@ public:
 	float& z = pos.z;
 	
 	CBrick();
+	CBrick(const glm::vec3& _pos);
 
 	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+
+};
+
+class CMap
+{
+	// 임시로 bricks를 public 한정자로, vector<CBrick> 자료형으로 만들었다.
+	// 자료구조와 한정자는 추후 수정할 것이다.
+public:
+	std::vector<CBrick> bricks;
+
+
+	void createBrick();
+	void createBricks(const std::vector<float>& _data);
 
 };

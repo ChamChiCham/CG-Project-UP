@@ -81,6 +81,7 @@ private:
 	std::vector<CShape> shapes;
 
 	CBrick brick;
+	CMap map;
 
 public:
 
@@ -123,16 +124,42 @@ public:
 		// create shape data
 		// --
 
+		// 조명의 위치.
 		light.pos = { 0.f, 0.f, 5.f };
 		
+		// #####
+		// readme
+		// #####
+		// brick에 setData와 setColor을 할 필요가 없다. 기본적으로 SHAPE_DICE 형태와 0x00FF00의 색이 들어가 있다.
+		// 색을 바꾸고 싶다면 다른 색으로 setColor을 해주어도 무방하다.
+		// brick의 좌표는 glm::vec3 형태의 pos 또는 float x,y,z 로 설정할 수 있다. 각 좌표가 블록의 원점이라고 생각하면 편하다.
+
+		// 하지만 마지막에 업데이트 버퍼는 해주어야 한다.
+		// brick.updateBuffer();
+
+		// 아래는 맵을 만드는 과정이다.
+		// brick_data에 float형 좌표를 넣어주면 된다.
+		std::vector<float> brick_data =
+		{
+			0.f, 1.f, 1.f,
+			2.f, 1.f, 1.f,
+			-2.f, 1.f, 1.f,
+		};
+
+		map.createBricks(brick_data);
+
+		// 또한, createBrick()으로 빈 자료를 넣을 수도 있다.
+		map.createBrick();
+
 
 		for (auto& shape : shapes)
 			shape.updateBuffer();
 
-		brick.updateBuffer();
-
 		//for (auto& line : lines)
 		//	line.updateBuffer();
+
+		for (auto& brick : map.bricks)
+			brick.updateBuffer();
 
 
 		// --
@@ -172,7 +199,13 @@ public:
 		for (auto& shape : shapes)
 			shape.draw(ShaderMgr.program, view, proj, mode, light);
 
-		brick.draw(ShaderMgr.program, view, proj, mode, light);
+		// 아래 문장의 주석을 풀면 아무것도 건들지 않은 brick의 예시를 볼 수 있다. 
+		// brick.draw(ShaderMgr.program, view, proj, mode, light);
+
+
+		// 맵에 있는 brick 그리기
+		for (auto& brick : map.bricks)
+			brick.draw(ShaderMgr.program, view, proj, mode, light);
 
 
 		glutSwapBuffers();
