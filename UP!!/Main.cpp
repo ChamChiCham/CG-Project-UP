@@ -74,15 +74,13 @@ private:
 	glm::vec3	background = glm::vec3(0.f, 0.f, 0.f);
 
 
-	// --
+	// ---
 	// process member variable
-	// --
+	// ---
 
 	std::vector<CShape> shapes;
-	
-	
-	int mode_c = 0;
-	int mode_r = 0;
+
+	CBrick brick;
 
 public:
 
@@ -126,39 +124,12 @@ public:
 		// --
 
 		light.pos = { 0.f, 0.f, 5.f };
-
-
-		shapes.push_back(CShape());
-		shapes[0].setData(SHAPE_SPHERE);
-		shapes[0].setColor(1.f, 0.f, 0.f);
-		shapes[0].translate(0, 0.f, -0.05f, 0.f);
-		shapes[0].scale(1, 0.392837782f, 0.392837782f, 0.392837782f);
-
-		shapes.push_back(CShape());
-		shapes[1].setData(SHAPE_SPHERE);
-		shapes[1].setColor(0.f, 1.f, 0.f);
-		shapes[1].translate(0, 0.f, -0.05f, 0.f);
-		shapes[1].scale(1, 0.392837782f, 0.392837782f, 0.392837782f);
-		shapes[1].scale(1, 0.5f, 0.5f, 0.5f);
-		shapes[1].translate(2, -2.0f, 0.f, 0.f);
-
-		shapes.push_back(CShape());
-		shapes[2].setData(SHAPE_SPHERE);
-		shapes[2].setColor(0.f, 0.f, 1.f);
-		shapes[2].translate(0, 0.f, -0.05f, 0.f);
-		shapes[2].scale(1, 0.392837782f, 0.392837782f, 0.392837782f);
-		shapes[2].scale(1, 0.3f, 0.3f, 0.3f);
-		shapes[2].translate(2, -4.0f, 0.f, 0.f);
-
-		shapes.push_back(CShape());
-		shapes[3].setData(SHAPE_DICE);
-		shapes[3].setColor(0.3f, 0.3f, 0.3f);
-		shapes[3].scale(0, 0.3f, 0.3f, 0.3f);
-		shapes[3].translate(1, 0.0f, 0.f, 5.f);
 		
 
 		for (auto& shape : shapes)
 			shape.updateBuffer();
+
+		brick.updateBuffer();
 
 		//for (auto& line : lines)
 		//	line.updateBuffer();
@@ -189,7 +160,7 @@ public:
 	// define cb func
 	// --
 
-	void Display() const
+	void Display()
 	{
 		glClearColor(background.r, background.g, background.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -198,8 +169,10 @@ public:
 
 		glEnable(GL_DEPTH_TEST);
 
-		for (const auto& shape : shapes)
+		for (auto& shape : shapes)
 			shape.draw(ShaderMgr.program, view, proj, mode, light);
+
+		brick.draw(ShaderMgr.program, view, proj, mode, light);
 
 
 		glutSwapBuffers();
@@ -212,55 +185,7 @@ public:
 
 	void Keyboard(const unsigned char _key, const int _x, const int _y)
 	{
-		switch (_key)
-		{
-		case 'c':
-			switch (mode_c)
-			{
-			case 0:
-				mode_c++;
-				light.color = { 1.f, 0.f, 0.f };
-				break;
-
-			case 1:
-				mode_c++;
-				light.color = { 0.f, 1.f, 0.f };
-				break;
-
-			case 2:
-				mode_c++;
-				light.color = { 0.f, 0.f, 1.f };
-				break;
-
-			case 3:
-				mode_c = 0;
-				light.color = { 1.f, 1.f, 1.f };
-				break;
-			}
-			break;
-
-		case 'r':
-			if (mode_r == 1)
-				mode_r = 0;
-			else
-				mode_r = 1;
-
-			break;
-
-		case 'R':
-			if (mode_r == -1)
-				mode_r = 0;
-			else
-				mode_r = -1;
-			break;
-
-		case 'q':
-			PostQuitMessage(0);
-			break;
-
-		default:
-			break;
-		}
+		
 	}
 
 	void Motion(const int _x, const int _y)
@@ -275,14 +200,7 @@ public:
 
 	void updateState()
 	{
-		if (mode_r != 0) {
-			float angle = glm::radians(1.f * -mode_r);
-			float newX = light.x * cos(angle) - light.z * sin(angle);
-			float newZ = light.x * sin(angle) + light.z * cos(angle);
-			light.x = newX;
-			light.z = newZ;
-			shapes[3].rotate(3, 1.f * mode_r, 0.f, 1.f, 0.f);
-		}
+		
 	}
 
 

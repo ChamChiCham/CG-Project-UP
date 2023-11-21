@@ -25,14 +25,14 @@ void CShapeDataMgr::init()
 	data.push_back(SShapeData());
 	data[SHAPE_DICE].coords =
 	{
-		1.f,	1.f,	1.f,
-		-1.f,	1.f,	1.f,
-		1.f,	-1.f,	1.f,
-		-1.f,	-1.f,	1.f,
-		1.f,	1.f,	-1.f,
-		-1.f,	1.f,	-1.f,
-		1.f,	-1.f,	-1.f,
-		-1.f,	-1.f,	-1.f
+		0.5f,	0.5f,	0.5f,
+		-0.5f,	0.5f,	0.5f,
+		0.5f,	-0.5f,	0.5f,
+		-0.5f,	-0.5f,	0.5f,
+		0.5f,	0.5f,	-0.5f,
+		-0.5f,	0.5f,	-0.5f,
+		0.5f,	-0.5f,	-0.5f,
+		-0.5f,	-0.5f,	-0.5f
 	};
 
 	data[SHAPE_DICE].normals =

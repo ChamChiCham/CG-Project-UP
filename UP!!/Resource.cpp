@@ -1,5 +1,9 @@
 #include "Resource.h"
 
+// --
+// CShape member function
+// --
+
 void CShape::updateBuffer()
 {
 	if (data == nullptr) {
@@ -46,7 +50,7 @@ void CShape::setData(const int _shape)
 	data = &CShapeDataMgr::getInst()->getData(_shape);
 }
 
-void CShape::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) const
+void CShape::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	glUseProgram(_program);
 
@@ -161,4 +165,21 @@ void CShape::clearMatrix(const int _idx)
 	if (mats.size() <= _idx)
 		return;
 	mats[_idx] = glm::mat4(1.f);
+}
+
+// --
+// CBrick member function
+// --
+
+CBrick::CBrick()
+{
+	setData(SHAPE_DICE);
+	setColor(0.f, 1.f, 0.f);
+}
+
+void CBrick::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	translate(static_cast<int>(mats.size()), pos);
+	CShape::draw(_program, _view, _proj, _mode, _light);
+	mats.pop_back();
 }
