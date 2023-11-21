@@ -204,7 +204,7 @@ void CMap::createBricks(const std::vector<float>& _data)
 	}
 
 	for (int i = 0; i < _data.size() / 3; ++i) {
-		bricks.push_back(CBrick(glm::vec3(_data[i * 3], _data[i * 3 + 1], _data[i * 3 + 2])));
+		bricks.push_back(CBrick(glm::vec3(_data[i * 3 + 1], _data[i * 3], _data[i * 3 + 2])));
 	}
 
 }

@@ -82,7 +82,8 @@ private:
 
 	CBrick brick;
 	CMap map;
-
+	float d = 0.f;
+	float s = 0.f;
 public:
 
 	// --
@@ -125,7 +126,7 @@ public:
 		// --
 
 		// 조명의 위치.
-		light.pos = { 0.f, 0.f, 5.f };
+		light.pos = { 3.f, 0.f, 10.f };
 		
 		// #####
 		// readme
@@ -139,11 +140,59 @@ public:
 
 		// 아래는 맵을 만드는 과정이다.
 		// brick_data에 float형 좌표를 넣어주면 된다.
+		// 순서는 y, x, z순이다.
 		std::vector<float> brick_data =
 		{
-			0.f, 1.f, 1.f,
-			2.f, 1.f, 1.f,
-			-2.f, 1.f, 1.f,
+			0, 0, 0,
+			0, 1, 0,
+			0, 2, 0,
+			0, 3, 0,
+			0, 4, 0,
+			0, 5, 0,
+
+			1, 0, -1,
+			1, 1, -1,
+			1, 2, -1,
+			1, 3, -1,
+			1, 4, -1,
+			1, 5, -1,
+
+			2, 0, -2,
+			2, 1, -2,
+			2, 2, -2,
+			2, 3, -2,
+			2, 4, -2,
+			2, 5, -2,
+
+			3, 1, -2,
+			3, 4, -2,
+
+			3, 0, -3,
+			3, 2, -3,
+			3, 3, -3,
+			3, 5, -3,
+
+			4, 0, -3,
+			4, 1, -3,
+			4, 2, -3,
+			4, 3, -3,
+			4, 4, -3,
+			4, 5, -3,
+
+			5, 1, -3,
+			5, 4, -3,
+
+			5, 0, -4,
+			5, 2, -4,
+			5, 3, -4,
+			5, 5, -4,
+
+			6, 0, -4,
+			6, 1, -4,
+			6, 2, -4,
+			6, 3, -4,
+			6, 4, -4,
+			6, 5, -4,
 		};
 
 		map.createBricks(brick_data);
@@ -166,8 +215,8 @@ public:
 		// set view
 		// --
 
-		view.eye = glm::vec3(0.0f, 0.0f, 10.0f);
-		view.at = glm::vec3(0.f, 0.f, 0.0f);
+		view.eye = glm::vec3(3.0f, 3.0f, 10.0f);
+		view.at = glm::vec3(3.f, 3.f, 0.0f);
 		view.up = glm::vec3(0.f, 1.f, 0.f);
 
 		proj = glm::perspective(glm::radians(60.f), 1.0f, 0.1f, 20.f);
@@ -177,10 +226,9 @@ public:
 		// explain
 		// --
 
-		std::cout << "c:  조명 색을 다른 색으로 바뀌도록 한다. ( W -> R -> G -> B -> W )" << std::endl;
-		std::cout << "r/R:  조명의 위치를 중심의 구의 y축에 대하여 양/음 방향으로 회전한다." << std::endl;
-		std::cout << "q: 프로그램 종료" << std::endl;
-
+		std::cout << "4/6: 카메라 x이동" << std::endl;
+		std::cout << "8/5: 카메라 x이동" << std::endl;
+		std::cout << "7/9: 카메라 y회전" << std::endl;
 	}
 
 	// --
@@ -218,7 +266,36 @@ public:
 
 	void Keyboard(const unsigned char _key, const int _x, const int _y)
 	{
-		
+		switch (_key) {
+		case '8':
+			view.eye.y += 0.1;
+			view.at.y += 0.1;
+			break;
+		case '5':
+			view.eye.y -= 0.1;
+			view.at.y -= 0.1;
+			break;
+		case '4':
+			view.eye.x -= 0.1;
+			view.at.x -= 0.1;
+			break;
+		case '6':
+			view.eye.x += 0.1;
+			view.at.x += 0.1;
+			break;
+		case '7':
+			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
+			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
+			view.eye.x = view.at.x + d * cos(s + glm::radians(2.f));
+			view.eye.z = view.at.z + d * sin(s + glm::radians(2.f));
+			break;
+		case '9':
+			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
+			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
+			view.eye.x = view.at.x + d * cos(s + glm::radians(-2.f));
+			view.eye.z = view.at.z + d * sin(s + glm::radians(-2.f));
+			break;
+		}
 	}
 
 	void Motion(const int _x, const int _y)

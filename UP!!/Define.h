@@ -18,8 +18,8 @@ enum
 	WINDOW_POSITION_Y = 50,
 
 	// Window Size
-	WINDOW_SIZE_X = 1280,
-	WINDOW_SIZE_Y = 960,
+	WINDOW_SIZE_X = 600,
+	WINDOW_SIZE_Y = 600,
 
 	// shape name
 	SHAPE_DICE = 0,
@@ -31,4 +31,4 @@ enum
 };
 
 
-constexpr const char* WINDOW_TITLE = "Example";
+constexpr const char* WINDOW_TITLE = "UP!!";
