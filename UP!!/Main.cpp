@@ -321,7 +321,7 @@ public:
 			21, 3, -11,
 			21, 4, -11,
 
-
+			22, 3, -11,
 		};
 
 		map.createBricks(brick_data);
@@ -338,8 +338,9 @@ public:
 		// ---
 		// READ ME: use this
 		// ---
-		map(2, 0, -2).setColor(0.5f, 0.5f, 0.5f);
-
+		map(7, 1, -4).setColor(0.5f, 0.5f, 0.5f);
+		map(22, 3, -11).setColor(1.f, 0.f, 0.f);
+		
 		// --
 		// set view
 		// --
