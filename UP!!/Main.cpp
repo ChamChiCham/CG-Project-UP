@@ -80,8 +80,8 @@ private:
 
 	std::vector<CShape> shapes;
 
-	CBrick brick;
 	CMap map;
+
 	float d = 0.f;
 	float s = 0.f;
 public:
@@ -141,7 +141,7 @@ public:
 		// 아래는 맵을 만드는 과정이다.
 		// brick_data에 float형 좌표를 넣어주면 된다.
 		// 순서는 y, x, z순이다.
-		std::vector<float> brick_data =
+		std::vector<int> brick_data =
 		{
 			0, 0, 0,
 			0, 1, 0,
@@ -197,10 +197,6 @@ public:
 
 		map.createBricks(brick_data);
 
-		// 또한, createBrick()으로 빈 자료를 넣을 수도 있다.
-		map.createBrick();
-
-
 		for (auto& shape : shapes)
 			shape.updateBuffer();
 
@@ -210,6 +206,10 @@ public:
 		for (auto& brick : map.bricks)
 			brick.updateBuffer();
 
+		// ---
+		// READ ME: use this
+		// ---
+		map(2, 0, -2).setColor(0.5f, 0.5f, 0.5f);
 
 		// --
 		// set view
@@ -219,7 +219,7 @@ public:
 		view.at = glm::vec3(3.f, 3.f, 0.0f);
 		view.up = glm::vec3(0.f, 1.f, 0.f);
 
-		proj = glm::perspective(glm::radians(60.f), 1.0f, 0.1f, 20.f);
+		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
 
 
 		// --
@@ -246,10 +246,6 @@ public:
 
 		for (auto& shape : shapes)
 			shape.draw(ShaderMgr.program, view, proj, mode, light);
-
-		// 아래 문장의 주석을 풀면 아무것도 건들지 않은 brick의 예시를 볼 수 있다. 
-		// brick.draw(ShaderMgr.program, view, proj, mode, light);
-
 
 		// 맵에 있는 brick 그리기
 		for (auto& brick : map.bricks)

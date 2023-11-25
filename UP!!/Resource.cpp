@@ -177,7 +177,7 @@ CBrick::CBrick()
 	setColor(0.f, 1.f, 0.f);
 }
 
-CBrick::CBrick(const glm::vec3& _pos)
+CBrick::CBrick(const glm::ivec3& _pos)
 {
 	setData(SHAPE_DICE);
 	setColor(0.f, 1.f, 0.f);
@@ -186,7 +186,8 @@ CBrick::CBrick(const glm::vec3& _pos)
 
 void CBrick::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
-	translate(static_cast<int>(mats.size()), pos);
+
+	translate(static_cast<int>(mats.size()), static_cast<glm::vec3>(pos));
 	CShape::draw(_program, _view, _proj, _mode, _light);
 	mats.pop_back();
 }
@@ -196,7 +197,7 @@ void CMap::createBrick()
 	bricks.push_back(CBrick());
 }
 
-void CMap::createBricks(const std::vector<float>& _data)
+void CMap::createBricks(const std::vector<int>& _data)
 {
 	if (_data.size() % 3 != 0) {
 		std::cerr << "createBricks(): 받은 데이터가 3으로 나누어 떨어지지 않습니다." << std::endl;
@@ -207,4 +208,25 @@ void CMap::createBricks(const std::vector<float>& _data)
 		bricks.push_back(CBrick(glm::vec3(_data[i * 3 + 1], _data[i * 3], _data[i * 3 + 2])));
 	}
 
+}
+
+CBrick& CMap::operator()(const glm::ivec3 _pos)
+{
+	if (bricks.empty()) {
+		std::cerr << "CMap::operator[](): Cannot find any Bricks." << std::endl;
+		assert(false);
+	}
+	for (auto& brick : bricks) {
+		if (brick.pos == _pos) {
+			return brick;
+		}
+	}
+	
+	std::cerr << "CMap::operator[](): Cannot find Brick. Returned first instance." << std::endl;
+	return bricks[0];
+}
+
+CBrick& CMap::operator()(const int _y, const int _x, const int _z)
+{
+	return (*this)(glm::ivec3(_x, _y, _z));
 }

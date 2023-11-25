@@ -57,13 +57,13 @@ class CBrick : public CShape
 {
 public:
 
-	glm::vec3 pos = { 0.f, 0.f, 0.f };
-	float& x = pos.x;
-	float& y = pos.y;
-	float& z = pos.z;
+	glm::ivec3 pos = { 0.f, 0.f, 0.f };
+	int& x = pos.x;
+	int& y = pos.y;
+	int& z = pos.z;
 	
 	CBrick();
-	CBrick(const glm::vec3& _pos);
+	CBrick(const glm::ivec3& _pos);
 
 	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
 
@@ -78,6 +78,9 @@ public:
 
 
 	void createBrick();
-	void createBricks(const std::vector<float>& _data);
+	void createBricks(const std::vector<int>& _data);
+
+	CBrick& operator()(const glm::ivec3 _pos);
+	CBrick& operator()(const int _y, const int _x, const int _z);
 
 };
