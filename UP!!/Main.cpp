@@ -124,23 +124,8 @@ public:
 		// --
 		// create shape data
 		// --
-
-		// 조명의 위치.
-		light.pos = { 3.f, 0.f, 10.f };
 		
-		// #####
-		// readme
-		// #####
-		// brick에 setData와 setColor을 할 필요가 없다. 기본적으로 SHAPE_DICE 형태와 0x00FF00의 색이 들어가 있다.
-		// 색을 바꾸고 싶다면 다른 색으로 setColor을 해주어도 무방하다.
-		// brick의 좌표는 glm::vec3 형태의 pos 또는 float x,y,z 로 설정할 수 있다. 각 좌표가 블록의 원점이라고 생각하면 편하다.
 
-		// 하지만 마지막에 업데이트 버퍼는 해주어야 한다.
-		// brick.updateBuffer();
-
-		// 아래는 맵을 만드는 과정이다.
-		// brick_data에 float형 좌표를 넣어주면 된다.
-		// 순서는 y, x, z순이다.
 		std::vector<int> brick_data =
 		{
 			0, 0, 0,
@@ -370,14 +355,12 @@ public:
 		for (auto& brick : map.bricks)
 			brick.updateBuffer();
 
-		// ---
-		// READ ME: use this
-		// ---
 		// map(21, 6, -8).setColor(1.f, 0.f, 0.f);
 		
 		// --
 		// set view
 		// --
+		light.pos = { 3.f, 0.f, 10.f };
 
 		view.eye = glm::vec3(3.0f, 3.0f, 10.0f);
 		view.at = glm::vec3(3.f, 3.f, 0.0f);

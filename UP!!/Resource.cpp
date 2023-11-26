@@ -14,7 +14,8 @@ void CShape::updateBuffer()
 	if (buffer.VAO != 0) {
 		glDeleteVertexArrays(1, &buffer.VAO);
 		glDeleteBuffers(2, buffer.VBO);
-		glDeleteBuffers(1, &buffer.EBO);
+		if (!data->indices.empty())
+			glDeleteBuffers(1, &buffer.EBO);
 	}
 
 
@@ -27,10 +28,11 @@ void CShape::updateBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(GLfloat), data->normals.data(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &buffer.EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
-
+	if (!data->indices.empty()) {
+		glGenBuffers(1, &buffer.EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
+	}
 	glGenVertexArrays(1, &buffer.VAO);
 	glBindVertexArray(buffer.VAO);
 
@@ -42,7 +44,9 @@ void CShape::updateBuffer()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+	if (!data->indices.empty()) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+	}
 }
 
 void CShape::setData(const int _shape)
@@ -86,8 +90,13 @@ void CShape::draw(const unsigned int _program, const SView& _view, const glm::ma
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &MV[0][0]);
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &MP[0][0]);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
-	glDrawElements(_mode, data->indices.size(), GL_UNSIGNED_INT, 0);
+	if (data->indices.empty()) {
+		glDrawArrays(_mode, 0, data->coords.size() / 3);
+	}
+	else {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+		glDrawElements(_mode, data->indices.size(), GL_UNSIGNED_INT, 0);
+	}
 }
 
 void CShape::scale(const int _idx, const float _fir, const float _sec, const float _thi)

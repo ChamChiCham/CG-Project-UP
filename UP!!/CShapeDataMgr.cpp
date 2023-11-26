@@ -20,50 +20,32 @@ CShapeDataMgr::CShapeDataMgr()
 
 void CShapeDataMgr::init()
 {
-	data.reserve(6);
-
-	data.push_back(SShapeData());
+	data.resize(SHAPE_SPHERE + 1);
 	data[SHAPE_DICE].coords =
 	{
-		0.5f,	0.5f,	0.5f,
-		-0.5f,	0.5f,	0.5f,
-		0.5f,	-0.5f,	0.5f,
-		-0.5f,	-0.5f,	0.5f,
-		0.5f,	0.5f,	-0.5f,
-		-0.5f,	0.5f,	-0.5f,
-		0.5f,	-0.5f,	-0.5f,
-		-0.5f,	-0.5f,	-0.5f
+		-0.5f, -0.5f, -0.5f,	0.5f, -0.5f, -0.5f,		0.5f,  0.5f, -0.5f,
+		0.5f,  0.5f, -0.5f,		-0.5f,  0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,	0.5f, -0.5f,  0.5f,		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,		-0.5f,  0.5f,  0.5f,	-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,	-0.5f,  0.5f, -0.5f,	-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,	-0.5f, -0.5f,  0.5f,	-0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,		0.5f,  0.5f, -0.5f,		0.5f, -0.5f, -0.5f,
+		0.5f, -0.5f, -0.5f,		0.5f, -0.5f,  0.5f,		0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,	0.5f, -0.5f, -0.5f,		0.5f, -0.5f,  0.5f,
+		0.5f, -0.5f,  0.5f,		-0.5f, -0.5f,  0.5f,	-0.5f, -0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,	0.5f,  0.5f, -0.5f,		0.5f,  0.5f,  0.5f,
+		0.5f,  0.5f,  0.5f,		-0.5f,  0.5f,  0.5f,	-0.5f,  0.5f, -0.5f
 	};
-
 	data[SHAPE_DICE].normals =
 	{
-		0.5773502692f, 0.5773502692f, 0.5773502692f,
-		-0.5773502692f, 0.5773502692f, 0.5773502692f,
-		0.5773502692f, -0.5773502692f, 0.5773502692f,
-		-0.5773502692f, -0.5773502692f, 0.5773502692f,
-		0.5773502692f, 0.5773502692f, -0.5773502692f,
-		-0.5773502692f, 0.5773502692f, -0.5773502692f,
-		0.5773502692f, -0.5773502692f, -0.5773502692f,
-		-0.5773502692f, -0.5773502692f, -0.5773502692f,
+		0.0f,  0.0f, -1.0f, 0.0f,  0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  1.0f,
+		  -1.0f,  0.0f,  0.0f,  -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,  -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+		   1.0f,  0.0f,  0.0f, 1.0f,  0.0f,  0.0f, 1.0f,  0.0f,  0.0f, 1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+			0.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f, 0.0f, -1.0f,  0.0f,  0.0f, -1.0f,  0.0f,
+			 0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,  1.0f,  0.0
 	};
 
-	data[SHAPE_DICE].indices =
-	{
-		0, 3, 1,
-		0, 2, 3,
-		0, 4, 2,
-		2, 4, 6,
-		2, 6, 3,
-		3, 6, 7,
-		4, 7, 6,
-		4, 5, 7,
-		7, 5, 3,
-		1, 3, 5,
-		4, 1, 5,
-		0, 1, 4
-	};
-
-	data.push_back(SShapeData());
 	data[SHAPE_SQUARE_PRAMID].coords =
 	{
 		0.f,	1.f,	0.f,
@@ -92,24 +74,7 @@ void CShapeDataMgr::init()
 		1, 4, 3
 	};
 
-	//data.push_back(SShapeData());
-	//data[SHAPE_TETRA].coords =
-	//{
-	//	0.f,	1.f,	0.f,
-	//	1.f,	-1.f,	1.f,
-	//	-1.f,	-1.f,	1.f,
-	//	0.f,	-1.f,	-1.f
-	//};
 
-	//data[SHAPE_TETRA].indices =
-	//{
-	//	0, 2, 1,
-	//	0, 3, 2,
-	//	0, 1, 3,
-	//	1, 2, 3
-	//};
-
-	data.push_back(SShapeData());
 	data[SHAPE_SQUARE].coords =
 	{
 		1.f,	0.f,	1.f,
@@ -132,7 +97,6 @@ void CShapeDataMgr::init()
 		1, 2, 3
 	};
 
-	data.push_back(SShapeData());
 	data[SHAPE_TRIANGLE].coords =
 	{
 		1.f,	0.f,	1.f,
@@ -153,8 +117,6 @@ void CShapeDataMgr::init()
 	};
 
 	initObj("Sphere.obj", SHAPE_SPHERE);
-
-	// initObj("cylinder.obj", SHAPE_CYLINDER);
 }
 
 void CShapeDataMgr::initObj(const char* _obj, const int _shape)
