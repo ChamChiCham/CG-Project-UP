@@ -20,7 +20,7 @@ CShapeDataMgr::CShapeDataMgr()
 
 void CShapeDataMgr::init()
 {
-	data.resize(SHAPE_SPHERE + 1);
+	data.resize(SHAPE_MAX);
 	data[SHAPE_DICE].coords =
 	{
 		-0.5f, -0.5f, -0.5f,	0.5f, -0.5f, -0.5f,		0.5f,  0.5f, -0.5f,
@@ -116,8 +116,9 @@ void CShapeDataMgr::init()
 		0, 2, 1
 	};
 
-	initObj("Sphere.obj", SHAPE_SPHERE);
-}
+	initObj("obj\\sphere.obj", SHAPE_SPHERE);
+	// initObj("obj\\player_stand.obj", SHAPE_PLAYER);
+}	
 
 void CShapeDataMgr::initObj(const char* _obj, const int _shape)
 {

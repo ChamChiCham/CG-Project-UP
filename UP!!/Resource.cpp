@@ -109,7 +109,6 @@ void CShape::scale(const int _idx, const glm::vec3 _vec)
 	while (mats.size() <= _idx) {
 		mats.push_back(glm::mat4(1.f));
 	}
-
 	mats[_idx] = glm::scale(mats[_idx], _vec);
 }
 

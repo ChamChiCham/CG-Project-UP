@@ -27,6 +27,8 @@ enum
 	SHAPE_SQUARE,
 	SHAPE_TRIANGLE,
 	SHAPE_SPHERE, // 중심: 0, 0.5, 0 / 지름: 5.09116 .transform(0, 0.f, -0.05f, 0.f); .scale(1, 0.392837782.f,,);
+	SHAPE_PLAYER,
+	SHAPE_MAX
 };
 
 

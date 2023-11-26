@@ -346,6 +346,11 @@ public:
 
 		map.createBricks(brick_data);
 
+		shapes.push_back(CShape());
+		shapes[0].setData(SHAPE_PLAYER);
+		shapes[0].setColor(0.5f, 0.5f, 0.5f);
+
+
 		for (auto& shape : shapes)
 			shape.updateBuffer();
 
@@ -396,8 +401,8 @@ public:
 			shape.draw(ShaderMgr.program, view, proj, mode, light);
 
 		// 맵에 있는 brick 그리기
-		for (auto& brick : map.bricks)
-			brick.draw(ShaderMgr.program, view, proj, mode, light);
+		/*for (auto& brick : map.bricks)
+			brick.draw(ShaderMgr.program, view, proj, mode, light);*/
 
 
 		glutSwapBuffers();

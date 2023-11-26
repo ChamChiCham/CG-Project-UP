@@ -69,6 +69,11 @@ public:
 
 };
 
+class CPlayer
+{
+	
+};
+
 class CMap
 {
 	// 임시로 bricks를 public 한정자로, vector<CBrick> 자료형으로 만들었다.
