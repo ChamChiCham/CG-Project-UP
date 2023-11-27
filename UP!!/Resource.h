@@ -54,6 +54,7 @@ public:
 
 	void clearMatrix(const int _idx);
 	void setMatrix(CShape& _other);
+	const size_t getMatrixSize();
 
 };
 
@@ -82,9 +83,9 @@ private:
 	
 	int			status = PLAYER_STAND;
 	glm::ivec3	pos = { 0.f, 0.f, 0.f };
-	int& x =	pos.x;
-	int& y =	pos.y;
-	int& z =	pos.z;
+	int&		x =	pos.x;
+	int&		y =	pos.y;
+	int&		z =	pos.z;
 
 public:
 	void init();

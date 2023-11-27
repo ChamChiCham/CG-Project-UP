@@ -183,6 +183,11 @@ void CShape::setMatrix(CShape& _other)
 	mats = _other.mats;
 }
 
+const size_t CShape::getMatrixSize()
+{
+	return mats.size();
+}
+
 // --
 // CBrick member function
 // --
@@ -306,7 +311,9 @@ void CPlayer::init()
 
 void CPlayer::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
+	shapes[status].translate(static_cast<int>(shapes[status].getMatrixSize()), static_cast<glm::vec3>(pos));
 	shapes[status].draw(_program, _view, _proj, _mode, _light);
+	shapes[status].clearMatrix(shapes[status].getMatrixSize() - 1);
 }
 
 void CPlayer::changeStatus(const int _status)
