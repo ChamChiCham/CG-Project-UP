@@ -4,9 +4,6 @@
     <Filter Include="GLSL">
       <UniqueIdentifier>{c0651d2e-f25e-4a36-8a4c-1395c6af4f97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CCore">
-      <UniqueIdentifier>{d5005e34-be0e-4048-839f-0d5c5b85592e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Define">
       <UniqueIdentifier>{92c1a8a8-07d7-46a4-aad2-4a9523dafbe2}</UniqueIdentifier>
     </Filter>

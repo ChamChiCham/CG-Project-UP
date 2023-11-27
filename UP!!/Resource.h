@@ -11,6 +11,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <array>
 
 #include "CShaderMgr.h"
 #include "CShapeDataMgr.h"
@@ -20,9 +21,9 @@
 class CShape
 {
 private:
-	SBuffer					buffer;
-	SShapeData* data = nullptr;
-	glm::vec3				color = glm::vec3(1.f);
+	SBuffer		buffer;
+	SShapeData*	data = nullptr;
+	glm::vec3	color = glm::vec3(1.f);
 
 protected:
 	std::vector<glm::mat4>	mats;
@@ -34,7 +35,7 @@ public:
 
 	void setData(const int _shape);
 
-	virtual void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 
 	void scale(const int _idx, const float _fir, const float _sec, const float _thi);
 	void scale(const int _idx, const glm::vec3 _vec);
@@ -57,24 +58,35 @@ public:
 
 class CBrick : public CShape
 {
+private:
+	glm::ivec3	pos = { 0.f, 0.f, 0.f };
+	int& x =	pos.x;
+	int& y =	pos.y;
+	int& z =	pos.z;
+
 public:
 
-	glm::ivec3 pos = { 0.f, 0.f, 0.f };
-	int& x = pos.x;
-	int& y = pos.y;
-	int& z = pos.z;
-	
 	CBrick();
 	CBrick(const glm::ivec3& _pos);
 
-	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
-	bool operator<(const CBrick& other) const;
+	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	const glm::ivec3& getPos();
 
 };
 
 class CPlayer
 {
-	
+private:
+	std::array<CShape, 3> shapes;
+	int status = PLAYER_STAND;
+	glm::ivec3 pos = { 0.f, 0.f, 0.f };
+	int& x = pos.x;
+	int& y = pos.y;
+	int& z = pos.z;
+
+public:
+	void init();
+	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 };
 
 class CMap

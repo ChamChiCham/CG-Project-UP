@@ -81,6 +81,7 @@ private:
 
 	std::vector<CShape> shapes;
 
+	CPlayer player;
 	CMap* map_ptr = nullptr;
 	std::array<CMap, 3> maps;
 
@@ -132,6 +133,8 @@ public:
 			maps[i].init(i);
 
 		map_ptr = &maps[0];
+
+		player.init();
 
 		for (auto& shape : shapes)
 			shape.updateBuffer();
@@ -187,6 +190,7 @@ public:
 		// 맵에 있는 brick 그리기
 		map_ptr->draw(ShaderMgr.program, view, proj, mode, light);
 
+		player.draw(ShaderMgr.program, view, proj, mode, light);
 
 		glutSwapBuffers();
 	}

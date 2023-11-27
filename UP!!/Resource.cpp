@@ -91,11 +91,11 @@ void CShape::draw(const unsigned int _program, const SView& _view, const glm::ma
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &MP[0][0]);
 
 	if (data->indices.empty()) {
-		glDrawArrays(_mode, 0, data->coords.size() / 3);
+		glDrawArrays(_mode, 0, static_cast<GLsizei>(data->coords.size() / 3));
 	}
 	else {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
-		glDrawElements(_mode, data->indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(_mode, static_cast<GLsizei>(data->indices.size()), GL_UNSIGNED_INT, 0);
 	}
 }
 
@@ -200,15 +200,9 @@ void CBrick::draw(const unsigned int _program, const SView& _view, const glm::ma
 	mats.pop_back();
 }
 
-bool CBrick::operator<(const CBrick& other) const
+const glm::ivec3& CBrick::getPos()
 {
-	if (y == other.y)
-		if (x == other.x)
-			return z < other.x;
-		else
-			return x < other.x;
-	else
-		return y < other.y;
+	return pos;
 }
 
 void CMap::init(const int _idx)
@@ -272,7 +266,7 @@ CBrick& CMap::operator()(const glm::ivec3 _pos)
 
 	
 	for (auto& brick : bricks) {
-		if (brick.pos == _pos) {
+		if (brick.getPos() == _pos) {
 			return brick;
 		}
 	}
@@ -285,4 +279,17 @@ CBrick& CMap::operator()(const glm::ivec3 _pos)
 CBrick& CMap::operator()(const int _y, const int _x, const int _z)
 {
 	return (*this)(glm::ivec3(_x, _y, _z));
+}
+
+void CPlayer::init()
+{
+	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
+	shapes[PLAYER_STAND].setColor(0.2f, 0.2f, 0.2f);
+
+	shapes[PLAYER_STAND].updateBuffer();
+}
+
+void CPlayer::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	shapes[status].draw(_program, _view, _proj, _mode, _light);
 }

@@ -117,7 +117,7 @@ void CShapeDataMgr::init()
 	};
 
 	initObj("obj\\sphere.obj", SHAPE_SPHERE);
-	// initObj("obj\\player_stand.obj", SHAPE_PLAYER);
+	initObj("obj\\player_stand.obj", SHAPE_PLAYER_STAND);
 }	
 
 void CShapeDataMgr::initObj(const char* _obj, const int _shape)
@@ -130,7 +130,8 @@ void CShapeDataMgr::initObj(const char* _obj, const int _shape)
 		return;
 	}
 
-	std::list<float> normals_list;
+	std::vector<float> normals_data;
+	std::list<int> normals_indices;
 
 	data.push_back(SShapeData());
 	while (std::getline(file, line)) {
@@ -146,17 +147,28 @@ void CShapeDataMgr::initObj(const char* _obj, const int _shape)
 			float normals[3] = {};
 			sscanf_s(line.c_str(), "vn %f %f %f", &normals[0], &normals[1], &normals[2]);
 			for (auto& normal : normals)
-				normals_list.push_back(normal);
+				normals_data.push_back(normal);
 		}
 
 		else if (line.substr(0, 2) == "f ") {
-			int indices[4] = { -1, -1, -1, -1 }, dummy0[4] = {}, dummy1[4] = {};
+			if (data[_shape].normals.empty())
+				data[_shape].normals.resize(data[_shape].coords.size());
+			int indices[4] = { -1, -1, -1, -1 }, dummy0[4] = {}, normals[4] = {-1, -1, -1, -1};
 			sscanf_s(line.c_str(), "f %d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d",
-				&indices[0], &dummy0[0], &dummy1[0],
-				&indices[1], &dummy0[1], &dummy1[1],
-				&indices[2], &dummy0[2], &dummy1[2],
-				&indices[3], &dummy0[3], &dummy1[3]
+				&indices[0], &dummy0[0], &normals[0],
+				&indices[1], &dummy0[1], &normals[1],
+				&indices[2], &dummy0[2], &normals[2],
+				&indices[3], &dummy0[3], &normals[3]
 			);
+
+			for (int i = 0; i < 4; ++i) {
+				if (i == 3 && indices[3] == -1)
+					break;
+				data[_shape].normals[(indices[i] - 1) * 3] += normals_data[(normals[i] - 1) * 3];
+				data[_shape].normals[(indices[i] - 1) * 3 + 1] += normals_data[(normals[i] - 1) * 3 + 1];
+				data[_shape].normals[(indices[i] - 1) * 3 + 2] += normals_data[(normals[i] - 1) * 3 + 2];
+			}
+
 
 			for (int i = 0; i < 3; ++i) {
 				data[_shape].indices.push_back(indices[i] - 1);
@@ -167,14 +179,6 @@ void CShapeDataMgr::initObj(const char* _obj, const int _shape)
 				data[_shape].indices.push_back(indices[3] - 1);
 			}
 		}
-	}
-
-	data[_shape].normals.resize(data[_shape].indices.size());
-	std::list<float>::iterator iter = normals_list.begin();
-	for (auto& index : data[_shape].indices) {
-		data[_shape].normals[3 * index] += *iter; iter++;
-		data[_shape].normals[3 * index + 1] += *iter; iter++;
-		data[_shape].normals[3 * index + 2] += *iter; iter++;
 	}
 
 	file.close();
