@@ -28,6 +28,9 @@
     <Filter Include="Main">
       <UniqueIdentifier>{5c04099a-d61c-4299-9374-43159c59e62c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="coordinates">
+      <UniqueIdentifier>{17eae186-4236-4012-907f-30ec6dc4d6f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -70,5 +73,16 @@
     <ClInclude Include="Resource.h">
       <Filter>resource</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="coordinates\map0.txt">
+      <Filter>coordinates</Filter>
+    </Text>
+    <Text Include="coordinates\map1.txt">
+      <Filter>coordinates</Filter>
+    </Text>
+    <Text Include="coordinates\map2.txt">
+      <Filter>coordinates</Filter>
+    </Text>
   </ItemGroup>
 </Project>

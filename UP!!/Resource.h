@@ -9,6 +9,8 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <string>
 
 #include "CShaderMgr.h"
 #include "CShapeDataMgr.h"
@@ -66,6 +68,7 @@ public:
 	CBrick(const glm::ivec3& _pos);
 
 	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+	bool operator<(const CBrick& other) const;
 
 };
 
@@ -76,14 +79,14 @@ class CPlayer
 
 class CMap
 {
-	// 임시로 bricks를 public 한정자로, vector<CBrick> 자료형으로 만들었다.
-	// 자료구조와 한정자는 추후 수정할 것이다.
-public:
+private:
 	std::vector<CBrick> bricks;
 
 
-	void createBrick();
-	void createBricks(const std::vector<int>& _data);
+public:
+	void init(const int _idx);
+	void updateBuffer();
+	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 
 	CBrick& operator()(const glm::ivec3 _pos);
 	CBrick& operator()(const int _y, const int _x, const int _z);
