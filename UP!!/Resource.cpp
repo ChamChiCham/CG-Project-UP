@@ -14,7 +14,8 @@ void CShape::updateBuffer()
 	if (buffer.VAO != 0) {
 		glDeleteVertexArrays(1, &buffer.VAO);
 		glDeleteBuffers(2, buffer.VBO);
-		glDeleteBuffers(1, &buffer.EBO);
+		if (!data->indices.empty())
+			glDeleteBuffers(1, &buffer.EBO);
 	}
 
 
@@ -27,10 +28,11 @@ void CShape::updateBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(GLfloat), data->normals.data(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &buffer.EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
-
+	if (!data->indices.empty()) {
+		glGenBuffers(1, &buffer.EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(unsigned int), data->indices.data(), GL_STATIC_DRAW);
+	}
 	glGenVertexArrays(1, &buffer.VAO);
 	glBindVertexArray(buffer.VAO);
 
@@ -42,7 +44,9 @@ void CShape::updateBuffer()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(1);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+	if (!data->indices.empty()) {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+	}
 }
 
 void CShape::setData(const int _shape)
@@ -86,8 +90,13 @@ void CShape::draw(const unsigned int _program, const SView& _view, const glm::ma
 	glUniformMatrix4fv(viewLocation, 1, GL_FALSE, &MV[0][0]);
 	glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, &MP[0][0]);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
-	glDrawElements(_mode, data->indices.size(), GL_UNSIGNED_INT, 0);
+	if (data->indices.empty()) {
+		glDrawArrays(_mode, 0, data->coords.size() / 3);
+	}
+	else {
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
+		glDrawElements(_mode, data->indices.size(), GL_UNSIGNED_INT, 0);
+	}
 }
 
 void CShape::scale(const int _idx, const float _fir, const float _sec, const float _thi)
@@ -100,7 +109,6 @@ void CShape::scale(const int _idx, const glm::vec3 _vec)
 	while (mats.size() <= _idx) {
 		mats.push_back(glm::mat4(1.f));
 	}
-
 	mats[_idx] = glm::scale(mats[_idx], _vec);
 }
 
@@ -192,22 +200,67 @@ void CBrick::draw(const unsigned int _program, const SView& _view, const glm::ma
 	mats.pop_back();
 }
 
-void CMap::createBrick()
+bool CBrick::operator<(const CBrick& other) const
 {
-	bricks.push_back(CBrick());
+	if (y == other.y)
+		if (x == other.x)
+			return z < other.x;
+		else
+			return x < other.x;
+	else
+		return y < other.y;
 }
 
-void CMap::createBricks(const std::vector<int>& _data)
+void CMap::init(const int _idx)
 {
-	if (_data.size() % 3 != 0) {
-		std::cerr << "createBricks(): 받은 데이터가 3으로 나누어 떨어지지 않습니다." << std::endl;
+
+	std::ifstream inputFile;
+	bricks.clear();
+	bricks.reserve(150);
+	switch (_idx)
+	{
+	case 0:
+		inputFile.open("coordinates\\map0.txt");
+		break;
+	case 1:
+		inputFile.open("coordinates\\map1.txt");
+		break;
+	case 2:
+		inputFile.open("coordinates\\map2.txt");
+		break;
+	default:
+		std::cerr << "CMap()::init(): invaild index." << std::endl;
 		return;
 	}
 
-	for (int i = 0; i < _data.size() / 3; ++i) {
-		bricks.push_back(CBrick(glm::vec3(_data[i * 3 + 1], _data[i * 3], _data[i * 3 + 2])));
+	if (!inputFile.is_open()) {
+		std::cerr << "CMap()::init(): cannot open file." << std::endl;
+		return;
 	}
 
+	std::string line;
+	while (std::getline(inputFile, line)) {
+		if (line[0] == '#')
+			break;
+		int pos[3] = {};
+		sscanf_s(line.c_str(), "%d, %d, %d,", &pos[0], &pos[1], &pos[2]);
+		bricks.push_back(CBrick(glm::ivec3(pos[1], pos[0], pos[2])));
+	}
+
+	inputFile.close();
+
+}
+
+void CMap::updateBuffer()
+{
+	for (auto& brick : bricks)
+		brick.updateBuffer();
+}
+
+void CMap::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	for (auto& brick : bricks)
+		brick.draw(_program, _view, _proj, _mode, _light);
 }
 
 CBrick& CMap::operator()(const glm::ivec3 _pos)
@@ -216,11 +269,14 @@ CBrick& CMap::operator()(const glm::ivec3 _pos)
 		std::cerr << "CMap::operator[](): Cannot find any Bricks." << std::endl;
 		assert(false);
 	}
+
+	
 	for (auto& brick : bricks) {
 		if (brick.pos == _pos) {
 			return brick;
 		}
 	}
+
 	
 	std::cerr << "CMap::operator[](): Cannot find Brick. Returned first instance." << std::endl;
 	return bricks[0];
