@@ -86,6 +86,7 @@ private:
 
 	float d = 0.f;
 	float s = 0.f;
+	int current_map = 0;
 public:
 
 	// --
@@ -131,7 +132,7 @@ public:
 		for (int i = 0; i < 3; ++i)
 			maps[i].init(i);
 
-		map_ptr = &maps[0];
+		map_ptr = &maps[current_map];
 
 		for (auto& shape : shapes)
 			shape.updateBuffer();
@@ -161,6 +162,7 @@ public:
 		std::cout << "8/5: 카메라 y이동" << std::endl;
 		std::cout << "1/3: 카메라 z이동" << std::endl;
 		std::cout << "7/9: 카메라 y회전" << std::endl;
+		std::cout << "=/-: 스테이지 강제 변환" << std::endl;
 	}
 
 	// --
@@ -235,6 +237,22 @@ public:
 			view.eye.x = view.at.x + d * cos(s + glm::radians(-2.f));
 			view.eye.z = view.at.z + d * sin(s + glm::radians(-2.f));
 			break;
+		case '=':
+			if (current_map < 2) {
+				current_map++;
+				map_ptr = &maps[current_map];
+				std::cout << "Stage Change" << std::endl;
+				std::cout << "Current Map: " << current_map << std::endl;
+			}
+			break;
+		case '-':
+			if (current_map > 0) {
+				current_map--;
+				map_ptr = &maps[current_map];
+				std::cout << "Stage Change" << std::endl;
+				std::cout << "Current Map: " << current_map << std::endl;
+				break;
+			}
 		}
 	}
 
