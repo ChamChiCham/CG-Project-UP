@@ -109,7 +109,9 @@ void CShape::scale(const int _idx, const glm::vec3 _vec)
 	while (mats.size() <= _idx) {
 		mats.push_back(glm::mat4(1.f));
 	}
-	mats[_idx] = glm::scale(mats[_idx], _vec);
+
+	glm::mat4 m = glm::scale(glm::mat4(1.f), _vec);
+	mats[_idx] = m * mats[_idx];
 }
 
 void CShape::rotate(const int _idx, const float _deg, const float _fir, const float _sec, const float _thi)
@@ -123,7 +125,8 @@ void CShape::rotate(const int _idx, const float _deg, const glm::vec3 _vec)
 		mats.push_back(glm::mat4(1.f));
 	}
 
-	mats[_idx] = glm::rotate(mats[_idx], glm::radians(_deg), _vec);
+	glm::mat4 m = glm::rotate(glm::mat4(1.f), glm::radians(_deg), _vec);
+	mats[_idx] = m * mats[_idx];
 }
 
 void CShape::rotate(const int _idx, const float _x, const float _y, const float _z, const float _deg, const float _fir, const float _sec, const float _thi)
@@ -154,8 +157,8 @@ void CShape::translate(const int _idx, const glm::vec3 _vec)
 	while (mats.size() <= _idx) {
 		mats.push_back(glm::mat4(1.f));
 	}
-
-	mats[_idx] = glm::translate(mats[_idx], _vec);
+	glm::mat4 m = glm::translate(glm::mat4(1.f), _vec);
+	mats[_idx] = m * mats[_idx];
 }
 
 void CShape::setColor(const glm::vec3& _color)
@@ -173,6 +176,11 @@ void CShape::clearMatrix(const int _idx)
 	if (mats.size() <= _idx)
 		return;
 	mats[_idx] = glm::mat4(1.f);
+}
+
+void CShape::setMatrix(CShape& _other)
+{
+	mats = _other.mats;
 }
 
 // --
@@ -285,11 +293,29 @@ void CPlayer::init()
 {
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
 	shapes[PLAYER_STAND].setColor(0.2f, 0.2f, 0.2f);
-
 	shapes[PLAYER_STAND].updateBuffer();
+
+	shapes[PLAYER_HOLD].setData(SHAPE_PLAYER_HOLD);
+	shapes[PLAYER_HOLD].setColor(0.2f, 0.2f, 0.2f);
+	shapes[PLAYER_HOLD].updateBuffer();
+
+	shapes[PLAYER_HANG].setData(SHAPE_PLAYER_HANG);
+	shapes[PLAYER_HANG].setColor(0.2f, 0.2f, 0.2f);
+	shapes[PLAYER_HANG].updateBuffer();
 }
 
 void CPlayer::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	shapes[status].draw(_program, _view, _proj, _mode, _light);
+}
+
+void CPlayer::changeStatus(const int _status)
+{
+	shapes[_status].setMatrix(shapes[status]);
+	status = _status;
+}
+
+CShape& CPlayer::getShape()
+{
+	return shapes[status];
 }

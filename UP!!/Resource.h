@@ -35,7 +35,7 @@ public:
 
 	void setData(const int _shape);
 
-	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	virtual void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 
 	void scale(const int _idx, const float _fir, const float _sec, const float _thi);
 	void scale(const int _idx, const glm::vec3 _vec);
@@ -53,6 +53,7 @@ public:
 	void setColor(const float _r, const float _g, const float _b);
 
 	void clearMatrix(const int _idx);
+	void setMatrix(CShape& _other);
 
 };
 
@@ -69,7 +70,7 @@ public:
 	CBrick();
 	CBrick(const glm::ivec3& _pos);
 
-	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
 	const glm::ivec3& getPos();
 
 };
@@ -78,15 +79,18 @@ class CPlayer
 {
 private:
 	std::array<CShape, 3> shapes;
-	int status = PLAYER_STAND;
-	glm::ivec3 pos = { 0.f, 0.f, 0.f };
-	int& x = pos.x;
-	int& y = pos.y;
-	int& z = pos.z;
+	
+	int			status = PLAYER_STAND;
+	glm::ivec3	pos = { 0.f, 0.f, 0.f };
+	int& x =	pos.x;
+	int& y =	pos.y;
+	int& z =	pos.z;
 
 public:
 	void init();
 	void draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	void changeStatus(const int _status);
+	CShape& getShape();
 };
 
 class CMap

@@ -257,6 +257,14 @@ public:
 				std::cout << "Current Map: " << current_map << std::endl;
 				break;
 			}
+		case 'n':
+			player.getShape().scale(0, 0.5f, 0.5f, 0.5f);
+			player.changeStatus(PLAYER_HOLD);
+			break;
+		case 'm':
+			player.getShape().scale(0, 0.5f, 0.5f, 0.5f);
+			player.changeStatus(PLAYER_HANG);
+			break;
 		}
 	}
 
