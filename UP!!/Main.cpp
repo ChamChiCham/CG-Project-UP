@@ -153,8 +153,8 @@ public:
 		// --
 		light.pos = { 3.f, 0.f, 10.f };
 
-		view.eye = glm::vec3(3.0f, 3.0f, 10.0f);
-		view.at = glm::vec3(3.f, 3.f, 0.0f);
+		view.eye = glm::vec3(3.0f, 4.0f, 10.0f);
+		view.at = glm::vec3(3.f, 4.f, 0.0f);
 		view.up = glm::vec3(0.f, 1.f, 0.f);
 
 		player.getShape().scale(0, 0.03f, 0.03f, 0.03f);
@@ -163,6 +163,10 @@ public:
 
 		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
 
+		d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
+		s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
+		view.eye.x = view.at.x + d * cos(s + glm::radians(-20.f));
+		view.eye.z = view.at.z + d * sin(s + glm::radians(-20.f));
 
 		// --
 		// explain
@@ -282,10 +286,14 @@ public:
 		case 'i':
 			player.getShape().translate(0, 0.f, 1.f, 0.f);
 			player.getShape().translate(0, 0.f, 0.f, 1.f);
+			view.eye.y += 0.1;
+			view.at.y += 0.1;
 			break;
 		case 'k':
 			player.getShape().translate(0, 0.f, -1.f, 0.f);
 			player.getShape().translate(0, 0.f, 0.f, -1.f);
+			view.eye.y -= 0.1;
+			view.at.y -= 0.1;
 			break;
 		}
 	}
