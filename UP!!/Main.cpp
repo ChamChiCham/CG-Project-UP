@@ -440,7 +440,7 @@ public:
 	// 어떠한 조건을 충족하면 이동을 막음
 	bool MoveUpBan()
 	{
-		if (playerPos.way != front) {
+		if (playerPos.way == right || playerPos.way == left) {
 			return true;
 		}
 		return false;
