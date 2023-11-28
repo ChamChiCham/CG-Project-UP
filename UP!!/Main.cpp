@@ -29,6 +29,7 @@ namespace cham
 	GLvoid GameLoop(int value);
 	GLvoid Mouse(int button, int state, int x, int y);
 	GLvoid Keyboard(unsigned char key, int x, int y);
+	GLvoid SpecialKeys(int key, int x, int y);
 	GLvoid Motion(int x, int y);
 }
 
@@ -125,7 +126,7 @@ public:
 		glutKeyboardFunc(cham::Keyboard);
 		glutTimerFunc(10, cham::GameLoop, 1);
 		glutMotionFunc(cham::Motion);
-
+		glutSpecialFunc(cham::SpecialKeys);
 
 		// --
 		// create shape data
@@ -294,6 +295,11 @@ public:
 		
 	}
 
+	void SpecialKeys(const int _key, const int _x, const int _y)
+	{
+
+	}
+
 	// --
 	// process func
 	// --
@@ -341,6 +347,11 @@ GLvoid cham::Keyboard(unsigned char key, int x, int y)
 GLvoid cham::Motion(int x, int y)
 {
 	CWindowMgr::getInst()->Motion(x, y);
+}
+
+GLvoid cham::SpecialKeys(int key, int x, int y)
+{
+	CWindowMgr::getInst()->SpecialKeys(key, x, y);
 }
 
 // (CALLBACK) Main Loop
