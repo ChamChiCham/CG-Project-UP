@@ -87,7 +87,9 @@ private:
 
 	float d = 0.f;
 	float s = 0.f;
-	int current_map = 0;
+	int current_map;
+	int moving_time;
+	bool moving;
 public:
 
 	// --
@@ -153,6 +155,10 @@ public:
 		view.eye = glm::vec3(3.0f, 3.0f, 10.0f);
 		view.at = glm::vec3(3.f, 3.f, 0.0f);
 		view.up = glm::vec3(0.f, 1.f, 0.f);
+
+		player.getShape().scale(0, 0.03f, 0.03f, 0.03f);
+		player.getShape().translate(1, 0.f, 0.5f, 0.f);
+		player.getShape().rotate(2, 180.f, 0.f, 1.f, 0.f);
 
 		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
 
@@ -257,13 +263,28 @@ public:
 				std::cout << "Current Map: " << current_map << std::endl;
 				break;
 			}
+		case 'b':
+			player.changeStatus(PLAYER_STAND);
+			break;
 		case 'n':
-			player.getShape().scale(0, 0.5f, 0.5f, 0.5f);
 			player.changeStatus(PLAYER_HOLD);
 			break;
 		case 'm':
-			player.getShape().scale(0, 0.5f, 0.5f, 0.5f);
 			player.changeStatus(PLAYER_HANG);
+			break;
+		case 'l':
+			player.getShape().translate(0, -1.f, 0.f, 0.f);
+			break;
+		case 'j':
+			player.getShape().translate(0, 1.f, 0.f, 0.f);
+			break;
+		case 'i':
+			player.getShape().translate(0, 0.f, 1.f, 0.f);
+			player.getShape().translate(0, 0.f, 0.f, 1.f);
+			break;
+		case 'k':
+			player.getShape().translate(0, 0.f, -1.f, 0.f);
+			player.getShape().translate(0, 0.f, 0.f, -1.f);
 			break;
 		}
 	}
