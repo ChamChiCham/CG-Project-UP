@@ -4,14 +4,30 @@
 #include <string>
 #include <iostream>
 
-CShaderMgr::CShaderMgr() :
-	program(0)
+CShaderMgr* CShaderMgr::instance = nullptr;
+
+CShaderMgr::CShaderMgr()
+{}
+
+CShaderMgr* CShaderMgr::getInst()
 {
+	if (!instance) {
+		instance = new CShaderMgr();
+	}
+	return instance;
 }
 
 CShaderMgr::~CShaderMgr()
 {
-	glDeleteProgram(program);
+	for (auto& program : programs)
+		glDeleteProgram(program);
+	if (instance != nullptr)
+		delete instance;
+}
+
+void CShaderMgr::init()
+{
+	makeProgram(SHADER_COMMON_VERTEX, SHADER_COMMON_FRAGMENT);
 }
 
 const bool CShaderMgr::makeProgram(const char* _vert, const char* _frag)
@@ -20,7 +36,7 @@ const bool CShaderMgr::makeProgram(const char* _vert, const char* _frag)
 	std::string code_vert;
 	std::string code_frag;
 	std::string line;
-	
+
 
 	// create vertex code
 	if (!file.is_open()) {
@@ -83,7 +99,7 @@ const bool CShaderMgr::makeProgram(const char* _vert, const char* _frag)
 		return false;
 	}
 
-	program = glCreateProgram();
+	GLuint program = glCreateProgram();
 	glAttachShader(program, vert_shader);
 	glAttachShader(program, frag_shader);
 	glLinkProgram(program);
@@ -91,17 +107,18 @@ const bool CShaderMgr::makeProgram(const char* _vert, const char* _frag)
 	glDeleteShader(vert_shader);
 	glDeleteShader(frag_shader);
 
+	programs.push_back(program);
+
 	return true;
 }
 
-void CShaderMgr::useProgram(const glm::mat4& _matrix)
+const GLuint CShaderMgr::getProgram(const size_t _idx)
 {
-	// program use
-	glUseProgram(program);
-
-	// uniform matrix 
-	unsigned int transformLocation = glGetUniformLocation(program, "transform");
-	glUniformMatrix4fv(transformLocation, 1, GL_FALSE, glm::value_ptr(_matrix));
-
-
+	if (0 <= _idx && _idx < programs.size()) {
+		return programs[_idx];
+	}
+	
+	std::cerr << "CShaderMgr::getProgram(): invaild index." << std::endl;
+	return static_cast<GLuint>(-1);
 }
+

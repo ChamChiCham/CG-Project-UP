@@ -54,8 +54,9 @@ void CShape::setData(const int _shape)
 	data = &CShapeDataMgr::getInst()->getData(_shape);
 }
 
-void CShape::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+void CShape::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
+	GLuint _program = CShaderMgr::getInst()->getProgram(SHADER_COMMON);
 	glUseProgram(_program);
 
 	// light
@@ -205,11 +206,11 @@ CBrick::CBrick(const glm::ivec3& _pos)
 	pos = _pos;
 }
 
-void CBrick::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 
 	translate(static_cast<int>(mats.size()), static_cast<glm::vec3>(pos));
-	CShape::draw(_program, _view, _proj, _mode, _light);
+	CShape::draw(_view, _proj, _mode, _light);
 	mats.pop_back();
 }
 
@@ -264,10 +265,10 @@ void CMap::updateBuffer()
 		brick.updateBuffer();
 }
 
-void CMap::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+void CMap::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	for (auto& brick : bricks)
-		brick.draw(_program, _view, _proj, _mode, _light);
+		brick.draw(_view, _proj, _mode, _light);
 }
 
 CBrick& CMap::operator()(const glm::ivec3 _pos)
@@ -317,10 +318,10 @@ void CPlayer::init()
 	shapes[PLAYER_HANG].updateBuffer();
 }
 
-void CPlayer::draw(const unsigned int _program, const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+void CPlayer::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	shapes[status].translate(static_cast<int>(shapes[status].getMatrixSize()), static_cast<glm::vec3>(pos));
-	shapes[status].draw(_program, _view, _proj, _mode, _light);
+	shapes[status].draw(_view, _proj, _mode, _light);
 	shapes[status].clearMatrix(shapes[status].getMatrixSize() - 1);
 }
 

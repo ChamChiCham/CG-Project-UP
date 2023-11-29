@@ -7,22 +7,32 @@
 #include <glm/glm/ext.hpp>
 #include <glm/glm/gtc/matrix_transform.hpp>
 
+#include <vector>
+
+#include "Define.h"
 
 class CShaderMgr
 {
 private:
-	GLuint program;
-
-public:
+	static CShaderMgr* instance;
 	CShaderMgr();
 	~CShaderMgr();
 
 public:
+	static CShaderMgr* getInst();
+
+
+private:
+	std::vector<GLuint> programs;
+
+
+private:
 	const bool makeProgram(const char* _vert, const char* _frag);
-	void useProgram(const glm::mat4& _matrix);
 
 
-	friend class CWindowMgr;
+public:
+	void init();
+	const GLuint getProgram(const size_t _idx);
 
 };
 

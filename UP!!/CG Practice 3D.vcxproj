@@ -135,10 +135,6 @@
     <ClCompile Include="Struct.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fragment.glsl" />
-    <None Include="Vertex.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CShaderMgr.h" />
     <ClInclude Include="CShapeDataMgr.h" />
     <ClInclude Include="Define.h" />
@@ -149,6 +145,10 @@
     <Text Include="coordinates\map0.txt" />
     <Text Include="coordinates\map1.txt" />
     <Text Include="coordinates\map2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glsl\Fragment.glsl" />
+    <None Include="glsl\Vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

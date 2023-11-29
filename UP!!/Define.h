@@ -34,8 +34,15 @@ enum
 
 	PLAYER_STAND = 0,
 	PLAYER_HOLD,
-	PLAYER_HANG
+	PLAYER_HANG,
+
+	SHADER_COMMON = 0,
+	SHADER_TEXTURE
 };
 
 
 constexpr const char* WINDOW_TITLE = "UP!!";
+
+constexpr const char* SHADER_COMMON_VERTEX = "glsl\\Vertex.glsl";
+constexpr const char* SHADER_COMMON_FRAGMENT = "glsl\\Fragment.glsl";
+

@@ -66,9 +66,6 @@ public:
 
 private:
 
-	// Manager
-	CShaderMgr ShaderMgr;
-
 	// default member variable
 	SView		view;
 	SLight		light;
@@ -128,7 +125,7 @@ public:
 		else
 			std::cout << "GLEW Initialized\n";
 
-		ShaderMgr.makeProgram("Vertex.glsl", "Fragment.glsl");
+		CShaderMgr::getInst()->init();
 
 
 		// set cb func
@@ -218,12 +215,12 @@ public:
 		glEnable(GL_DEPTH_TEST);
 
 		for (auto& shape : shapes)
-			shape.draw(ShaderMgr.program, view, proj, mode, light);
+			shape.draw(view, proj, mode, light);
 
 		// 맵에 있는 brick 그리기
-		map_ptr->draw(ShaderMgr.program, view, proj, mode, light);
+		map_ptr->draw(view, proj, mode, light);
 
-		player.draw(ShaderMgr.program, view, proj, mode, light);
+		player.draw(view, proj, mode, light);
 
 		glutSwapBuffers();
 	}
@@ -301,7 +298,7 @@ public:
 			if (maps[0].isPosition(0, 0, 0))
 				std::cout << "True" << std::endl;
 			else
-				std::cout << "False" << std::endl;
+				std::cout << "False" << std::endl;	
 			break;
 		}
 	}

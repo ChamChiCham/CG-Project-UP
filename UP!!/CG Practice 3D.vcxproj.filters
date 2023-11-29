@@ -47,14 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fragment.glsl">
-      <Filter>GLSL</Filter>
-    </None>
-    <None Include="Vertex.glsl">
-      <Filter>GLSL</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="CShaderMgr.h">
       <Filter>CShaderManager</Filter>
     </ClInclude>
@@ -81,5 +73,13 @@
     <Text Include="coordinates\map2.txt">
       <Filter>coordinates</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glsl\Fragment.glsl">
+      <Filter>GLSL</Filter>
+    </None>
+    <None Include="glsl\Vertex.glsl">
+      <Filter>GLSL</Filter>
+    </None>
   </ItemGroup>
 </Project>
