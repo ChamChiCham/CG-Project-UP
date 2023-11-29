@@ -297,6 +297,12 @@ public:
 		case 'm':
 			player.changeStatus(PLAYER_HANG);
 			break;
+		case ']':
+			if (maps[0].isPosition(0, 0, 0))
+				std::cout << "True" << std::endl;
+			else
+				std::cout << "False" << std::endl;
+			break;
 		}
 	}
 

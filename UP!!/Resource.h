@@ -108,4 +108,6 @@ public:
 	CBrick& operator()(const glm::ivec3 _pos);
 	CBrick& operator()(const int _y, const int _x, const int _z);
 
+	const bool isPosition(const int _y, const int _x, const int _z);
+
 };

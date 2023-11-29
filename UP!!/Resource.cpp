@@ -294,6 +294,14 @@ CBrick& CMap::operator()(const int _y, const int _x, const int _z)
 	return (*this)(glm::ivec3(_x, _y, _z));
 }
 
+const bool CMap::isPosition(const int _y, const int _x, const int _z)
+{
+	for (auto& brick : bricks)
+		if (brick.getPos() == glm::ivec3(_x, _y, _z))
+			return true;
+	return false;
+}
+
 void CPlayer::init()
 {
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
