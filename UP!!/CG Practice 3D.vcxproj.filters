@@ -75,10 +75,16 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <None Include="glsl\Fragment.glsl">
+    <None Include="glsl\Fragment_common.glsl">
       <Filter>GLSL</Filter>
     </None>
-    <None Include="glsl\Vertex.glsl">
+    <None Include="glsl\Vertex_common.glsl">
+      <Filter>GLSL</Filter>
+    </None>
+    <None Include="glsl\Fragment_texture.glsl">
+      <Filter>GLSL</Filter>
+    </None>
+    <None Include="glsl\Vertex_texture.glsl">
       <Filter>GLSL</Filter>
     </None>
   </ItemGroup>

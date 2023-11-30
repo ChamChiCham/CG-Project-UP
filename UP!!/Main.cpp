@@ -79,8 +79,8 @@ private:
 
 	std::vector<CShape> shapes;
 
-	CPlayer player;
-	CMap* map_ptr = nullptr;
+	CPlayer				player;
+	CMap*				map_ptr = nullptr;
 	std::array<CMap, 3> maps;
 	
 	// 전역 변수

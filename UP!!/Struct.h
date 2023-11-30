@@ -8,12 +8,12 @@
 #include <glm/glm/gtc/matrix_transform.hpp>
 
 #include <vector>
-
+#include <array>
 
 struct SBuffer
 {
 	GLuint	VAO;
-	GLuint	VBO[2];
+	GLuint  VBO[3];
 	GLuint	EBO;
 
 	SBuffer();

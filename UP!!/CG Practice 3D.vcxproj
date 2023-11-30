@@ -147,8 +147,10 @@
     <Text Include="coordinates\map2.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="glsl\Fragment.glsl" />
-    <None Include="glsl\Vertex.glsl" />
+    <None Include="glsl\Fragment_common.glsl" />
+    <None Include="glsl\Fragment_texture.glsl" />
+    <None Include="glsl\Vertex_common.glsl" />
+    <None Include="glsl\Vertex_texture.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,13 +36,19 @@ enum
 	PLAYER_HOLD,
 	PLAYER_HANG,
 
-	SHADER_COMMON = 0,
-	SHADER_TEXTURE
+	SHADER_COMMON_PROGRAM = 0,
+	SHADER_TEXTURE_PROGRAM
 };
 
 
 constexpr const char* WINDOW_TITLE = "UP!!";
 
-constexpr const char* SHADER_COMMON_VERTEX = "glsl\\Vertex.glsl";
-constexpr const char* SHADER_COMMON_FRAGMENT = "glsl\\Fragment.glsl";
+constexpr const char* SHADER_COMMON_VERTEX = "glsl\\Vertex_common.glsl";
+constexpr const char* SHADER_COMMON_FRAGMENT = "glsl\\Fragment_common.glsl";
+constexpr const char* SHADER_TEXTURE_VERTEX = "glsl\\Vertex_texture.glsl";
+constexpr const char* SHADER_TEXTURE_FRAGMENT = "glsl\\Fragment_texture.glsl";
+
+constexpr const char* BRICK_IMAGE = "image\\example.png";
+
+
 

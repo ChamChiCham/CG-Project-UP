@@ -20,18 +20,20 @@
 
 class CShape
 {
-private:
+protected:
 	SBuffer		buffer;
 	SShapeData*	data = nullptr;
 	glm::vec3	color = glm::vec3(1.f);
-
-protected:
 	std::vector<glm::mat4>	mats;
 
 
+protected:
+	void setUniform(const SView& _view, const glm::mat4& _proj, const SLight& _light, const GLuint _program);
+	void drawBuffer(const int _mode);
+
 public:
 
-	void updateBuffer();
+	virtual void updateBuffer();
 
 	void setData(const int _shape);
 
@@ -55,7 +57,6 @@ public:
 	void clearMatrix(const int _idx);
 	void setMatrix(CShape& _other);
 	const size_t getMatrixSize();
-
 };
 
 class CBrick : public CShape
@@ -66,11 +67,17 @@ private:
 	int& y =	pos.y;
 	int& z =	pos.z;
 
+	static unsigned int texture;
+
+private:
+	void updateTexture();
+
 public:
 
 	CBrick();
 	CBrick(const glm::ivec3& _pos);
 
+	void updateBuffer() override;
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
 	const glm::ivec3& getPos();
 

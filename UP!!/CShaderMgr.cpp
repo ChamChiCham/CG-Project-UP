@@ -28,6 +28,7 @@ CShaderMgr::~CShaderMgr()
 void CShaderMgr::init()
 {
 	makeProgram(SHADER_COMMON_VERTEX, SHADER_COMMON_FRAGMENT);
+	makeProgram(SHADER_TEXTURE_VERTEX, SHADER_TEXTURE_FRAGMENT);
 }
 
 const bool CShaderMgr::makeProgram(const char* _vert, const char* _frag)

@@ -2,7 +2,7 @@
 
 SBuffer::SBuffer() :
 	VAO{ 0 },
-	VBO{},
+	VBO{ 0, 0, 0 },
 	EBO{ 0 }
 {}
 

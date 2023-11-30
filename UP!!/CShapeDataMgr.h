@@ -16,6 +16,7 @@ struct SShapeData
 	std::vector<GLfloat> coords;
 	std::vector<GLfloat> normals;
 	std::vector<unsigned int> indices;
+	std::vector<GLfloat> textures;
 
 	SShapeData();
 };
