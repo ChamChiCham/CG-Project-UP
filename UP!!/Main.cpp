@@ -88,10 +88,13 @@ private:
 	float s = 0.f;
 	int current_map;
 	int moving_time;
+	int jump_time;
 	bool moving_left;
 	bool moving_right;
-	bool moving_up;
-	bool moving_down;
+	bool moving_front;
+	bool moving_back;
+	bool jumping_up;
+	bool jumping_down;
 
 	typedef struct CurrentPos {
 		int xPos;
@@ -162,10 +165,6 @@ public:
 		// --
 		light.pos = { 3.f, 0.f, 10.f };
 
-		view.eye = glm::vec3(3.0f, 2.0f, 5.0f);
-		view.at = glm::vec3(3.f, 2.f, 0.0f);
-		view.up = glm::vec3(0.f, 1.f, 0.f);
-
 		// 초기 플레이어 위치/크기 조정
 		player.getShape().scale(0, 0.015f, 0.015f, 0.015f);
 		player.getShape().translate(1, 0.f, 0.5f, 0.1f);
@@ -175,6 +174,10 @@ public:
 		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
 
 		// 초기 카메라 위치 조정
+		view.eye = glm::vec3(1.0f, 2.0f, 5.0f);
+		view.at = glm::vec3(1.f, 2.f, 0.0f);
+		view.up = glm::vec3(0.f, 1.f, 0.f);
+
 		d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
 		s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 		view.eye.x = view.at.x + d * cos(s + glm::radians(-20.f));
@@ -289,16 +292,28 @@ public:
 			player.changeStatus(PLAYER_STAND);
 			break;
 		case 'n':
-			player.changeStatus(PLAYER_HOLD);
+			// 플레이어 바로 앞에 블록이 있으면 홀드 자세를 취함
+			if (playerPos.way == front || playerPos.way == back) {
+				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
+					player.changeStatus(PLAYER_HOLD);
+				}
+			}
+			else if (playerPos.way == right) {
+				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos + 1, playerPos.zPos)) {
+					player.changeStatus(PLAYER_HOLD);
+				}
+			}
+			else if (playerPos.way == left) {
+				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos - 1, playerPos.zPos)) {
+					player.changeStatus(PLAYER_HOLD);
+				}
+			}
 			break;
 		case 'm':
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			if (maps[0].isPosition(0, 0, 0))
-				std::cout << "True" << std::endl;
-			else
-				std::cout << "False" << std::endl;	
+			// test 완료
 			break;
 		}
 	}
@@ -313,10 +328,9 @@ public:
 		switch (_key) {
 		case GLUT_KEY_UP:
 			// 이동중이 아니거나, 벤 조건에 만족하지 않으면 이동
-			if (moving_time == 0 && MoveUpBan() == false) {
+			if (moving_time == 0 && MoveFrontBan() == false) {
 				player.changeStatus(PLAYER_HANG);
-				moving_up = true;
-				playerPos.yPos += 1;
+				moving_front = true;
 				playerPos.zPos -= 1;
 			}
 			// 이전에 바라보던 방향에 맞게 현재 바라보는 방향 수정
@@ -326,14 +340,15 @@ public:
 			else if (playerPos.way == left) {
 				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
 			}
+			// 점프가 가능한지 확인
+			CanJumpUp();
 			// 현재 바라보는 방향 업데이트
 			playerPos.way = front;
 			break;
 		case GLUT_KEY_DOWN:
-			if (moving_time == 0 && MoveDownBan() == false) {
+			if (moving_time == 0 && MoveBackBan() == false) {
 				player.changeStatus(PLAYER_HANG);
-				moving_down = true;
-				playerPos.yPos -= 1;
+				moving_back = true;
 				playerPos.zPos += 1;
 			}
 			if (playerPos.way == right) {
@@ -342,6 +357,7 @@ public:
 			else if (playerPos.way == left) {
 				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
 			}
+			CanJumpDown();
 			playerPos.way = back;
 			break;
 		case GLUT_KEY_LEFT:
@@ -355,6 +371,7 @@ public:
 			else if (playerPos.way == right) {
 				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
 			}
+			CanJumpLeft();
 			playerPos.way = left;
 			break;
 		case GLUT_KEY_RIGHT:
@@ -368,9 +385,173 @@ public:
 			else if (playerPos.way == left) {
 				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
 			}
+			CanJumpRight();
 			playerPos.way = right;
 			break;
 		}
+		PrintPos();
+	}
+
+	// 점프가 가능한가?
+	void CanJumpUp()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
+			jumping_up = true;
+			playerPos.yPos += 1;
+		}
+	}
+	void CanJumpDown()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos)) {
+			jumping_down = true;
+			playerPos.yPos -= 1;
+		}
+	}
+	// 경우의 수를 더 고려해볼 필요가 있음
+	void CanJumpLeft()
+	{
+		std::cout << "Can Jump Left?" << std::endl;
+		/*
+		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
+			jumping_up = true;
+			playerPos.yPos += 1;
+		}
+		*/
+	}
+	void CanJumpRight()
+	{
+		std::cout << "Can Jump Right?" << std::endl;
+		/*
+		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
+			jumping_up = true;
+			playerPos.yPos += 1;
+		}
+		*/
+	}
+
+	// 점프
+	void JumpingUp()
+	{
+		if (jumping_up) {
+			player.getShape().translate(3, 0.f, 0.1f, 0.f);
+			view.eye.y += 0.1f;
+			view.at.y += 0.1f;
+			EndJump();
+		}
+	}
+	// 하단 점프
+	void JumpingDown()
+	{
+		if (jumping_down) {
+			player.getShape().translate(3, 0.f, -0.1f, 0.f);
+			view.eye.y -= 0.1f;
+			view.at.y -= 0.1f;
+			EndJump();
+		}
+	}
+
+	// 이동
+	void MovingFront()
+	{
+		if (moving_front) {
+			player.getShape().translate(3, 0.f, 0.f, -0.1f);
+			view.eye.z -= 0.1f;
+			view.at.z -= 0.1f;
+			EndMove();
+		}
+	}
+	void MovingBack()
+	{
+		if (moving_back) {
+			player.getShape().translate(3, 0.f, 0.f, 0.1f);
+			view.eye.z += 0.1f;
+			view.at.z += 0.1f;
+			EndMove();
+		}
+	}
+	void MovingLeft()
+	{
+		if (moving_left) {
+			player.getShape().translate(3, -0.1f, 0.f, 0.f);
+			view.eye.x -= 0.1f;
+			view.at.x -= 0.1f;
+			EndMove();
+		}
+	}
+	void MovingRight()
+	{
+		if (moving_right) {
+			player.getShape().translate(3, 0.1f, 0.f, 0.f);
+			view.eye.x += 0.1f;
+			view.at.x += 0.1f;
+			EndMove();
+		}
+	}
+
+	// 무빙 종료 조건
+	void EndMove()
+	{
+		moving_time++;
+		if (moving_time == 10) {
+			player.changeStatus(PLAYER_STAND);
+			moving_time = 0;
+			moving_right = false;
+			moving_left = false;
+			moving_front = false;
+			moving_back = false;
+		}
+	}
+
+	// 점프 종료 조건
+	void EndJump()
+	{
+		jump_time++;
+		if (jump_time == 10) {
+			jump_time = 0;
+			jumping_up = false;
+			jumping_down = false;
+		}
+	}
+
+	// 어떠한 조건을 충족하면 이동을 막음
+	bool MoveLeftBan()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos - 1, playerPos.zPos) != true) {
+			return true;
+		}
+		return false;
+	}
+	bool MoveRightBan()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos + 1, playerPos.zPos) != true) {
+			return true;
+		}
+		return false;
+	}
+	bool MoveFrontBan()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos - 1)) {
+			return true;
+		}
+		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos - 1) != true && maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1) != true) {
+			return true;
+		}
+		return false;
+	}
+	bool MoveBackBan()
+	{
+		if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1) != true) {
+			return true;
+		}
+		// 아직 테스트 못해봄
+		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos + 1) != true && maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1) != true) {
+			return true;
+		}
+		return false;
+	}
+
+	// 플레이어 위치 확인용 코드
+	void PrintPos() {
 		std::cout << "xPos:" << playerPos.xPos << std::endl;
 		std::cout << "yPos:" << playerPos.yPos << std::endl;
 		std::cout << "zPos:" << playerPos.zPos << std::endl;
@@ -388,85 +569,6 @@ public:
 		}
 	}
 
-	void MovingUp()
-	{
-		if (moving_up) {
-			player.getShape().translate(3, 0.f, 0.1f, 0.f);
-			player.getShape().translate(3, 0.f, 0.f, -0.1f);
-			view.eye.y += 0.1f;
-			view.at.y += 0.1f;
-			EndMove();
-		}
-	}
-
-	void MovingDown()
-	{
-		if (moving_down) {
-			player.getShape().translate(3, 0.f, -0.1f, 0.f);
-			player.getShape().translate(3, 0.f, 0.f, 0.1f);
-			view.eye.y -= 0.1f;
-			view.at.y -= 0.1f;
-			EndMove();
-		}
-	}
-
-	void MovingLeft()
-	{
-		if (moving_left) {
-			player.getShape().translate(3, -0.1f, 0.f, 0.f);
-			EndMove();
-		}
-	}
-
-	void MovingRight()
-	{
-		if (moving_right) {
-			player.getShape().translate(3, 0.1f, 0.f, 0.f);
-			EndMove();
-		}
-	}
-
-	void EndMove()
-	{
-		moving_time++;
-		// 무빙 종료 조건
-		if (moving_time == 10) {
-			player.changeStatus(PLAYER_STAND);
-			moving_time = 0;
-			moving_right = false;
-			moving_left = false;
-			moving_up = false;
-			moving_down = false;
-		}
-	}
-
-	// 어떠한 조건을 충족하면 이동을 막음
-	bool MoveUpBan()
-	{
-		if (playerPos.way == right || playerPos.way == left) {
-			return true;
-		}
-		return false;
-	}
-
-	bool MoveDownBan()
-	{
-		if (playerPos.yPos == 0) {
-			return true;
-		}
-		return false;
-	}
-
-	bool MoveLeftBan()
-	{
-		return false;
-	}
-
-	bool MoveRightBan()
-	{
-		return false;
-	}
-
 	// --
 	// process func
 	// --
@@ -474,8 +576,10 @@ public:
 
 	void updateState()
 	{
-		MovingUp();
-		MovingDown();
+		JumpingUp();
+		JumpingDown();
+		MovingFront();
+		MovingBack();
 		MovingLeft();
 		MovingRight();
 	}
