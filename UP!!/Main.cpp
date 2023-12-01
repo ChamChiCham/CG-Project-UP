@@ -718,6 +718,7 @@ public:
 
 	// 플레이어 위치 확인용 코드
 	void PrintPos() {
+		std::cout << "-------------" << std::endl;
 		std::cout << "yPos:" << playerPos.yPos << std::endl;
 		std::cout << "xPos:" << playerPos.xPos << std::endl;
 		std::cout << "zPos:" << playerPos.zPos << std::endl;
