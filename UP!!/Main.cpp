@@ -342,6 +342,7 @@ public:
 		case GLUT_KEY_UP:
 			if (CheckFront() == 1) {
 				if (moving_time == 0) {
+					// player.changeStatus(PLAYER_MOVING);
 					moving_front = true;
 					playerPos.zPos -= 1;
 				}
@@ -377,6 +378,7 @@ public:
 			break;
 		case GLUT_KEY_DOWN:
 			if (CheckBack() == 1) {
+				// player.changeStatus(PLAYER_MOVING);
 				if (moving_time == 0) {
 					moving_back = true;
 					playerPos.zPos += 1;
@@ -412,6 +414,7 @@ public:
 		case GLUT_KEY_LEFT:
 			if (CheckLeft() == 1) {
 				if (moving_time == 0) {
+					// player.changeStatus(PLAYER_MOVING);
 					moving_left = true;
 					playerPos.xPos -= 1;
 				}
@@ -446,6 +449,7 @@ public:
 		case GLUT_KEY_RIGHT:
 			if (CheckRight() == 1) {
 				if (moving_time == 0) {
+					// player.changeStatus(PLAYER_MOVING);
 					moving_right = true;
 					playerPos.xPos += 1;
 				}
@@ -484,19 +488,23 @@ public:
 	// 이동 검사
 	int CheckFront()
 	{
+		// 이동 불가
 		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos - 1)) {
 			return 0;
 		}
+		// 점프
 		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
 			if (playerPos.way == front) {
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos - 1)) {
-			return 3;
-		}
+		// 이동
 		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos - 1)) {
 			return 1;
+		}
+		// 하단 점프
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos - 1)) {
+			return 3;
 		}
 		return 0;
 	}
@@ -510,11 +518,11 @@ public:
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1)) {
-			return 3;
-		}
 		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos + 1)) {
 			return 1;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1)) {
+			return 3;
 		}
 		return 0;
 	}
@@ -528,11 +536,11 @@ public:
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos - 1, playerPos.zPos)) {
-			return 3;
-		}
 		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos - 1, playerPos.zPos)) {
 			return 1;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos - 1, playerPos.zPos)) {
+			return 3;
 		}
 		return 0;
 	}
@@ -546,11 +554,11 @@ public:
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos + 1, playerPos.zPos)) {
-			return 3;
-		}
 		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos + 1, playerPos.zPos)) {
 			return 1;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos + 1, playerPos.zPos)) {
+			return 3;
 		}
 		return 0;
 	}
