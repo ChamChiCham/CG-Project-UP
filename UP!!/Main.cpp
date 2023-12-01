@@ -88,13 +88,21 @@ private:
 	float s = 0.f;
 	int current_map;
 	int moving_time;
-	int jump_time;
+
 	bool moving_left;
 	bool moving_right;
 	bool moving_front;
 	bool moving_back;
-	bool jumping_up;
-	bool jumping_down;
+
+	bool moving_left_up;
+	bool moving_right_up;
+	bool moving_front_up;
+	bool moving_back_up;
+
+	bool moving_left_down;
+	bool moving_right_down;
+	bool moving_front_down;
+	bool moving_back_down;
 
 	typedef struct CurrentPos {
 		int xPos;
@@ -293,8 +301,13 @@ public:
 			break;
 		case 'n':
 			// 플레이어 바로 앞에 블록이 있으면 홀드 자세를 취함
-			if (playerPos.way == front || playerPos.way == back) {
+			if (playerPos.way == front) {
 				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
+					player.changeStatus(PLAYER_HOLD);
+				}
+			}
+			else if (playerPos.way == back) {
+				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos + 1)) {
 					player.changeStatus(PLAYER_HOLD);
 				}
 			}
@@ -327,11 +340,27 @@ public:
 	{
 		switch (_key) {
 		case GLUT_KEY_UP:
-			// 이동중이 아니거나, 벤 조건에 만족하지 않으면 이동
-			if (moving_time == 0 && MoveFrontBan() == false) {
-				player.changeStatus(PLAYER_HANG);
-				moving_front = true;
-				playerPos.zPos -= 1;
+			if (CheckFront() == 1) {
+				if (moving_time == 0) {
+					moving_front = true;
+					playerPos.zPos -= 1;
+				}
+			}
+			else if (CheckFront() == 2) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_front_up = true;
+					playerPos.zPos -= 1;
+					playerPos.yPos += 1;
+				}
+			}
+			else if (CheckFront() == 3) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_front_down = true;
+					playerPos.zPos -= 1;
+					playerPos.yPos -= 1;
+				}
 			}
 			// 이전에 바라보던 방향에 맞게 현재 바라보는 방향 수정
 			if (playerPos.way == right) {
@@ -340,114 +369,190 @@ public:
 			else if (playerPos.way == left) {
 				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
 			}
-			// 점프가 가능한지 확인
-			CanJumpUp();
+			else if (playerPos.way == back) {
+				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+			}
 			// 현재 바라보는 방향 업데이트
 			playerPos.way = front;
 			break;
 		case GLUT_KEY_DOWN:
-			if (moving_time == 0 && MoveBackBan() == false) {
-				player.changeStatus(PLAYER_HANG);
-				moving_back = true;
-				playerPos.zPos += 1;
+			if (CheckBack() == 1) {
+				if (moving_time == 0) {
+					moving_back = true;
+					playerPos.zPos += 1;
+				}
+			}
+			else if (CheckBack() == 2) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_back_up = true;
+					playerPos.zPos += 1;
+					playerPos.yPos += 1;
+				}
+			}
+			else if (CheckBack() == 3) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_back_down = true;
+					playerPos.zPos += 1;
+					playerPos.yPos -= 1;
+				}
 			}
 			if (playerPos.way == right) {
-				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+				player.getShape().rotate(1,-90.f, 0.f, 1.f, 0.f);
 			}
 			else if (playerPos.way == left) {
-				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
 			}
-			CanJumpDown();
+			else if (playerPos.way == front) {
+				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+			}
 			playerPos.way = back;
 			break;
 		case GLUT_KEY_LEFT:
-			if (moving_time == 0 && MoveLeftBan() == false) {
-				moving_left = true;
-				playerPos.xPos -= 1;
+			if (CheckLeft() == 1) {
+				if (moving_time == 0) {
+					moving_left = true;
+					playerPos.xPos -= 1;
+				}
 			}
-			if (playerPos.way == front || playerPos.way == back) {
+			else if (CheckLeft() == 2) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_left_up = true;
+					playerPos.xPos -= 1;
+					playerPos.yPos += 1;
+				}
+			}
+			else if (CheckLeft() == 3) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_left_down = true;
+					playerPos.xPos -= 1;
+					playerPos.yPos -= 1;
+				}
+			}
+			if (playerPos.way == front) {
 				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+			}
+			else if (playerPos.way == back) {
+				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
 			}
 			else if (playerPos.way == right) {
 				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
 			}
-			CanJumpLeft();
 			playerPos.way = left;
 			break;
 		case GLUT_KEY_RIGHT:
-			if (moving_time == 0 && MoveRightBan() == false) {
-				moving_right = true;
-				playerPos.xPos += 1;
+			if (CheckRight() == 1) {
+				if (moving_time == 0) {
+					moving_right = true;
+					playerPos.xPos += 1;
+				}
 			}
-			if (playerPos.way == front || playerPos.way == back) {
+			else if (CheckRight() == 2) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_right_up = true;
+					playerPos.xPos += 1;
+					playerPos.yPos += 1;
+				}
+			}
+			else if (CheckRight() == 3) {
+				if (moving_time == 0) {
+					player.changeStatus(PLAYER_HANG);
+					moving_right_down = true;
+					playerPos.xPos += 1;
+					playerPos.yPos -= 1;
+				}
+			}
+			if (playerPos.way == front) {
 				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+			}
+			else if (playerPos.way == back) {
+				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
 			}
 			else if (playerPos.way == left) {
 				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
 			}
-			CanJumpRight();
 			playerPos.way = right;
 			break;
 		}
 		PrintPos();
 	}
 
-	// 점프가 가능한가?
-	void CanJumpUp()
+	// 이동 검사
+	int CheckFront()
 	{
-		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
-			jumping_up = true;
-			playerPos.yPos += 1;
+		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos - 1)) {
+			return 0;
 		}
+		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
+			if (playerPos.way == front) {
+				return 2;
+			}
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos - 1)) {
+			return 3;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos - 1)) {
+			return 1;
+		}
+		return 0;
 	}
-	void CanJumpDown()
+	int CheckBack()
 	{
-		if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos)) {
-			jumping_down = true;
-			playerPos.yPos -= 1;
+		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos + 1)) {
+			return 0;
 		}
+		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos + 1)) {
+			if (playerPos.way == back) {
+				return 2;
+			}
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1)) {
+			return 3;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos + 1)) {
+			return 1;
+		}
+		return 0;
 	}
-	// 경우의 수를 더 고려해볼 필요가 있음
-	void CanJumpLeft()
+	int CheckLeft()
 	{
-		std::cout << "Can Jump Left?" << std::endl;
-		/*
-		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
-			jumping_up = true;
-			playerPos.yPos += 1;
+		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos - 1, playerPos.zPos)) {
+			return 0;
 		}
-		*/
+		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos - 1, playerPos.zPos)) {
+			if (playerPos.way == left) {
+				return 2;
+			}
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos - 1, playerPos.zPos)) {
+			return 3;
+		}
+		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos - 1, playerPos.zPos)) {
+			return 1;
+		}
+		return 0;
 	}
-	void CanJumpRight()
+	int CheckRight()
 	{
-		std::cout << "Can Jump Right?" << std::endl;
-		/*
-		if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos)) {
-			jumping_up = true;
-			playerPos.yPos += 1;
+		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos + 1, playerPos.zPos)) {
+			return 0;
 		}
-		*/
-	}
-
-	// 점프
-	void JumpingUp()
-	{
-		if (jumping_up) {
-			player.getShape().translate(3, 0.f, 0.1f, 0.f);
-			view.eye.y += 0.1f;
-			view.at.y += 0.1f;
-			EndJump();
+		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos + 1, playerPos.zPos)) {
+			if (playerPos.way == right) {
+				return 2;
+			}
 		}
-	}
-	// 하단 점프
-	void JumpingDown()
-	{
-		if (jumping_down) {
-			player.getShape().translate(3, 0.f, -0.1f, 0.f);
-			view.eye.y -= 0.1f;
-			view.at.y -= 0.1f;
-			EndJump();
+		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos + 1, playerPos.zPos)) {
+			return 3;
 		}
+		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos + 1, playerPos.zPos)) {
+			return 1;
+		}
+		return 0;
 	}
 
 	// 이동
@@ -460,6 +565,29 @@ public:
 			EndMove();
 		}
 	}
+	void MovingFrontUp()
+	{
+		if (moving_front_up) {
+			player.getShape().translate(3, 0.f, 0.1f, -0.1f);
+			view.eye.z -= 0.1f;
+			view.at.z -= 0.1f;
+			view.eye.y += 0.1f;
+			view.at.y += 0.1f;
+			EndMove();
+		}
+	}
+	void MovingFrontDown()
+	{
+		if (moving_front_down) {
+			player.getShape().translate(3, 0.f, -0.1f, -0.1f);
+			view.eye.z -= 0.1f;
+			view.at.z -= 0.1f;
+			view.eye.y -= 0.1f;
+			view.at.y -= 0.1f;
+			EndMove();
+		}
+	}
+
 	void MovingBack()
 	{
 		if (moving_back) {
@@ -469,6 +597,29 @@ public:
 			EndMove();
 		}
 	}
+	void MovingBackUp()
+	{
+		if (moving_back_up) {
+			player.getShape().translate(3, 0.f, 0.1f, 0.1f);
+			view.eye.z += 0.1f;
+			view.at.z += 0.1f;
+			view.eye.y += 0.1f;
+			view.at.y += 0.1f;
+			EndMove();
+		}
+	}
+	void MovingBackDown()
+	{
+		if (moving_back_down) {
+			player.getShape().translate(3, 0.f, -0.1f, 0.1f);
+			view.eye.z += 0.1f;
+			view.at.z += 0.1f;
+			view.eye.y -= 0.1f;
+			view.at.y -= 0.1f;
+			EndMove();
+		}
+	}
+
 	void MovingLeft()
 	{
 		if (moving_left) {
@@ -478,12 +629,57 @@ public:
 			EndMove();
 		}
 	}
+	void MovingLeftUp()
+	{
+		if (moving_left_up) {
+			player.getShape().translate(3, -0.1f, 0.1f, 0.f);
+			view.eye.x -= 0.1f;
+			view.at.x -= 0.1f;
+			view.eye.y += 0.1;
+			view.at.y += 0.1;
+			EndMove();
+		}
+	}
+	void MovingLeftDown()
+	{
+		if (moving_left_down) {
+			player.getShape().translate(3, -0.1f, -0.1f, 0.f);
+			view.eye.x -= 0.1f;
+			view.at.x -= 0.1f;
+			view.eye.y -= 0.1;
+			view.at.y -= 0.1;
+			EndMove();
+		}
+	}
+
 	void MovingRight()
 	{
 		if (moving_right) {
 			player.getShape().translate(3, 0.1f, 0.f, 0.f);
 			view.eye.x += 0.1f;
 			view.at.x += 0.1f;
+			EndMove();
+		}
+	}
+	void MovingRightUp()
+	{
+		if (moving_right_up) {
+			player.getShape().translate(3, 0.1f, 0.1f, 0.f);
+			view.eye.x += 0.1f;
+			view.at.x += 0.1f;
+			view.eye.y += 0.1;
+			view.at.y += 0.1;
+			EndMove();
+		}
+	}
+	void MovingRightDown()
+	{
+		if (moving_right_down) {
+			player.getShape().translate(3, 0.1f, -0.1f, 0.f);
+			view.eye.x += 0.1f;
+			view.at.x += 0.1f;
+			view.eye.y -= 0.1;
+			view.at.y -= 0.1;
 			EndMove();
 		}
 	}
@@ -499,61 +695,23 @@ public:
 			moving_left = false;
 			moving_front = false;
 			moving_back = false;
-		}
-	}
 
-	// 점프 종료 조건
-	void EndJump()
-	{
-		jump_time++;
-		if (jump_time == 10) {
-			jump_time = 0;
-			jumping_up = false;
-			jumping_down = false;
-		}
-	}
+			moving_right_up = false;
+			moving_left_up = false;
+			moving_front_up = false;
+			moving_back_up = false;
 
-	// 어떠한 조건을 충족하면 이동을 막음
-	bool MoveLeftBan()
-	{
-		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos - 1, playerPos.zPos) != true) {
-			return true;
+			moving_right_down = false;
+			moving_left_down = false;
+			moving_front_down = false;
+			moving_back_down = false;
 		}
-		return false;
-	}
-	bool MoveRightBan()
-	{
-		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos + 1, playerPos.zPos) != true) {
-			return true;
-		}
-		return false;
-	}
-	bool MoveFrontBan()
-	{
-		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos - 1)) {
-			return true;
-		}
-		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos - 1) != true && maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1) != true) {
-			return true;
-		}
-		return false;
-	}
-	bool MoveBackBan()
-	{
-		if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1) != true) {
-			return true;
-		}
-		// 아직 테스트 못해봄
-		if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos + 1) != true && maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1) != true) {
-			return true;
-		}
-		return false;
 	}
 
 	// 플레이어 위치 확인용 코드
 	void PrintPos() {
-		std::cout << "xPos:" << playerPos.xPos << std::endl;
 		std::cout << "yPos:" << playerPos.yPos << std::endl;
+		std::cout << "xPos:" << playerPos.xPos << std::endl;
 		std::cout << "zPos:" << playerPos.zPos << std::endl;
 		if (playerPos.way == 0) {
 			std::cout << "way: front" << std::endl;
@@ -576,12 +734,20 @@ public:
 
 	void updateState()
 	{
-		JumpingUp();
-		JumpingDown();
 		MovingFront();
 		MovingBack();
 		MovingLeft();
 		MovingRight();
+
+		MovingFrontUp();
+		MovingBackUp();
+		MovingLeftUp();
+		MovingRightUp();
+
+		MovingFrontDown();
+		MovingBackDown();
+		MovingLeftDown();
+		MovingRightDown();
 	}
 
 
