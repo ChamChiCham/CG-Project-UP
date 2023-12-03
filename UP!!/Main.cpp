@@ -665,22 +665,98 @@ public:
 	// 홀드한 채로 잘못된 이동 방지
 	bool HoldCheckFront()
 	{
-		
+		// 블럭 좌우 이동 방지
+		if (playerstate.way == left || playerstate.way == right) {
+			return false;
+		}
+		if (playerstate.way == front) {
+			// 밀려는 곳에 이미 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 2)) {
+				return false;
+			}
+			// 밀려는 곳에 발판이 없으면
+			if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos - 1) != true) {
+				return false;
+			}
+		}
+		if (playerstate.way == back) {
+			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
+				return false;
+			}
+		}
 		return true;
 	}
 	bool HoldCheckBack()
 	{
-		
+		// 블럭 좌우 이동 방지
+		if (playerstate.way == left || playerstate.way == right) {
+			return false;
+		}
+		if (playerstate.way == back) {
+			// 밀려는 곳에 이미 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 2)) {
+				return false;
+			}
+			// 밀려는 곳에 발판이 없으면
+			if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos + 1) != true) {
+				return false;
+			}
+		}
+		if (playerstate.way == front) {
+			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+				return false;
+			}
+		}
 		return true;
 	}
 	bool HoldCheckLeft()
 	{
-		
+		// 블럭 좌우 이동 방지
+		if (playerstate.way == front || playerstate.way == back) {
+			return false;
+		}
+		if (playerstate.way == left) {
+			// 밀려는 곳에 이미 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 2, playerstate.zPos)) {
+				return false;
+			}
+			// 밀려는 곳에 발판이 없으면
+			if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos - 1, playerstate.zPos) != true) {
+				return false;
+			}
+		}
+		if (playerstate.way == right) {
+			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
+				return false;
+			}
+		}
 		return true;
 	}
 	bool HoldCheckRight()
 	{
-		
+		// 블럭 좌우 이동 방지
+		if (playerstate.way == front || playerstate.way == back) {
+			return false;
+		}
+		if (playerstate.way == right) {
+			// 밀려는 곳에 이미 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 2, playerstate.zPos)) {
+				return false;
+			}
+			// 밀려는 곳에 발판이 없으면
+			if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos + 1, playerstate.zPos) != true) {
+				return false;
+			}
+		}
+		if (playerstate.way == left) {
+			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+				return false;
+			}
+		}
 		return true;
 	}
 
