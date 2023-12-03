@@ -104,13 +104,25 @@ private:
 	bool moving_front_down;
 	bool moving_back_down;
 
-	typedef struct CurrentPos {
+	bool moving_left_hold;
+	bool moving_right_hold;
+	bool moving_front_hold;
+	bool moving_back_hold;
+
+	int bottom_adjustment;
+
+	typedef struct CurrentState {
 		int xPos;
 		int yPos;
 		int zPos;
 		int way;
+		bool hold;
+		bool hang;
+		int brickxPos;
+		int brickyPos;
+		int brickzPos;
 	};
-	CurrentPos playerPos;
+	CurrentState playerstate;
 public:
 
 	// --
@@ -177,7 +189,7 @@ public:
 		player.getShape().scale(0, 0.015f, 0.015f, 0.015f);
 		player.getShape().translate(1, 0.f, 0.5f, 0.1f);
 		player.getShape().rotate(2, 180.f, 0.f, 1.f, 0.f);
-		playerPos = { 0, 0, 0 };
+		playerstate = { 0, 0, 0 };
 
 		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
 
@@ -241,6 +253,11 @@ public:
 
 	}
 
+	void Motion(const int _x, const int _y)
+	{
+
+	}
+
 	void Keyboard(const unsigned char _key, const int _x, const int _y)
 	{
 		switch (_key) {
@@ -300,273 +317,374 @@ public:
 			player.changeStatus(PLAYER_STAND);
 			break;
 		case 'n':
-			// 플레이어 바로 앞에 블록이 있으면 홀드 자세를 취함
-			if (playerPos.way == front) {
-				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
-					player.changeStatus(PLAYER_HOLD);
+			if (playerstate.hold == true) {
+				player.changeStatus(PLAYER_STAND);
+				playerstate.hold = false;
+			}
+			else {
+				// 플레이어 바로 앞에 블록이 있으면 홀드 자세를 취함
+				if (playerstate.way == front) {
+					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
+						player.changeStatus(PLAYER_HOLD);
+						playerstate.hold = true;
+						playerstate.brickxPos = playerstate.xPos;
+						playerstate.brickyPos = playerstate.yPos + 1;
+						playerstate.brickzPos = playerstate.zPos - 1;
+					}
+				}
+				else if (playerstate.way == back) {
+					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+						player.changeStatus(PLAYER_HOLD);
+						playerstate.hold = true;
+						playerstate.brickxPos = playerstate.xPos;
+						playerstate.brickyPos = playerstate.yPos + 1;
+						playerstate.brickzPos = playerstate.zPos + 1;
+					}
+				}
+				else if (playerstate.way == right) {
+					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+						player.changeStatus(PLAYER_HOLD);
+						playerstate.hold = true;
+						playerstate.brickxPos = playerstate.xPos + 1;
+						playerstate.brickyPos = playerstate.yPos + 1;
+						playerstate.brickzPos = playerstate.zPos;
+					}
+				}
+				else if (playerstate.way == left) {
+					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
+						player.changeStatus(PLAYER_HOLD);
+						playerstate.hold = true;
+						playerstate.brickxPos = playerstate.xPos - 1;
+						playerstate.brickyPos = playerstate.yPos + 1;
+						playerstate.brickzPos = playerstate.zPos;
+					}
 				}
 			}
-			else if (playerPos.way == back) {
-				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos + 1)) {
-					player.changeStatus(PLAYER_HOLD);
-				}
-			}
-			else if (playerPos.way == right) {
-				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos + 1, playerPos.zPos)) {
-					player.changeStatus(PLAYER_HOLD);
-				}
-			}
-			else if (playerPos.way == left) {
-				if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos - 1, playerPos.zPos)) {
-					player.changeStatus(PLAYER_HOLD);
-				}
-			}
+			PrintPos();
 			break;
 		case 'm':
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			maps[current_map](3, 1, -2).move(1, 0, 0);
-			break;
-		case '[':
-			maps[current_map](4, 1, -2).setPos(3, 1, -2);
+			// test 완료
 			break;
 		}
 	}
 
-	void Motion(const int _x, const int _y)
-	{
-		
-	}
-
 	void SpecialKeys(const int _key, const int _x, const int _y)
 	{
+		playerstate.hang = false;
 		switch (_key) {
 		case GLUT_KEY_UP:
-			if (CheckFront() == 1) {
+			if (playerstate.hold) {
+				if (moving_time == 0) {
+					if (HoldCheckFront() == true) {
+						moving_front_hold = true;
+						playerstate.zPos -= 1;
+						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, -1);
+					}
+				}
+			}
+			else if (CheckFront() == 1) {
 				if (moving_time == 0) {
 					// player.changeStatus(PLAYER_MOVING);
 					moving_front = true;
-					playerPos.zPos -= 1;
+					playerstate.zPos -= 1;
 				}
 			}
 			else if (CheckFront() == 2) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_front_up = true;
-					playerPos.zPos -= 1;
-					playerPos.yPos += 1;
+					playerstate.zPos -= 1;
+					playerstate.yPos += 1;
 				}
 			}
 			else if (CheckFront() == 3) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_front_down = true;
-					playerPos.zPos -= 1;
-					playerPos.yPos -= 1;
+					playerstate.zPos -= 1;
+					playerstate.yPos -= 1;
 				}
 			}
-			// 이전에 바라보던 방향에 맞게 현재 바라보는 방향 수정
-			if (playerPos.way == right) {
-				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+			if (playerstate.hold == false) {
+				// 이전에 바라보던 방향에 맞게 현재 바라보는 방향 수정
+				if (playerstate.way == right) {
+					player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == left) {
+					player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == back) {
+					player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+				}
+				// 현재 바라보는 방향 업데이트
+				playerstate.way = front;
 			}
-			else if (playerPos.way == left) {
-				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
-			}
-			else if (playerPos.way == back) {
-				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
-			}
-			// 현재 바라보는 방향 업데이트
-			playerPos.way = front;
 			break;
 		case GLUT_KEY_DOWN:
-			if (CheckBack() == 1) {
+			if (playerstate.hold) {
+				if (moving_time == 0) {
+					if (HoldCheckBack() == true) {
+						moving_back_hold = true;
+						playerstate.zPos += 1;
+						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, 1);
+					}
+				}
+			}
+			else if (CheckBack() == 1) {
 				// player.changeStatus(PLAYER_MOVING);
 				if (moving_time == 0) {
 					moving_back = true;
-					playerPos.zPos += 1;
+					playerstate.zPos += 1;
 				}
 			}
 			else if (CheckBack() == 2) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_up = true;
-					playerPos.zPos += 1;
-					playerPos.yPos += 1;
+					playerstate.zPos += 1;
+					playerstate.yPos += 1;
 				}
 			}
 			else if (CheckBack() == 3) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_down = true;
-					playerPos.zPos += 1;
-					playerPos.yPos -= 1;
+					playerstate.zPos += 1;
+					playerstate.yPos -= 1;
 				}
 			}
-			if (playerPos.way == right) {
-				player.getShape().rotate(1,-90.f, 0.f, 1.f, 0.f);
+			if (playerstate.hold == false) {
+				if (playerstate.way == right) {
+					player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == left) {
+					player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == front) {
+					player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+				}
+				playerstate.way = back;
 			}
-			else if (playerPos.way == left) {
-				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
-			}
-			else if (playerPos.way == front) {
-				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
-			}
-			playerPos.way = back;
 			break;
 		case GLUT_KEY_LEFT:
-			if (CheckLeft() == 1) {
+			if (playerstate.hold) {
+				if (moving_time == 0) {
+					if (HoldCheckLeft() == true) {
+						moving_left_hold = true;
+						playerstate.xPos -= 1;
+						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, -1, 0);
+					}
+				}
+			}
+			else if (CheckLeft() == 1) {
 				if (moving_time == 0) {
 					// player.changeStatus(PLAYER_MOVING);
 					moving_left = true;
-					playerPos.xPos -= 1;
+					playerstate.xPos -= 1;
 				}
 			}
 			else if (CheckLeft() == 2) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_up = true;
-					playerPos.xPos -= 1;
-					playerPos.yPos += 1;
+					playerstate.xPos -= 1;
+					playerstate.yPos += 1;
 				}
 			}
 			else if (CheckLeft() == 3) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_down = true;
-					playerPos.xPos -= 1;
-					playerPos.yPos -= 1;
+					playerstate.xPos -= 1;
+					playerstate.yPos -= 1;
 				}
 			}
-			if (playerPos.way == front) {
-				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+			if (playerstate.hold == false) {
+				if (playerstate.way == front) {
+					player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == back) {
+					player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == right) {
+					player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+				}
+				playerstate.way = left;
 			}
-			else if (playerPos.way == back) {
-				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
-			}
-			else if (playerPos.way == right) {
-				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
-			}
-			playerPos.way = left;
 			break;
 		case GLUT_KEY_RIGHT:
-			if (CheckRight() == 1) {
+			if (playerstate.hold) {
+				if (moving_time == 0) {
+					if (HoldCheckRight() == true) {
+						moving_right_hold = true;
+						playerstate.xPos += 1;
+						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 1, 0);
+					}
+				}
+			}
+			else if (CheckRight() == 1) {
 				if (moving_time == 0) {
 					// player.changeStatus(PLAYER_MOVING);
 					moving_right = true;
-					playerPos.xPos += 1;
+					playerstate.xPos += 1;
 				}
 			}
 			else if (CheckRight() == 2) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_up = true;
-					playerPos.xPos += 1;
-					playerPos.yPos += 1;
+					playerstate.xPos += 1;
+					playerstate.yPos += 1;
 				}
 			}
 			else if (CheckRight() == 3) {
 				if (moving_time == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_down = true;
-					playerPos.xPos += 1;
-					playerPos.yPos -= 1;
+					playerstate.xPos += 1;
+					playerstate.yPos -= 1;
 				}
 			}
-			if (playerPos.way == front) {
-				player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+			if (playerstate.hold == false) {
+				if (playerstate.way == front) {
+					player.getShape().rotate(1, -90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == back) {
+					player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
+				}
+				else if (playerstate.way == left) {
+					player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
+				}
+				playerstate.way = right;
 			}
-			else if (playerPos.way == back) {
-				player.getShape().rotate(1, 90.f, 0.f, 1.f, 0.f);
-			}
-			else if (playerPos.way == left) {
-				player.getShape().rotate(1, 180.f, 0.f, 1.f, 0.f);
-			}
-			playerPos.way = right;
 			break;
 		}
-		PrintPos();
 	}
 
 	// 이동 검사
 	int CheckFront()
 	{
 		// 이동 불가
-		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos - 1)) {
+		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos - 1)) {
 			return 0;
 		}
 		// 점프
-		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos - 1)) {
-			if (playerPos.way == front) {
+		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
+			if (playerstate.way == front) {
 				return 2;
 			}
 		}
 		// 이동
-		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos - 1)) {
+		else if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos - 1)) {
 			return 1;
 		}
 		// 하단 점프
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos - 1)) {
-			return 3;
+		else {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos - 1)) {
+					bottom_adjustment = i - 1;
+					return 3;
+				}
+			}
 		}
 		return 0;
 	}
 	int CheckBack()
 	{
-		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos, playerPos.zPos + 1)) {
+		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos + 1)) {
 			return 0;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos, playerPos.zPos + 1)) {
-			if (playerPos.way == back) {
+		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+			if (playerstate.way == back) {
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos, playerPos.zPos + 1)) {
+		else if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos + 1)) {
 			return 1;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos, playerPos.zPos + 1)) {
-			return 3;
+		else {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos + 1)) {
+					bottom_adjustment = i - 1;
+					return 3;
+				}
+			}
 		}
 		return 0;
 	}
 	int CheckLeft()
 	{
-		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos - 1, playerPos.zPos)) {
+		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos - 1, playerstate.zPos)) {
 			return 0;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos - 1, playerPos.zPos)) {
-			if (playerPos.way == left) {
+		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
+			if (playerstate.way == left) {
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos - 1, playerPos.zPos)) {
+		else if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos - 1, playerstate.zPos)) {
 			return 1;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos - 1, playerPos.zPos)) {
-			return 3;
+		else {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos - 1, playerstate.zPos)) {
+					bottom_adjustment = i - 1;
+					return 3;
+				}
+			}
 		}
 		return 0;
 	}
 	int CheckRight()
 	{
-		if (maps[current_map].isPosition(playerPos.yPos + 2, playerPos.xPos + 1, playerPos.zPos)) {
+		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos + 1, playerstate.zPos)) {
 			return 0;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos + 1, playerPos.xPos + 1, playerPos.zPos)) {
-			if (playerPos.way == right) {
+		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+			if (playerstate.way == right) {
 				return 2;
 			}
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos, playerPos.xPos + 1, playerPos.zPos)) {
+		else if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos + 1, playerstate.zPos)) {
 			return 1;
 		}
-		else if (maps[current_map].isPosition(playerPos.yPos - 1, playerPos.xPos + 1, playerPos.zPos)) {
-			return 3;
+		else {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos + 1, playerstate.zPos)) {
+					bottom_adjustment = i - 1;
+					return 3;
+				}
+			}
 		}
 		return 0;
 	}
 
-	// 이동
+	// 홀드한 채로 잘못된 이동 방지
+	bool HoldCheckFront()
+	{
+		
+		return true;
+	}
+	bool HoldCheckBack()
+	{
+		
+		return true;
+	}
+	bool HoldCheckLeft()
+	{
+		
+		return true;
+	}
+	bool HoldCheckRight()
+	{
+		
+		return true;
+	}
+
+	// 앞
 	void MovingFront()
 	{
 		if (moving_front) {
@@ -598,7 +716,17 @@ public:
 			EndMove();
 		}
 	}
+	void MovingFrontHold()
+	{
+		if (moving_front_hold) {
+			player.getShape().translate(3, 0.f, 0.f, -0.1f);
+			view.eye.z -= 0.1f;
+			view.at.z -= 0.1f;
+			EndMove();
+		}
+	}
 
+	// 뒤
 	void MovingBack()
 	{
 		if (moving_back) {
@@ -630,7 +758,17 @@ public:
 			EndMove();
 		}
 	}
+	void MovingBackHold()
+	{
+		if (moving_back_hold) {
+			player.getShape().translate(3, 0.f, 0.f, 0.1f);
+			view.eye.z += 0.1f;
+			view.at.z += 0.1f;
+			EndMove();
+		}
+	}
 
+	// 왼쪽
 	void MovingLeft()
 	{
 		if (moving_left) {
@@ -662,7 +800,17 @@ public:
 			EndMove();
 		}
 	}
+	void MovingLeftHold()
+	{
+		if (moving_left_hold) {
+			player.getShape().translate(3, -0.1f, 0.f, 0.f);
+			view.eye.x -= 0.1f;
+			view.at.x -= 0.1f;
+			EndMove();
+		}
+	}
 
+	// 오른쪽
 	void MovingRight()
 	{
 		if (moving_right) {
@@ -694,6 +842,15 @@ public:
 			EndMove();
 		}
 	}
+	void MovingRightHold()
+	{
+		if (moving_right_hold) {
+			player.getShape().translate(3, 0.1f, 0.f, 0.f);
+			view.eye.x += 0.1f;
+			view.at.x += 0.1f;
+			EndMove();
+		}
+	}
 
 	// 무빙 종료 조건
 	void EndMove()
@@ -701,6 +858,9 @@ public:
 		moving_time++;
 		if (moving_time == 10) {
 			player.changeStatus(PLAYER_STAND);
+			if (playerstate.hang == true) {
+				player.changeStatus(PLAYER_HANG);
+			}
 			moving_time = 0;
 			moving_right = false;
 			moving_left = false;
@@ -716,27 +876,51 @@ public:
 			moving_left_down = false;
 			moving_front_down = false;
 			moving_back_down = false;
+
+			moving_right_hold = false;
+			moving_left_hold = false;
+			moving_front_hold = false;
+			moving_back_hold = false;
+
+			playerstate.hold = false;
+
+			if (bottom_adjustment > 0) {
+				BottomAdjustment(bottom_adjustment);
+				bottom_adjustment = 0;
+			}
+
+			PrintPos();
 		}
+	}
+
+	// 하단 조정
+	void BottomAdjustment(int i)
+	{
+		playerstate.yPos -= i;
+		player.getShape().translate(3, 0.f, -i, 0.f);
+		view.eye.y -= i;
+		view.at.y -= i;
 	}
 
 	// 플레이어 위치 확인용 코드
 	void PrintPos() {
 		std::cout << "-------------" << std::endl;
-		std::cout << "yPos:" << playerPos.yPos << std::endl;
-		std::cout << "xPos:" << playerPos.xPos << std::endl;
-		std::cout << "zPos:" << playerPos.zPos << std::endl;
-		if (playerPos.way == 0) {
+		std::cout << "yPos:" << playerstate.yPos << std::endl;
+		std::cout << "xPos:" << playerstate.xPos << std::endl;
+		std::cout << "zPos:" << playerstate.zPos << std::endl;
+		if (playerstate.way == 0) {
 			std::cout << "way: front" << std::endl;
 		}
-		else if (playerPos.way == 1) {
+		else if (playerstate.way == 1) {
 			std::cout << "way: right" << std::endl;
 		}
-		else if (playerPos.way == 2) {
+		else if (playerstate.way == 2) {
 			std::cout << "way: back" << std::endl;
 		}
-		else if (playerPos.way == 3) {
+		else if (playerstate.way == 3) {
 			std::cout << "way: left" << std::endl;
 		}
+		std::cout << "hold:" << playerstate.hold << std::endl;
 	}
 
 	// --
@@ -760,6 +944,11 @@ public:
 		MovingBackDown();
 		MovingLeftDown();
 		MovingRightDown();
+
+		MovingFrontHold();
+		MovingBackHold();
+		MovingLeftHold();
+		MovingRightHold();
 	}
 
 
