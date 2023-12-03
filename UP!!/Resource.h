@@ -62,7 +62,7 @@ public:
 class CBrick : public CShape
 {
 private:
-	glm::ivec3	pos = { 0.f, 0.f, 0.f };
+	glm::ivec3	pos = { 0, 0, 0 };
 	int& x =	pos.x;
 	int& y =	pos.y;
 	int& z =	pos.z;
@@ -80,6 +80,8 @@ public:
 	void updateBuffer() override;
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
 	const glm::ivec3& getPos();
+	void setPos(const int _y, const int _x, const int _z);
+	void move(const int _dy, const int _dx, const int _dz);
 
 };
 
@@ -89,15 +91,12 @@ private:
 	std::array<CShape, 3> shapes;
 	
 	int			status = PLAYER_STAND;
-	glm::ivec3	pos = { 0.f, 0.f, 0.f };
-	int&		x =	pos.x;
-	int&		y =	pos.y;
-	int&		z =	pos.z;
 
 public:
 	void init();
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 	void changeStatus(const int _status);
+	int& getstatus();
 	CShape& getShape();
 };
 

@@ -304,6 +304,18 @@ const glm::ivec3& CBrick::getPos()
 	return pos;
 }
 
+void CBrick::setPos(const int _y, const int _x, const int _z)
+{
+	pos = glm::ivec3(_x, _y, _z);
+}
+
+void CBrick::move(const int _dy, const int _dx, const int _dz)
+{
+	pos.x += _dx;
+	pos.y += _dy;
+	pos.z += _dz;
+}
+
 void CMap::init(const int _idx)
 {
 
@@ -405,9 +417,7 @@ void CPlayer::init()
 
 void CPlayer::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
-	shapes[status].translate(static_cast<int>(shapes[status].getMatrixSize()), static_cast<glm::vec3>(pos));
 	shapes[status].draw(_view, _proj, _mode, _light);
-	shapes[status].clearMatrix(shapes[status].getMatrixSize() - 1);
 }
 
 void CPlayer::changeStatus(const int _status)
@@ -419,4 +429,9 @@ void CPlayer::changeStatus(const int _status)
 CShape& CPlayer::getShape()
 {
 	return shapes[status];
+}
+
+int& CPlayer::getstatus()
+{
+	return status;
 }

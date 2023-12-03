@@ -326,7 +326,10 @@ public:
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			// test 완료
+			maps[current_map](3, 1, -2).move(1, 0, 0);
+			break;
+		case '[':
+			maps[current_map](4, 1, -2).setPos(3, 1, -2);
 			break;
 		}
 	}
