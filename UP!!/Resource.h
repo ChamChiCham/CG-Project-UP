@@ -63,14 +63,17 @@ class CBrick : public CShape
 {
 private:
 	glm::ivec3	pos = { 0, 0, 0 };
-	int& x =	pos.x;
-	int& y =	pos.y;
-	int& z =	pos.z;
+	int&		x =	pos.x;
+	int&		y =	pos.y;
+	int&		z =	pos.z;
 
-	static unsigned int texture;
+	int			type = BRICK_TYPE_NORMAL;
+
+	static std::array<unsigned int, BRICK_TYPE_MAX> texture;
 
 private:
-	void updateTexture();
+	void updateTextures();
+	void createTexture(const int _type, const char* _name);
 
 public:
 
@@ -83,6 +86,8 @@ public:
 	void setPos(const int _y, const int _x, const int _z);
 	void move(const int _dy, const int _dx, const int _dz);
 
+	void setType(const int _type);
+	const int getType();
 };
 
 class CPlayer
@@ -90,7 +95,7 @@ class CPlayer
 private:
 	std::array<CShape, 3> shapes;
 	
-	int			status = PLAYER_STAND;
+	int status = PLAYER_STAND;
 
 public:
 	void init();

@@ -207,14 +207,14 @@ const size_t CShape::getMatrixSize()
 // CBrick member function
 // --
 
-unsigned int CBrick::texture = -1;
+std::array<unsigned int, BRICK_TYPE_MAX> CBrick::texture = {-1};
 
 CBrick::CBrick()
 {
 	setData(SHAPE_DICE);
 	setColor(1.f, 1.f, 1.f);
-	if (texture == -1)
-		updateTexture();
+	if (texture[0] == -1)
+		updateTextures();
 }
 
 CBrick::CBrick(const glm::ivec3& _pos)
@@ -222,8 +222,8 @@ CBrick::CBrick(const glm::ivec3& _pos)
 	setData(SHAPE_DICE);
 	setColor(1.f, 1.f, 1.f);
 	pos = _pos;
-	if (texture == -1)
-		updateTexture();
+	if (texture[0] == -1)
+		updateTextures();
 }
 
 void CBrick::updateBuffer()
@@ -267,17 +267,23 @@ void CBrick::updateBuffer()
 	glEnableVertexAttribArray(2);
 }
 
-void CBrick::updateTexture()
+void CBrick::updateTextures()
 {
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	for (int i = 0; i < BRICK_TYPE_MAX; ++i)
+		createTexture(i, BRICK_IMAGE[i]);
+}
+
+void CBrick::createTexture(const int _type, const char* _name)
+{
+	glGenTextures(1, &texture[_type]);
+	glBindTexture(GL_TEXTURE_2D, texture[_type]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	int widthImage, heightImage, numberOfChannel;
-	unsigned char* data = stbi_load(BRICK_IMAGE, &widthImage, &heightImage, &numberOfChannel, 0);
+	unsigned char* data = stbi_load(_name, &widthImage, &heightImage, &numberOfChannel, 0);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3, widthImage, heightImage, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	stbi_image_free(data);
 }
@@ -292,7 +298,7 @@ void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, c
 
 	setUniform(_view, _proj, _light, _program);
 
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE_2D, texture[type]);
 
 	drawBuffer(_mode);
 
@@ -314,6 +320,16 @@ void CBrick::move(const int _dy, const int _dx, const int _dz)
 	pos.x += _dx;
 	pos.y += _dy;
 	pos.z += _dz;
+}
+
+void CBrick::setType(const int _type)
+{
+	type = _type;
+}
+
+const int CBrick::getType()
+{
+	return type;
 }
 
 void CMap::init(const int _idx)
@@ -347,9 +363,14 @@ void CMap::init(const int _idx)
 	while (std::getline(inputFile, line)) {
 		if (line[0] == '#')
 			break;
-		int pos[3] = {};
-		sscanf_s(line.c_str(), "%d, %d, %d,", &pos[0], &pos[1], &pos[2]);
-		bricks.push_back(CBrick(glm::ivec3(pos[1], pos[0], pos[2])));
+		int pos[4] = {};
+		sscanf_s(line.c_str(), "%d, %d, %d, %d", &pos[0], &pos[1], &pos[2], &pos[3]);
+
+		CBrick brick_new;
+		brick_new.setPos(pos[0], pos[1], pos[2]);
+		if (pos[3] != 0)
+			brick_new.setType(pos[3] - 1);
+		bricks.push_back(brick_new);
 	}
 
 	inputFile.close();
