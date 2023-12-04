@@ -123,7 +123,6 @@ private:
 		int way;
 		bool hold;
 		bool hard;
-		bool hang;
 		int hold_brick_xPos;
 		int hold_brick_yPos;
 		int hold_brick_zPos;
@@ -376,11 +375,12 @@ public:
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case 'v':
+			// 블럭 느리게 밀기 테스트
 			if (playerstate.hold) {
 				playerstate.hard = true;
 			}
+			break;
 		case ']':
-			maps[current_map](0, 0, 0).setType(BRICK_TYPE_HARD);
 			maps[current_map](0, 1, 0).setType(BRICK_TYPE_UNMOVABLE);
 			break;
 		}
@@ -388,7 +388,6 @@ public:
 
 	void SpecialKeys(const int _key, const int _x, const int _y)
 	{
-		playerstate.hang = false;
 		switch (_key) {
 		case GLUT_KEY_UP:
 			if (playerstate.hold) {
@@ -399,7 +398,14 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 0;
 						movewait_brick_zPos = -1;
-						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 0, -1);
+					}
+				}
+				// 블럭 당기면 적절한 위치에 착지
+				for (int i = 0; i < 5; i++) {
+					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
+						bottom_adjustment = i;
+						std::cout << bottom_adjustment << std::endl;
+						return;
 					}
 				}
 			}
@@ -450,7 +456,14 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 0;
 						movewait_brick_zPos = 1;
-						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 0, 1);
+					}
+				}
+				// 블럭 당기면 적절한 위치에 착지
+				for (int i = 0; i < 5; i++) {
+					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
+						bottom_adjustment = i;
+						std::cout << bottom_adjustment << std::endl;
+						return;
 					}
 				}
 			}
@@ -499,7 +512,14 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = -1;
 						movewait_brick_zPos = 0;
-						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, -1, 0);
+					}
+				}
+				// 블럭 당기면 적절한 위치에 착지
+				for (int i = 0; i < 5; i++) {
+					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
+						bottom_adjustment = i;
+						std::cout << bottom_adjustment << std::endl;
+						return;
 					}
 				}
 			}
@@ -548,7 +568,14 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 1;
 						movewait_brick_zPos = 0;
-						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 1, 0);
+					}
+				}
+				// 블럭 당기면 적절한 위치에 착지
+				for (int i = 0; i < 5; i++) {
+					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
+						bottom_adjustment = i;
+						std::cout << bottom_adjustment << std::endl;
+						return;
 					}
 				}
 			}
@@ -711,6 +738,10 @@ public:
 			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
 				return false;
 			}
+			// 착지가 불가능한가
+			if (CanLanding() == false) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -733,6 +764,10 @@ public:
 		if (playerstate.way == front) {
 			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
 			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+				return false;
+			}
+			// 착지가 불가능한가
+			if (CanLanding() == false) {
 				return false;
 			}
 		}
@@ -759,6 +794,10 @@ public:
 			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
 				return false;
 			}
+			// 착지가 불가능한가
+			if (CanLanding() == false) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -781,6 +820,10 @@ public:
 		if (playerstate.way == left) {
 			// 당겨서 플레이어가 위치하는 곳에 블럭이 있으면
 			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+				return false;
+			}
+			// 착지가 불가능한가
+			if (CanLanding() == false) {
 				return false;
 			}
 		}
@@ -831,6 +874,11 @@ public:
 				player.getShape().translate(3, 0.f, 0.f, -0.1f);
 				view.eye.z -= 0.1f;
 				view.at.z -= 0.1f;
+			}
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos - 1)) {
+					bottom_adjustment = i - 1;
+				}
 			}
 			EndMove();
 		}
@@ -994,9 +1042,6 @@ public:
 		}
 		if (moving_time == 100) {
 			player.changeStatus(PLAYER_STAND);
-			if (playerstate.hang == true) {
-				player.changeStatus(PLAYER_HANG);
-			}
 			moving_time = 0;
 			moving_right = false;
 			moving_left = false;
@@ -1041,6 +1086,40 @@ public:
 		player.getShape().translate(3, 0.f, -i, 0.f);
 		view.eye.y -= i;
 		view.at.y -= i;
+	}
+
+	// 착지가 가능한지 불가능한지 확인
+	bool CanLanding()
+	{
+		if (playerstate.way == front) {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos + 1)) {
+					return true;
+				}
+			}
+		}
+		else if (playerstate.way == back) {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos - 1)) {
+					return true;
+				}
+			}
+		}
+		else if (playerstate.way == left) {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos + 1, playerstate.zPos)) {
+					return true;
+				}
+			}
+		}
+		else if (playerstate.way == right) {
+			for (int i = 0; i < 5; i++) {
+				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos - 1, playerstate.zPos)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	// 플레이어 위치 확인용 코드
