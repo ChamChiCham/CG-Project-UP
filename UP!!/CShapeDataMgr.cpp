@@ -134,6 +134,7 @@ void CShapeDataMgr::init()
 	initObj("obj\\player_stand.obj", SHAPE_PLAYER_STAND);
 	initObj("obj\\player_hold.obj", SHAPE_PLAYER_HOLD);
 	initObj("obj\\player_hang.obj", SHAPE_PLAYER_HANG);
+	initObj("obj\\player_moving.obj", SHAPE_PLAYER_MOVING);
 }	
 
 void CShapeDataMgr::initObj(const char* _obj, const int _shape)

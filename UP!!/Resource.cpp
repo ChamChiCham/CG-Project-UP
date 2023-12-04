@@ -448,16 +448,20 @@ const bool CMap::isPosition(const int _y, const int _x, const int _z)
 void CPlayer::updateBuffer()
 {
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
-	shapes[PLAYER_STAND].setColor(0.2f, 0.2f, 0.2f);
+	shapes[PLAYER_STAND].setColor(0.5f, 0.5f, 0.f);
 	shapes[PLAYER_STAND].updateBuffer();
 
 	shapes[PLAYER_HOLD].setData(SHAPE_PLAYER_HOLD);
-	shapes[PLAYER_HOLD].setColor(0.2f, 0.2f, 0.2f);
+	shapes[PLAYER_HOLD].setColor(0.5f, 0.5f, 0.f);
 	shapes[PLAYER_HOLD].updateBuffer();
 
 	shapes[PLAYER_HANG].setData(SHAPE_PLAYER_HANG);
-	shapes[PLAYER_HANG].setColor(0.2f, 0.2f, 0.2f);
+	shapes[PLAYER_HANG].setColor(0.5f, 0.5f, 0.f);
 	shapes[PLAYER_HANG].updateBuffer();
+
+	shapes[PLAYER_MOVING].setData(SHAPE_PLAYER_MOVING);
+	shapes[PLAYER_MOVING].setColor(0.5f, 0.5f, 0.f);
+	shapes[PLAYER_MOVING].updateBuffer();
 }
 
 void CPlayer::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)

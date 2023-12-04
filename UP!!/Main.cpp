@@ -381,7 +381,7 @@ public:
 			}
 			break;
 		case ']':
-			maps[current_map](0, 1, 0).setType(BRICK_TYPE_UNMOVABLE);
+			player.changeStatus(PLAYER_MOVING);
 			break;
 		}
 	}

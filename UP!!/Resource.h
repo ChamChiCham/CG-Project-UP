@@ -108,7 +108,7 @@ public:
 class CPlayer
 {
 private:
-	std::array<CShape, 3> shapes;
+	std::array<CShape, 4> shapes;
 	
 	int status = PLAYER_STAND;
 
