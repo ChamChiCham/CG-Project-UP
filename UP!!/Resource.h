@@ -18,9 +18,11 @@
 #include "Define.h"
 #include "Struct.h"
 
+unsigned int createTexture(const char* _name);
+
 class CShape
 {
-protected:
+private:
 	SBuffer		buffer;
 	SShapeData*	data = nullptr;
 	glm::vec3	color = glm::vec3(1.f);
@@ -30,10 +32,12 @@ protected:
 protected:
 	void setUniform(const SView& _view, const glm::mat4& _proj, const SLight& _light, const GLuint _program);
 	void drawBuffer(const int _mode);
+	void updateTextureBuffer();
 
 public:
 
 	virtual void updateBuffer();
+	
 
 	void setData(const int _shape);
 
@@ -57,6 +61,18 @@ public:
 	void clearMatrix(const int _idx);
 	void setMatrix(CShape& _other);
 	const size_t getMatrixSize();
+	void popMatrix();
+};
+
+class CBackground : public CShape
+{
+private:
+	unsigned int texture;
+
+public:
+
+	void updateBuffer() override;
+	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
 };
 
 class CBrick : public CShape
@@ -73,7 +89,6 @@ private:
 
 private:
 	void updateTextures();
-	void createTexture(const int _type, const char* _name);
 
 public:
 
@@ -98,7 +113,7 @@ private:
 	int status = PLAYER_STAND;
 
 public:
-	void init();
+	void updateBuffer();
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 	void changeStatus(const int _status);
 	int& getstatus();

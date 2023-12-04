@@ -99,26 +99,18 @@ void CShapeDataMgr::init()
 
 	data[SHAPE_SQUARE].coords =
 	{
-		1.f,	0.f,	1.f,
-		-1.f,	0.f,	1.f,
-		1.f,	0.f,	-1.f,
-		-1.f,	0.f,	-1.f
+		0.5f,	0.f,	0.5f, 0.5f,	0.f,	-0.5f, -0.5f,	0.f,	0.5f,
+		-0.5f,	0.f,	0.5f, 0.5f,	0.f,	-0.5f, -0.5f,	0.f,	-0.5f
 	};
-
 	data[SHAPE_SQUARE].normals =
 	{
-		0.f, 1.f, 0.f,
-		0.f, 1.f, 0.f,
-		0.f, 1.f, 0.f,
-		0.f, 1.f, 0.f
+		0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f,
+		0.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f, 0.f,
 	};
-
-	data[SHAPE_SQUARE].indices =
+	data[SHAPE_SQUARE].textures =
 	{
-		0, 2, 1,
-		1, 2, 3
+		1.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 0.f, 0.f
 	};
-
 	data[SHAPE_TRIANGLE].coords =
 	{
 		1.f,	0.f,	1.f,

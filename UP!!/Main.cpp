@@ -70,7 +70,7 @@ private:
 	SView		view;
 	SLight		light;
 	glm::mat4	proj = glm::mat4(1.f);
-	glm::vec3	background = glm::vec3(0.f, 0.f, 0.f);
+	glm::vec3	background_color = glm::vec3(0.f, 0.f, 0.f);
 
 
 	// ---
@@ -82,6 +82,7 @@ private:
 	CPlayer				player;
 	CMap*				map_ptr = nullptr;
 	std::array<CMap, 3> maps;
+	CBackground			background_image;
 	
 	// 전역 변수
 	float d = 0.f;
@@ -175,10 +176,9 @@ public:
 
 		map_ptr = &maps[current_map];
 
-		player.init();
+		player.updateBuffer();
 
-		for (auto& shape : shapes)
-			shape.updateBuffer();
+		background_image.updateBuffer();
 
 		for (auto& map : maps)
 			map.updateBuffer();
@@ -197,7 +197,7 @@ public:
 		player.getShape().rotate(2, 180.f, 0.f, 1.f, 0.f);
 		playerstate = { 0, 0, 0 };
 
-		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 20.f);
+		proj = glm::perspective(glm::radians(60.f), static_cast<float>(WINDOW_SIZE_X) / static_cast<float>(WINDOW_SIZE_Y), 0.1f, 100.f);
 
 		// 초기 카메라 위치 조정
 		view.eye = glm::vec3(1.0f, 2.0f, 5.0f);
@@ -236,10 +236,14 @@ public:
 
 	void Display()
 	{
-		glClearColor(background.r, background.g, background.b, 1.0f);
+		glClearColor(background_color.r, background_color.g, background_color.b, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int mode = GL_TRIANGLES;
+		float angle = std::atan2f(view.at.z - view.eye.z, view.eye.x - view.at.x);
+		background_image.clearMatrix(1);
+		background_image.rotate(1, glm::degrees(angle) + 90.f, 0.f, 1.f, 0.f);
+		background_image.draw(view, proj, mode, light);
 
 		glEnable(GL_DEPTH_TEST);
 

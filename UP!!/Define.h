@@ -59,5 +59,7 @@ constexpr const char* BRICK_IMAGE[3] = {
 	"image\\motionless_brick.png"
 };
 
+constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
+
 
 

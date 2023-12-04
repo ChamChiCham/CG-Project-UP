@@ -3,9 +3,27 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-// --
+
+unsigned int createTexture(const char* _name)
+{
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int widthImage, heightImage, numberOfChannel;
+	unsigned char* data = stbi_load(_name, &widthImage, &heightImage, &numberOfChannel, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, widthImage, heightImage, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	stbi_image_free(data);
+	return texture;
+}
+
+// -----
 // CShape member function
-// --
+// -----
 
 void CShape::setUniform(const SView& _view, const glm::mat4& _proj, const SLight& _light, const GLuint _program)
 {
@@ -97,6 +115,47 @@ void CShape::updateBuffer()
 	if (!data->indices.empty()) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.EBO);
 	}
+}
+
+void CShape::updateTextureBuffer()
+{
+	if (data == nullptr) {
+		std::cerr << "data isn't set" << std::endl;
+		return;
+	}
+
+	if (buffer.VAO != 0) {
+		glDeleteVertexArrays(1, &buffer.VAO);
+		glDeleteBuffers(3, buffer.VBO);
+	}
+
+	glGenBuffers(3, buffer.VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, data->coords.size() * sizeof(GLfloat), data->coords.data(), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(GLfloat), data->normals.data(), GL_STATIC_DRAW);
+
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[2]);
+	glBufferData(GL_ARRAY_BUFFER, data->textures.size() * sizeof(GLfloat), data->textures.data(), GL_STATIC_DRAW);
+
+
+	glGenVertexArrays(1, &buffer.VAO);
+	glBindVertexArray(buffer.VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[2]);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
+	glEnableVertexAttribArray(2);
 }
 
 void CShape::setData(const int _shape)
@@ -203,9 +262,14 @@ const size_t CShape::getMatrixSize()
 	return mats.size();
 }
 
-// --
+void CShape::popMatrix()
+{
+	mats.pop_back();
+}
+
+// -----
 // CBrick member function
-// --
+// -----
 
 std::array<unsigned int, BRICK_TYPE_MAX> CBrick::texture = {-1};
 
@@ -228,70 +292,21 @@ CBrick::CBrick(const glm::ivec3& _pos)
 
 void CBrick::updateBuffer()
 {
-	if (data == nullptr) {
-		std::cerr << "data isn't set" << std::endl;
-		return;
-	}
-
-	if (buffer.VAO != 0) {
-		glDeleteVertexArrays(1, &buffer.VAO);
-		glDeleteBuffers(3, buffer.VBO);
-	}
-
-	glGenBuffers(3, buffer.VBO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[0]);
-	glBufferData(GL_ARRAY_BUFFER, data->coords.size() * sizeof(GLfloat), data->coords.data(), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, data->normals.size() * sizeof(GLfloat), data->normals.data(), GL_STATIC_DRAW);
-
-	
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[2]);
-	glBufferData(GL_ARRAY_BUFFER, data->textures.size() * sizeof(GLfloat), data->textures.data(), GL_STATIC_DRAW);
-
-
-	glGenVertexArrays(1, &buffer.VAO);
-	glBindVertexArray(buffer.VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[0]);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[1]);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buffer.VBO[2]);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
-	glEnableVertexAttribArray(2);
+	CShape::updateTextureBuffer();
 }
 
 void CBrick::updateTextures()
 {
-	for (int i = 0; i < BRICK_TYPE_MAX; ++i)
-		createTexture(i, BRICK_IMAGE[i]);
-}
-
-void CBrick::createTexture(const int _type, const char* _name)
-{
-	glGenTextures(1, &texture[_type]);
-	glBindTexture(GL_TEXTURE_2D, texture[_type]);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	int widthImage, heightImage, numberOfChannel;
-	unsigned char* data = stbi_load(_name, &widthImage, &heightImage, &numberOfChannel, 0);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, widthImage, heightImage, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	stbi_image_free(data);
+	for (int i = 0; i < BRICK_TYPE_MAX; ++i) {
+		texture[i] = createTexture(BRICK_IMAGE[i]);
+		std::cout << texture[i] << std::endl;
+	}
 }
 
 void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 
-	translate(static_cast<int>(mats.size()), static_cast<glm::vec3>(pos));
+	translate(static_cast<int>(getMatrixSize()), static_cast<glm::vec3>(pos));
 	
 	GLuint _program = CShaderMgr::getInst()->getProgram(SHADER_TEXTURE_PROGRAM);
 	glUseProgram(_program);
@@ -302,7 +317,7 @@ void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, c
 
 	drawBuffer(_mode);
 
-	mats.pop_back();
+	popMatrix();
 }
 
 const glm::ivec3& CBrick::getPos()
@@ -331,6 +346,11 @@ const int CBrick::getType()
 {
 	return type;
 }
+
+
+// ------
+// CMap member function
+// ------
 
 void CMap::init(const int _idx)
 {
@@ -421,7 +441,11 @@ const bool CMap::isPosition(const int _y, const int _x, const int _z)
 	return false;
 }
 
-void CPlayer::init()
+// -----
+// CPlayer member function
+// -----
+
+void CPlayer::updateBuffer()
 {
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
 	shapes[PLAYER_STAND].setColor(0.2f, 0.2f, 0.2f);
@@ -455,4 +479,32 @@ CShape& CPlayer::getShape()
 int& CPlayer::getstatus()
 {
 	return status;
+}
+
+
+// -----
+// CBrick member function
+// -----
+
+void CBackground::updateBuffer()
+{
+	texture = createTexture(BACKGROUND_IMAGE);
+	setData(SHAPE_SQUARE);
+	setColor(1.f, 1.f, 1.f);
+	scale(0, 110.f, 110.f, 110.f);
+	rotate(0, 90.f, 1.f, 0.f, 0.f);
+	translate(0, 0.f, 0.f, -50.f);
+	CShape::updateTextureBuffer();
+}
+
+void CBackground::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	GLuint _program = CShaderMgr::getInst()->getProgram(SHADER_TEXTURE_PROGRAM);
+	glUseProgram(_program);
+
+	setUniform(_view, _proj, _light, _program);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	drawBuffer(_mode);
 }
