@@ -36,6 +36,11 @@ enum
 	PLAYER_HOLD,
 	PLAYER_HANG,
 
+	BRICK_TYPE_NORMAL = 0,
+	BRICK_TYPE_HARD,
+	BRICK_TYPE_UNMOVABLE,
+	BRICK_TYPE_MAX,
+
 	SHADER_COMMON_PROGRAM = 0,
 	SHADER_TEXTURE_PROGRAM
 };
@@ -48,7 +53,11 @@ constexpr const char* SHADER_COMMON_FRAGMENT = "glsl\\Fragment_common.glsl";
 constexpr const char* SHADER_TEXTURE_VERTEX = "glsl\\Vertex_texture.glsl";
 constexpr const char* SHADER_TEXTURE_FRAGMENT = "glsl\\Fragment_texture.glsl";
 
-constexpr const char* BRICK_IMAGE = "image\\example.png";
+constexpr const char* BRICK_IMAGE[3] = {
+	"image\\normal_brick.png",
+	"image\\hard_brick.png",
+	"image\\motionless_brick.png"
+};
 
 
 

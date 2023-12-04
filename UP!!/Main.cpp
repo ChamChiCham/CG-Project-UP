@@ -376,7 +376,8 @@ public:
 				playerstate.hard = true;
 			}
 		case ']':
-			// test 완료
+			maps[current_map](0, 0, 0).setType(BRICK_TYPE_HARD);
+			maps[current_map](0, 1, 0).setType(BRICK_TYPE_UNMOVABLE);
 			break;
 		}
 	}
