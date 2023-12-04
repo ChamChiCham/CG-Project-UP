@@ -111,9 +111,9 @@ private:
 
 	int bottom_adjustment;
 
-	int test_b_x;
-	int test_b_y;
-	int test_b_z;
+	int movewait_brick_xPos;
+	int movewait_brick_yPos;
+	int movewait_brick_zPos;
 
 	typedef struct CurrentState {
 		int xPos;
@@ -123,9 +123,9 @@ private:
 		bool hold;
 		bool hard;
 		bool hang;
-		int brickxPos;
-		int brickyPos;
-		int brickzPos;
+		int hold_brick_xPos;
+		int hold_brick_yPos;
+		int hold_brick_zPos;
 	};
 	CurrentState playerstate;
 public:
@@ -188,7 +188,8 @@ public:
 		// --
 		// set basic variable
 		// --
-		light.pos = { 3.f, 0.f, 10.f };
+		// 초기 조명 위치
+		light.pos = { 3.f, 70.f, 10.f };
 
 		// 초기 플레이어 위치/크기 조정
 		player.getShape().scale(0, 0.015f, 0.015f, 0.015f);
@@ -332,36 +333,36 @@ public:
 					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
 						player.changeStatus(PLAYER_HOLD);
 						playerstate.hold = true;
-						playerstate.brickxPos = playerstate.xPos;
-						playerstate.brickyPos = playerstate.yPos + 1;
-						playerstate.brickzPos = playerstate.zPos - 1;
+						playerstate.hold_brick_xPos = playerstate.xPos;
+						playerstate.hold_brick_yPos = playerstate.yPos + 1;
+						playerstate.hold_brick_zPos = playerstate.zPos - 1;
 					}
 				}
 				else if (playerstate.way == back) {
 					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
 						player.changeStatus(PLAYER_HOLD);
 						playerstate.hold = true;
-						playerstate.brickxPos = playerstate.xPos;
-						playerstate.brickyPos = playerstate.yPos + 1;
-						playerstate.brickzPos = playerstate.zPos + 1;
+						playerstate.hold_brick_xPos = playerstate.xPos;
+						playerstate.hold_brick_yPos = playerstate.yPos + 1;
+						playerstate.hold_brick_zPos = playerstate.zPos + 1;
 					}
 				}
 				else if (playerstate.way == right) {
 					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
 						player.changeStatus(PLAYER_HOLD);
 						playerstate.hold = true;
-						playerstate.brickxPos = playerstate.xPos + 1;
-						playerstate.brickyPos = playerstate.yPos + 1;
-						playerstate.brickzPos = playerstate.zPos;
+						playerstate.hold_brick_xPos = playerstate.xPos + 1;
+						playerstate.hold_brick_yPos = playerstate.yPos + 1;
+						playerstate.hold_brick_zPos = playerstate.zPos;
 					}
 				}
 				else if (playerstate.way == left) {
 					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
 						player.changeStatus(PLAYER_HOLD);
 						playerstate.hold = true;
-						playerstate.brickxPos = playerstate.xPos - 1;
-						playerstate.brickyPos = playerstate.yPos + 1;
-						playerstate.brickzPos = playerstate.zPos;
+						playerstate.hold_brick_xPos = playerstate.xPos - 1;
+						playerstate.hold_brick_yPos = playerstate.yPos + 1;
+						playerstate.hold_brick_zPos = playerstate.zPos;
 					}
 				}
 			}
@@ -390,10 +391,10 @@ public:
 					if (HoldCheckFront() == true) {
 						moving_front_hold = true;
 						playerstate.zPos -= 1;
-						test_b_y = 0;
-						test_b_x = 0;
-						test_b_z = -1;
-						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, -1);
+						movewait_brick_yPos = 0;
+						movewait_brick_xPos = 0;
+						movewait_brick_zPos = -1;
+						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 0, -1);
 					}
 				}
 			}
@@ -441,10 +442,10 @@ public:
 					if (HoldCheckBack() == true) {
 						moving_back_hold = true;
 						playerstate.zPos += 1;
-						test_b_y = 0;
-						test_b_x = 0;
-						test_b_z = 1;
-						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, 1);
+						movewait_brick_yPos = 0;
+						movewait_brick_xPos = 0;
+						movewait_brick_zPos = 1;
+						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 0, 1);
 					}
 				}
 			}
@@ -490,10 +491,10 @@ public:
 					if (HoldCheckLeft() == true) {
 						moving_left_hold = true;
 						playerstate.xPos -= 1;
-						test_b_y = 0;
-						test_b_x = -1;
-						test_b_z = 0;
-						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, -1, 0);
+						movewait_brick_yPos = 0;
+						movewait_brick_xPos = -1;
+						movewait_brick_zPos = 0;
+						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, -1, 0);
 					}
 				}
 			}
@@ -539,10 +540,10 @@ public:
 					if (HoldCheckRight() == true) {
 						moving_right_hold = true;
 						playerstate.xPos += 1;
-						test_b_y = 0;
-						test_b_x = 1;
-						test_b_z = 0;
-						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 1, 0);
+						movewait_brick_yPos = 0;
+						movewait_brick_xPos = 1;
+						movewait_brick_zPos = 0;
+						//maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(0, 1, 0);
 					}
 				}
 			}
@@ -1015,7 +1016,7 @@ public:
 			playerstate.hard = false;
 
 			if (playerstate.hold == true) {
-				maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(test_b_y, test_b_x, test_b_z);
+				maps[current_map](playerstate.hold_brick_yPos, playerstate.hold_brick_xPos, playerstate.hold_brick_zPos).move(movewait_brick_yPos, movewait_brick_xPos, movewait_brick_zPos);
 			}
 			playerstate.hold = false;
 
