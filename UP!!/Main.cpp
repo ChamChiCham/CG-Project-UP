@@ -412,7 +412,7 @@ public:
 			}
 			else if (CheckFront() == 1) {
 				if (moving_time == 0) {
-					// player.changeStatus(PLAYER_MOVING);
+					player.changeStatus(PLAYER_MOVING);
 					moving_front = true;
 					playerstate.zPos -= 1;
 				}
@@ -469,7 +469,7 @@ public:
 				}
 			}
 			else if (CheckBack() == 1) {
-				// player.changeStatus(PLAYER_MOVING);
+				player.changeStatus(PLAYER_MOVING);
 				if (moving_time == 0) {
 					moving_back = true;
 					playerstate.zPos += 1;
@@ -526,7 +526,7 @@ public:
 			}
 			else if (CheckLeft() == 1) {
 				if (moving_time == 0) {
-					// player.changeStatus(PLAYER_MOVING);
+					player.changeStatus(PLAYER_MOVING);
 					moving_left = true;
 					playerstate.xPos -= 1;
 				}
@@ -582,7 +582,7 @@ public:
 			}
 			else if (CheckRight() == 1) {
 				if (moving_time == 0) {
-					// player.changeStatus(PLAYER_MOVING);
+					player.changeStatus(PLAYER_MOVING);
 					moving_right = true;
 					playerstate.xPos += 1;
 				}
