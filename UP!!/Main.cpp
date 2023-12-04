@@ -111,12 +111,17 @@ private:
 
 	int bottom_adjustment;
 
+	int test_b_x;
+	int test_b_y;
+	int test_b_z;
+
 	typedef struct CurrentState {
 		int xPos;
 		int yPos;
 		int zPos;
 		int way;
 		bool hold;
+		bool hard;
 		bool hang;
 		int brickxPos;
 		int brickyPos;
@@ -365,6 +370,10 @@ public:
 		case 'm':
 			player.changeStatus(PLAYER_HANG);
 			break;
+		case 'v':
+			if (playerstate.hold) {
+				playerstate.hard = true;
+			}
 		case ']':
 			// test 완료
 			break;
@@ -381,7 +390,10 @@ public:
 					if (HoldCheckFront() == true) {
 						moving_front_hold = true;
 						playerstate.zPos -= 1;
-						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, -1);
+						test_b_y = 0;
+						test_b_x = 0;
+						test_b_z = -1;
+						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, -1);
 					}
 				}
 			}
@@ -429,7 +441,10 @@ public:
 					if (HoldCheckBack() == true) {
 						moving_back_hold = true;
 						playerstate.zPos += 1;
-						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, 1);
+						test_b_y = 0;
+						test_b_x = 0;
+						test_b_z = 1;
+						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 0, 1);
 					}
 				}
 			}
@@ -475,7 +490,10 @@ public:
 					if (HoldCheckLeft() == true) {
 						moving_left_hold = true;
 						playerstate.xPos -= 1;
-						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, -1, 0);
+						test_b_y = 0;
+						test_b_x = -1;
+						test_b_z = 0;
+						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, -1, 0);
 					}
 				}
 			}
@@ -521,7 +539,10 @@ public:
 					if (HoldCheckRight() == true) {
 						moving_right_hold = true;
 						playerstate.xPos += 1;
-						maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 1, 0);
+						test_b_y = 0;
+						test_b_x = 1;
+						test_b_z = 0;
+						//maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(0, 1, 0);
 					}
 				}
 			}
@@ -795,9 +816,16 @@ public:
 	void MovingFrontHold()
 	{
 		if (moving_front_hold) {
-			player.getShape().translate(3, 0.f, 0.f, -0.1f);
-			view.eye.z -= 0.1f;
-			view.at.z -= 0.1f;
+			if (playerstate.hard) {
+				player.getShape().translate(3, 0.f, 0.f, -0.01f);
+				view.eye.z -= 0.01f;
+				view.at.z -= 0.01f;
+			}
+			else {
+				player.getShape().translate(3, 0.f, 0.f, -0.1f);
+				view.eye.z -= 0.1f;
+				view.at.z -= 0.1f;
+			}
 			EndMove();
 		}
 	}
@@ -837,9 +865,16 @@ public:
 	void MovingBackHold()
 	{
 		if (moving_back_hold) {
-			player.getShape().translate(3, 0.f, 0.f, 0.1f);
-			view.eye.z += 0.1f;
-			view.at.z += 0.1f;
+			if (playerstate.hard) {
+				player.getShape().translate(3, 0.f, 0.f, 0.01f);
+				view.eye.z += 0.01f;
+				view.at.z += 0.01f;
+			}
+			else {
+				player.getShape().translate(3, 0.f, 0.f, 0.1f);
+				view.eye.z += 0.1f;
+				view.at.z += 0.1f;
+			}
 			EndMove();
 		}
 	}
@@ -879,9 +914,16 @@ public:
 	void MovingLeftHold()
 	{
 		if (moving_left_hold) {
-			player.getShape().translate(3, -0.1f, 0.f, 0.f);
-			view.eye.x -= 0.1f;
-			view.at.x -= 0.1f;
+			if (playerstate.hard) {
+				player.getShape().translate(3, -0.01f, 0.f, 0.f);
+				view.eye.x -= 0.01f;
+				view.at.x -= 0.01f;
+			}
+			else {
+				player.getShape().translate(3, -0.1f, 0.f, 0.f);
+				view.eye.x -= 0.1f;
+				view.at.x -= 0.1f;
+			}
 			EndMove();
 		}
 	}
@@ -921,9 +963,16 @@ public:
 	void MovingRightHold()
 	{
 		if (moving_right_hold) {
-			player.getShape().translate(3, 0.1f, 0.f, 0.f);
-			view.eye.x += 0.1f;
-			view.at.x += 0.1f;
+			if (playerstate.hard) {
+				player.getShape().translate(3, 0.01f, 0.f, 0.f);
+				view.eye.x += 0.01f;
+				view.at.x += 0.01f;
+			}
+			else {
+				player.getShape().translate(3, 0.1f, 0.f, 0.f);
+				view.eye.x += 0.1f;
+				view.at.x += 0.1f;
+			}
 			EndMove();
 		}
 	}
@@ -931,8 +980,13 @@ public:
 	// 무빙 종료 조건
 	void EndMove()
 	{
-		moving_time++;
-		if (moving_time == 10) {
+		if (playerstate.hard) {
+			moving_time++;
+		}
+		else {
+			moving_time += 10;
+		}
+		if (moving_time == 100) {
 			player.changeStatus(PLAYER_STAND);
 			if (playerstate.hang == true) {
 				player.changeStatus(PLAYER_HANG);
@@ -958,6 +1012,11 @@ public:
 			moving_front_hold = false;
 			moving_back_hold = false;
 
+			playerstate.hard = false;
+
+			if (playerstate.hold == true) {
+				maps[current_map](playerstate.brickyPos, playerstate.brickxPos, playerstate.brickzPos).move(test_b_y, test_b_x, test_b_z);
+			}
 			playerstate.hold = false;
 
 			if (bottom_adjustment > 0) {
