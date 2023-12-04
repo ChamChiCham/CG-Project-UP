@@ -242,6 +242,7 @@ public:
 		float angle = std::atan2f(view.at.z - view.eye.z, view.eye.x - view.at.x);
 		background_image.clearMatrix(1);
 		background_image.rotate(1, glm::degrees(angle) + 90.f, 0.f, 1.f, 0.f);
+		background_image.translate(1, 0.f, playerstate.yPos, 0.f);
 		background_image.draw(view, proj, mode, light);
 
 		glEnable(GL_DEPTH_TEST);
