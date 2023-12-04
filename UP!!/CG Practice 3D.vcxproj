@@ -152,9 +152,6 @@
     <None Include="glsl\Vertex_common.glsl" />
     <None Include="glsl\Vertex_texture.glsl" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="image\example.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
