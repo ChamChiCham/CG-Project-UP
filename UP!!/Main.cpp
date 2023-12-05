@@ -313,7 +313,7 @@ public:
 			view.eye.z = view.at.z + d * sin(s + glm::radians(-2.f));
 			break;
 		case '=':
-			if (current_map < 2) {
+			if (current_map < 3) {
 				current_map++;
 				map_ptr = &maps[current_map];
 				std::cout << "Stage Change" << std::endl;
@@ -1159,6 +1159,15 @@ public:
 	void Ending()
 	{
 		if (current_map == 0) {
+			if (playerstate.yPos == 6) {
+				if (playerstate.xPos == 3) {
+					if (playerstate.zPos == -3) {
+						ending = true;
+					}
+				}
+			}
+		}
+		else if (current_map == 1) {
 			if (playerstate.yPos == 22) {
 				if (playerstate.xPos == 2) {
 					if (playerstate.zPos == -11) {
@@ -1167,7 +1176,7 @@ public:
 				}
 			}
 		}
-		else if (current_map == 0) {
+		else if (current_map == 2) {
 			if (playerstate.yPos == 21) {
 				if (playerstate.xPos == 6) {
 					if (playerstate.zPos == -8) {
@@ -1176,7 +1185,7 @@ public:
 				}
 			}
 		}
-		else if (current_map == 0) {
+		else if (current_map == 3) {
 			if (playerstate.yPos == 36) {
 				if (playerstate.xPos == 2) {
 					if (playerstate.zPos == -11) {
