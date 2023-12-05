@@ -367,6 +367,9 @@ void CMap::init(const int _idx)
 	case 2:
 		inputFile.open("coordinates\\map2.txt");
 		break;
+	case 3:
+		inputFile.open("coordinates\\map3.txt");
+		break;
 	default:
 		std::cerr << "CMap()::init(): invaild index." << std::endl;
 		return;

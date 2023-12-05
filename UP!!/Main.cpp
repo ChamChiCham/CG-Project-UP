@@ -81,7 +81,7 @@ private:
 
 	CPlayer				player;
 	CMap*				map_ptr = nullptr;
-	std::array<CMap, 3> maps;
+	std::array<CMap, 4> maps;
 	CBackground			background_image;
 	
 	// 전역 변수
@@ -175,7 +175,7 @@ public:
 		// --
 		
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 4; ++i)
 			maps[i].init(i);
 
 		map_ptr = &maps[current_map];
@@ -313,7 +313,7 @@ public:
 			view.eye.z = view.at.z + d * sin(s + glm::radians(-2.f));
 			break;
 		case '=':
-			if (current_map < 2) {
+			if (current_map < 3) {
 				current_map++;
 				map_ptr = &maps[current_map];
 				std::cout << "Stage Change" << std::endl;
