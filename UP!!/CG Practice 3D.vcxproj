@@ -145,6 +145,7 @@
     <Text Include="coordinates\map0.txt" />
     <Text Include="coordinates\map1.txt" />
     <Text Include="coordinates\map2.txt" />
+    <Text Include="coordinates\map3.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glsl\Fragment_common.glsl" />
