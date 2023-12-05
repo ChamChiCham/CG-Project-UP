@@ -187,7 +187,6 @@ public:
 		for (auto& map : maps)
 			map.updateBuffer();
 
-		// map(21, 6, -8).setColor(1.f, 0.f, 0.f);
 		
 		// --
 		// set basic variable
@@ -217,14 +216,15 @@ public:
 		// explain
 		// --
 
+		std::cout << "---------------------" << std::endl;
 		std::cout << "방향키: 플레이어 이동" << std::endl;
-		std::cout << "b: 스탠드 자세" << std::endl;
-		std::cout << "n: 홀드 자세" << std::endl;
-		std::cout << "m: 행 자세" << std::endl;
-		std::cout << "4/6: 카메라 x이동" << std::endl;
-		std::cout << "8/5: 카메라 y이동" << std::endl;
-		std::cout << "1/3: 카메라 z이동" << std::endl;
-		std::cout << "7/9: 카메라 y회전" << std::endl;
+		std::cout << "a: 홀드 자세" << std::endl;
+		std::cout << "d: 아이템 사용" << std::endl;
+		std::cout << "q/e: 카메라 y회전" << std::endl;
+		std::cout << "---------------------" << std::endl;
+		std::cout << "4/6: 카메라 x 강제 이동" << std::endl;
+		std::cout << "8/5: 카메라 y 강제 이동" << std::endl;
+		std::cout << "1/3: 카메라 z 강제 이동" << std::endl;
 		std::cout << "=/-: 스테이지 강제 변환" << std::endl;
 	}
 
@@ -300,13 +300,13 @@ public:
 			view.eye.z -= 0.1;
 			view.at.z -= 0.1;
 			break;
-		case '7':
+		case 'q':
 			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
 			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 			view.eye.x = view.at.x + d * cos(s + glm::radians(2.f));
 			view.eye.z = view.at.z + d * sin(s + glm::radians(2.f));
 			break;
-		case '9':
+		case 'e':
 			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
 			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 			view.eye.x = view.at.x + d * cos(s + glm::radians(-2.f));
@@ -328,16 +328,13 @@ public:
 				std::cout << "Current Map: " << current_map << std::endl;
 				break;
 			}
-		case 'b':
-			player.changeStatus(PLAYER_STAND);
-			break;
-		case 'n':
+		case 'a':
 			if (playerstate.hold == true) {
 				player.changeStatus(PLAYER_STAND);
 				playerstate.hold = false;
+				playerstate.hard = false;
 			}
 			else {
-				// 플레이어 바로 앞에 블록이 있으면 홀드 자세를 취함
 				if (playerstate.way == front) {
 					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
 						player.changeStatus(PLAYER_HOLD);
@@ -345,6 +342,13 @@ public:
 						playerstate.hold_brick_xPos = playerstate.xPos;
 						playerstate.hold_brick_yPos = playerstate.yPos + 1;
 						playerstate.hold_brick_zPos = playerstate.zPos - 1;
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 1) {
+							playerstate.hard = true;
+						}
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 2) {
+							playerstate.hold = false;
+							player.changeStatus(PLAYER_STAND);
+						}
 					}
 				}
 				else if (playerstate.way == back) {
@@ -354,6 +358,13 @@ public:
 						playerstate.hold_brick_xPos = playerstate.xPos;
 						playerstate.hold_brick_yPos = playerstate.yPos + 1;
 						playerstate.hold_brick_zPos = playerstate.zPos + 1;
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 1) {
+							playerstate.hard = true;
+						}
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 2) {
+							playerstate.hold = false;
+							player.changeStatus(PLAYER_STAND);
+						}
 					}
 				}
 				else if (playerstate.way == right) {
@@ -363,6 +374,13 @@ public:
 						playerstate.hold_brick_xPos = playerstate.xPos + 1;
 						playerstate.hold_brick_yPos = playerstate.yPos + 1;
 						playerstate.hold_brick_zPos = playerstate.zPos;
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 1) {
+							playerstate.hard = true;
+						}
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 2) {
+							playerstate.hold = false;
+							player.changeStatus(PLAYER_STAND);
+						}
 					}
 				}
 				else if (playerstate.way == left) {
@@ -372,6 +390,13 @@ public:
 						playerstate.hold_brick_xPos = playerstate.xPos - 1;
 						playerstate.hold_brick_yPos = playerstate.yPos + 1;
 						playerstate.hold_brick_zPos = playerstate.zPos;
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 1) {
+							playerstate.hard = true;
+						}
+						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 2) {
+							playerstate.hold = false;
+							player.changeStatus(PLAYER_STAND);
+						}
 					}
 				}
 			}
@@ -380,14 +405,8 @@ public:
 		case 'm':
 			player.changeStatus(PLAYER_HANG);
 			break;
-		case 'v':
-			// 블럭 느리게 밀기 테스트
-			if (playerstate.hold) {
-				playerstate.hard = true;
-			}
-			break;
 		case ']':
-			player.changeStatus(PLAYER_MOVING);
+			// test 완
 			break;
 		}
 	}
@@ -1088,7 +1107,6 @@ public:
 		landing = i * 10;
 		playerstate.yPos -= i;
 	}
-	// 낙법을 계속 하다보면 오차가 발생
 	void LandingAnimation()
 	{
 		if (landing > 0) {
@@ -1097,7 +1115,6 @@ public:
 			view.eye.y -= 0.1;
 			view.at.y -= 0.1;
 			landing--;
-			std::cout << landing << std::endl;
 		}
 		else {
 			landing = 0;
