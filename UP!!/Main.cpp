@@ -645,10 +645,19 @@ public:
 	{
 		// 이동 불가
 		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos - 1)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1) != true) {
+				if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos - 1) != true) {
+					return 0;
+				}
+				return 1;
+			}
 			return 0;
 		}
 		// 점프
 		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos)) {
+				return 0;
+			}
 			if (playerstate.way == front) {
 				return 2;
 			}
@@ -671,9 +680,18 @@ public:
 	int CheckBack()
 	{
 		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos + 1)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1) != true) {
+				if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos, playerstate.zPos + 1) != true) {
+					return 0;
+				}
+				return 1;
+			}
 			return 0;
 		}
 		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos)) {
+				return 0;
+			}
 			if (playerstate.way == back) {
 				return 2;
 			}
@@ -694,9 +712,18 @@ public:
 	int CheckLeft()
 	{
 		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos - 1, playerstate.zPos)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos) != true) {
+				if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos - 1, playerstate.zPos) != true) {
+					return 0;
+				}
+				return 1;
+			}
 			return 0;
 		}
 		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos)) {
+				return 0;
+			}
 			if (playerstate.way == left) {
 				return 2;
 			}
@@ -717,9 +744,18 @@ public:
 	int CheckRight()
 	{
 		if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos + 1, playerstate.zPos)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos) != true) {
+				if (maps[current_map].isPosition(playerstate.yPos, playerstate.xPos + 1, playerstate.zPos) != true) {
+					return 0;
+				}
+				return 1;
+			}
 			return 0;
 		}
 		else if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+			if (maps[current_map].isPosition(playerstate.yPos + 2, playerstate.xPos, playerstate.zPos)) {
+				return 0;
+			}
 			if (playerstate.way == right) {
 				return 2;
 			}
