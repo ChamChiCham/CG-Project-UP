@@ -41,6 +41,7 @@ enum
 	BRICK_TYPE_NORMAL = 0,
 	BRICK_TYPE_HARD,
 	BRICK_TYPE_UNMOVABLE,
+	BRICK_TYPE_ENDING,
 	BRICK_TYPE_MAX,
 
 	SHADER_COMMON_PROGRAM = 0,
@@ -55,10 +56,11 @@ constexpr const char* SHADER_COMMON_FRAGMENT = "glsl\\Fragment_common.glsl";
 constexpr const char* SHADER_TEXTURE_VERTEX = "glsl\\Vertex_texture.glsl";
 constexpr const char* SHADER_TEXTURE_FRAGMENT = "glsl\\Fragment_texture.glsl";
 
-constexpr const char* BRICK_IMAGE[3] = {
-	"image\\normal_brick.png",
-	"image\\hard_brick.png",
-	"image\\motionless_brick.png"
+constexpr const char* BRICK_IMAGE[4] = {
+	"image\\normal_brick_con.png",
+	"image\\hard_brick_con.png",
+	"image\\motionless_brick_con.png",
+	"image\\ending_brick_con.png"
 };
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
