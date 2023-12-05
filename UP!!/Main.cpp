@@ -89,6 +89,9 @@ private:
 	float s = 0.f;
 	int current_map;
 	int moving_time;
+	int ending_time;
+
+	bool ending;
 
 	bool moving_left;
 	bool moving_right;
@@ -617,6 +620,7 @@ public:
 			}
 			break;
 		}
+		Ending();
 	}
 
 	// 이동 검사
@@ -1123,6 +1127,88 @@ public:
 		return false;
 	}
 
+	// 엔딩 조건
+	void Ending()
+	{
+		if (current_map == 0) {
+			if (playerstate.yPos == 22) {
+				if (playerstate.xPos == 2) {
+					if (playerstate.zPos == -11) {
+						ending = true;
+					}
+				}
+			}
+		}
+		else if (current_map == 0) {
+			if (playerstate.yPos == 21) {
+				if (playerstate.xPos == 6) {
+					if (playerstate.zPos == -8) {
+						ending = true;
+					}
+				}
+			}
+		}
+		else if (current_map == 0) {
+			if (playerstate.yPos == 36) {
+				if (playerstate.xPos == 2) {
+					if (playerstate.zPos == -11) {
+						ending = true;
+					}
+				}
+			}
+		}
+	}
+
+	// 엔딩 애니메이션
+	void EndingAnimation()
+	{
+		if (ending) {
+			if (ending_time < 100) {
+				light.r -= 0.1f;
+				light.g -= 0.1f;
+				light.b -= 0.1f;
+			}
+			else {
+				light.r += 0.1f;
+				light.g += 0.1f;
+				light.b += 0.1f;
+			}
+			// 맵, 플레이어 초기화
+			if (ending_time == 100) {
+				for (int i = 0; i < 4; i++) {
+					player.getShape().clearMatrix(i);
+				}
+				current_map++;
+				map_ptr = &maps[current_map];
+				playerstate.xPos = 0;
+				playerstate.yPos = 0;
+				playerstate.zPos = 0;
+
+				// 초기 플레이어 위치/크기 조정
+				player.getShape().scale(0, 0.015f, 0.015f, 0.015f);
+				player.getShape().translate(1, 0.f, 0.5f, 0.1f);
+				player.getShape().rotate(2, 180.f, 0.f, 1.f, 0.f);
+				playerstate = { 0, 0, 0 };
+
+				// 초기 카메라 위치 조정
+				view.eye = glm::vec3(1.0f, 2.0f, 5.0f);
+				view.at = glm::vec3(1.f, 2.f, 0.0f);
+				view.up = glm::vec3(0.f, 1.f, 0.f);
+
+				d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
+				s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
+				view.eye.x = view.at.x + d * cos(s + glm::radians(-20.f));
+				view.eye.z = view.at.z + d * sin(s + glm::radians(-20.f));
+			}
+			// 다시 조명 켜기
+			if (ending_time == 200) {
+				ending_time = 0;
+				ending = false;
+			}
+			ending_time++;
+		}
+	}
+
 	// 플레이어 위치 확인용 코드
 	void PrintPos() {
 		std::cout << "-------------" << std::endl;
@@ -1170,6 +1256,8 @@ public:
 		MovingBackHold();
 		MovingLeftHold();
 		MovingRightHold();
+
+		EndingAnimation();
 	}
 
 
