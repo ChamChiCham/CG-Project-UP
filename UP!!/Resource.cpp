@@ -297,10 +297,8 @@ void CBrick::updateBuffer()
 
 void CBrick::updateTextures()
 {
-	for (int i = 0; i < BRICK_TYPE_MAX; ++i) {
+	for (int i = 0; i < BRICK_TYPE_MAX; ++i)
 		texture[i] = createTexture(BRICK_IMAGE[i]);
-		std::cout << texture[i] << std::endl;
-	}
 }
 
 void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
@@ -447,20 +445,21 @@ const bool CMap::isPosition(const int _y, const int _x, const int _z)
 
 void CPlayer::updateBuffer()
 {
+	glm::vec3 color(0.647f, 0.4f, 1.f);
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
-	shapes[PLAYER_STAND].setColor(0.5f, 0.5f, 0.f);
+	shapes[PLAYER_STAND].setColor(color);
 	shapes[PLAYER_STAND].updateBuffer();
 
 	shapes[PLAYER_HOLD].setData(SHAPE_PLAYER_HOLD);
-	shapes[PLAYER_HOLD].setColor(0.5f, 0.5f, 0.f);
+	shapes[PLAYER_HOLD].setColor(color);
 	shapes[PLAYER_HOLD].updateBuffer();
 
 	shapes[PLAYER_HANG].setData(SHAPE_PLAYER_HANG);
-	shapes[PLAYER_HANG].setColor(0.5f, 0.5f, 0.f);
+	shapes[PLAYER_HANG].setColor(color);
 	shapes[PLAYER_HANG].updateBuffer();
 
 	shapes[PLAYER_MOVING].setData(SHAPE_PLAYER_MOVING);
-	shapes[PLAYER_MOVING].setColor(0.5f, 0.5f, 0.f);
+	shapes[PLAYER_MOVING].setColor(color);
 	shapes[PLAYER_MOVING].updateBuffer();
 }
 

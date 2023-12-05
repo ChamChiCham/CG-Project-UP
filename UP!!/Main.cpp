@@ -406,7 +406,7 @@ public:
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			// test 완
+			maps[current_map](0, 0, 0).setType(BRICK_TYPE_ENDING);
 			break;
 		}
 	}
