@@ -119,6 +119,8 @@ private:
 	int movewait_brick_yPos;
 	int movewait_brick_zPos;
 
+	float landing;
+
 	typedef struct CurrentState {
 		int xPos;
 		int yPos;
@@ -408,7 +410,6 @@ public:
 				for (int i = 0; i < 5; i++) {
 					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
 						bottom_adjustment = i;
-						std::cout << bottom_adjustment << std::endl;
 						return;
 					}
 				}
@@ -466,7 +467,6 @@ public:
 				for (int i = 0; i < 5; i++) {
 					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
 						bottom_adjustment = i;
-						std::cout << bottom_adjustment << std::endl;
 						return;
 					}
 				}
@@ -522,7 +522,6 @@ public:
 				for (int i = 0; i < 5; i++) {
 					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
 						bottom_adjustment = i;
-						std::cout << bottom_adjustment << std::endl;
 						return;
 					}
 				}
@@ -578,7 +577,6 @@ public:
 				for (int i = 0; i < 5; i++) {
 					if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos)) {
 						bottom_adjustment = i;
-						std::cout << bottom_adjustment << std::endl;
 						return;
 					}
 				}
@@ -1087,10 +1085,23 @@ public:
 	// 하단 조정
 	void BottomAdjustment(int i)
 	{
+		landing = i * 10;
 		playerstate.yPos -= i;
-		player.getShape().translate(3, 0.f, -i, 0.f);
-		view.eye.y -= i;
-		view.at.y -= i;
+	}
+	// 낙법을 계속 하다보면 오차가 발생
+	void LandingAnimation()
+	{
+		if (landing > 0) {
+			
+			player.getShape().translate(3, 0.f, -0.1, 0.f);
+			view.eye.y -= 0.1;
+			view.at.y -= 0.1;
+			landing--;
+			std::cout << landing << std::endl;
+		}
+		else {
+			landing = 0;
+		}
 	}
 
 	// 착지가 가능한지 불가능한지 확인
@@ -1258,6 +1269,8 @@ public:
 		MovingRightHold();
 
 		EndingAnimation();
+
+		LandingAnimation();
 	}
 
 
