@@ -363,6 +363,7 @@ void CMap::init(const int _idx)
 	std::string filename = "coordinates\\map" + std::to_string(_idx) + ".txt";
 	std::ifstream inputFile;
 	bricks.clear();
+	items.clear();
 	bricks.reserve(150);
 
 	inputFile.open(filename);
@@ -376,6 +377,11 @@ void CMap::init(const int _idx)
 		if (line[0] == '#')
 			break;
 		int pos[4] = {};
+		if (line[0] == '@') {
+			sscanf_s(line.c_str(), "@%d, %d, %d, %d", &pos[0], &pos[1], &pos[2], &pos[3]);
+			items.push_back(CItem(glm::ivec3(pos[1], pos[0], pos[2])));
+			continue;
+		}
 		sscanf_s(line.c_str(), "%d, %d, %d, %d", &pos[0], &pos[1], &pos[2], &pos[3]);
 
 		CBrick brick_new;
@@ -392,12 +398,24 @@ void CMap::updateBuffer()
 {
 	for (auto& brick : bricks)
 		brick.updateBuffer();
+
+	for (auto& item : items)
+		item.updateBuffer();
+}
+
+void CMap::update()
+{
+	for (auto& item : items)
+		item.update();
 }
 
 void CMap::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	for (auto& brick : bricks)
 		brick.draw(_view, _proj, _mode, _light);
+	for (auto& item : items)
+		item.draw(_view, _proj, _mode, _light);
+
 }
 
 const bool CMap::createBrick(const int _y, const int _x, const int _z, const int _type)
@@ -584,6 +602,11 @@ void CLava::update()
 	pos.y += 0.001f * static_cast<float>(speed);
 }
 
+CItem::CItem(const glm::ivec3& _pos)
+{
+	pos = _pos;
+}
+
 void CItem::updateBuffer()
 {
 	setData(SHAPE_SPHERE);
@@ -616,9 +639,4 @@ void CItem::update()
 		size_time = 100;
 		size_dir = !size_dir;
 	}
-}
-
-void CItem::setPos(const int _y, const int _x, const int _z)
-{
-	pos = { _x, _y, _z };
 }

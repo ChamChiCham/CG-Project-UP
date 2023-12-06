@@ -12,6 +12,7 @@
 #include <fstream>
 #include <string>
 #include <array>
+#include <list>
 
 #include "CShaderMgr.h"
 #include "CShapeDataMgr.h"
@@ -109,6 +110,20 @@ public:
 	const int getType() const;
 };
 
+class CItem : public CShape
+{
+private:
+	glm::ivec3 pos = { 0.f, 0.f, 0.f };
+	bool size_dir = false;
+	int size_time = 50;
+
+public:
+	CItem(const glm::ivec3& _pos);
+	void updateBuffer() override;
+	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+	void update();
+};
+
 class CPlayer
 {
 private:
@@ -128,16 +143,21 @@ class CMap
 {
 private:
 	std::vector<CBrick> bricks;
+	std::list<CItem> items;
+	glm::ivec3 asd;
 
 
 public:
 	void init(const int _idx);
 	void updateBuffer();
+	void update();
+
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 	const bool createBrick(const int _y, const int _x, const int _z, const int _type);
 
 	CBrick& operator()(const glm::ivec3 _pos);
 	CBrick& operator()(const int _y, const int _x, const int _z);
+
 
 	const bool isPosition(const int _y, const int _x, const int _z) const;
 
@@ -159,20 +179,5 @@ public:
 	const int getY() const;
 	void setSpeed(const int _speed);
 	void update();
-
-};
-
-class CItem : public CShape
-{
-private:
-	glm::ivec3 pos = { 0.f, 0.f, 0.f };
-	bool size_dir = false;
-	int size_time = 50;
-
-public:
-	void updateBuffer() override;
-	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
-	void update();
-	void setPos(const int _y, const int _x, const int _z);
 
 };
