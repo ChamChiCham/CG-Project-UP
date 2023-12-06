@@ -28,6 +28,9 @@ private:
 	glm::vec3	color = glm::vec3(1.f);
 	std::vector<glm::mat4>	mats;
 
+public:
+	virtual ~CShape();
+
 
 protected:
 	void setUniform(const SView& _view, const glm::mat4& _proj, const SLight& _light, const GLuint _program);
@@ -60,7 +63,7 @@ public:
 
 	void clearMatrix(const int _idx);
 	void setMatrix(CShape& _other);
-	const size_t getMatrixSize();
+	const size_t getMatrixSize() const;
 	void popMatrix();
 };
 
@@ -70,6 +73,7 @@ private:
 	unsigned int texture;
 
 public:
+	~CBackground();
 
 	void updateBuffer() override;
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
@@ -85,7 +89,7 @@ private:
 
 	int			type = BRICK_TYPE_NORMAL;
 
-	static std::array<unsigned int, BRICK_TYPE_MAX> texture;
+	static std::array<unsigned int, BRICK_TYPE_MAX> textures;
 
 private:
 	void updateTextures();
@@ -97,12 +101,12 @@ public:
 
 	void updateBuffer() override;
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
-	const glm::ivec3& getPos();
+	const glm::ivec3& getPos() const;
 	void setPos(const int _y, const int _x, const int _z);
 	void move(const int _dy, const int _dx, const int _dz);
 
 	void setType(const int _type);
-	const int getType();
+	const int getType() const;
 };
 
 class CPlayer
@@ -135,7 +139,7 @@ public:
 	CBrick& operator()(const glm::ivec3 _pos);
 	CBrick& operator()(const int _y, const int _x, const int _z);
 
-	const bool isPosition(const int _y, const int _x, const int _z);
+	const bool isPosition(const int _y, const int _x, const int _z) const;
 
 };
 
@@ -152,8 +156,23 @@ public:
 	void reset();
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 	void move(const float _dx, const float _dz);
-	const int getY();
+	const int getY() const;
 	void setSpeed(const int _speed);
 	void update();
+
+};
+
+class CItem : public CShape
+{
+private:
+	glm::ivec3 pos = { 0.f, 0.f, 0.f };
+	bool size_dir = false;
+	int size_time = 50;
+
+public:
+	void updateBuffer() override;
+	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+	void update();
+	void setPos(const int _y, const int _x, const int _z);
 
 };

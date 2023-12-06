@@ -84,6 +84,8 @@ private:
 	std::array<CMap, MAP_MAX> maps;
 	CBackground			background_image;
 	CLava				lava;
+
+	CItem				item;
 	
 	// 전역 변수
 	float d = 0.f;
@@ -188,11 +190,13 @@ public:
 
 		player.updateBuffer();
 		lava.updateBuffer();
+		item.updateBuffer();
 		background_image.updateBuffer();
 
 		for (auto& map : maps)
 			map.updateBuffer();
 
+		item.setPos(2, 0, -1);
 		
 		// --
 		// set basic variable
@@ -269,6 +273,8 @@ public:
 		player.draw(view, proj, mode, light);
 
 		lava.draw(view, proj, mode, light);
+
+		item.draw(view, proj, mode, light);
 
 		glutSwapBuffers();
 	}
@@ -1426,6 +1432,7 @@ public:
 		Dead();
 
 		lava.update();
+		item.update();
 	}
 
 

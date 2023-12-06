@@ -25,6 +25,9 @@ unsigned int createTexture(const char* _name)
 // CShape member function
 // -----
 
+CShape::~CShape()
+{}
+
 void CShape::setUniform(const SView& _view, const glm::mat4& _proj, const SLight& _light, const GLuint _program)
 {
 	unsigned int lightPosLocation = glGetUniformLocation(_program, "lightPos");
@@ -257,7 +260,7 @@ void CShape::setMatrix(CShape& _other)
 	mats = _other.mats;
 }
 
-const size_t CShape::getMatrixSize()
+const size_t CShape::getMatrixSize() const
 {
 	return mats.size();
 }
@@ -271,13 +274,13 @@ void CShape::popMatrix()
 // CBrick member function
 // -----
 
-std::array<unsigned int, BRICK_TYPE_MAX> CBrick::texture = {-1};
+std::array<unsigned int, BRICK_TYPE_MAX> CBrick::textures = {-1};
 
 CBrick::CBrick()
 {
 	setData(SHAPE_DICE);
 	setColor(1.f, 1.f, 1.f);
-	if (texture[0] == -1)
+	if (textures[0] == -1)
 		updateTextures();
 }
 
@@ -286,7 +289,7 @@ CBrick::CBrick(const glm::ivec3& _pos)
 	setData(SHAPE_DICE);
 	setColor(1.f, 1.f, 1.f);
 	pos = _pos;
-	if (texture[0] == -1)
+	if (textures[0] == -1)
 		updateTextures();
 }
 
@@ -298,7 +301,7 @@ void CBrick::updateBuffer()
 void CBrick::updateTextures()
 {
 	for (int i = 0; i < BRICK_TYPE_MAX; ++i)
-		texture[i] = createTexture(BRICK_IMAGE[i]);
+		textures[i] = createTexture(BRICK_IMAGE[i]);
 }
 
 void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
@@ -311,14 +314,14 @@ void CBrick::draw(const SView& _view, const glm::mat4& _proj, const int _mode, c
 
 	setUniform(_view, _proj, _light, _program);
 
-	glBindTexture(GL_TEXTURE_2D, texture[type]);
+	glBindTexture(GL_TEXTURE_2D, textures[type]);
 
 	drawBuffer(_mode);
 
 	popMatrix();
 }
 
-const glm::ivec3& CBrick::getPos()
+const glm::ivec3& CBrick::getPos() const
 {
 	return pos;
 }
@@ -340,7 +343,7 @@ void CBrick::setType(const int _type)
 	type = _type;
 }
 
-const int CBrick::getType()
+const int CBrick::getType() const
 {
 	return type;
 }
@@ -433,7 +436,7 @@ CBrick& CMap::operator()(const int _y, const int _x, const int _z)
 	return (*this)(glm::ivec3(_x, _y, _z));
 }
 
-const bool CMap::isPosition(const int _y, const int _x, const int _z)
+const bool CMap::isPosition(const int _y, const int _x, const int _z) const
 {
 	for (auto& brick : bricks)
 		if (brick.getPos() == glm::ivec3(_x, _y, _z))
@@ -490,6 +493,11 @@ int& CPlayer::getstatus()
 // -----
 // CBrick member function
 // -----
+
+CBackground::~CBackground()
+{
+	glDeleteTextures(1, &texture);
+}
 
 void CBackground::updateBuffer()
 {
@@ -561,7 +569,7 @@ void CLava::move(const float _dx, const float _dz)
 	pos.z += _dz;
 }
 
-const int CLava::getY()
+const int CLava::getY() const
 {
 	return static_cast<int>(floorf(pos.y));
 }
@@ -574,4 +582,43 @@ void CLava::setSpeed(const int _speed)
 void CLava::update()
 {
 	pos.y += 0.001f * static_cast<float>(speed);
+}
+
+void CItem::updateBuffer()
+{
+	setData(SHAPE_SPHERE);
+	setColor(1.f, 0.5f, 0.f);
+	translate(0, 0.f, -0.05f, 0.f);
+	scale(0, 0.392837782f, 0.392837782f, 0.392837782f);
+	scale(0, 0.25f, 0.25f, 0.25f);
+	CShape::updateBuffer();
+}
+
+void CItem::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	translate(getMatrixSize(), static_cast<float>(pos.x), static_cast<float>(pos.y), static_cast<float>(pos.z));
+	CShape::draw(_view, _proj, _mode, _light);
+	popMatrix();
+}
+
+void CItem::update()
+{
+	size_time--;
+	if (size_dir) {
+		scale(1, 0.99f, 0.99f, 0.99f);
+	}
+	else {
+		float value = 100.f / 99.f;
+		scale(1, value, value, value);
+	}
+
+	if (size_time <= 0) {
+		size_time = 100;
+		size_dir = !size_dir;
+	}
+}
+
+void CItem::setPos(const int _y, const int _x, const int _z)
+{
+	pos = { _x, _y, _z };
 }
