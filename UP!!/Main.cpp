@@ -453,7 +453,7 @@ public:
 		switch (_key) {
 		case GLUT_KEY_UP:
 			if (playerstate.hold) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					if (HoldCheckFront() == true) {
 						moving_front_hold = true;
 						playerstate.zPos -= 1;
@@ -471,14 +471,14 @@ public:
 				}
 			}
 			else if (CheckFront() == 1) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_MOVING);
 					moving_front = true;
 					playerstate.zPos -= 1;
 				}
 			}
 			else if (CheckFront() == 2) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_front_up = true;
 					playerstate.zPos -= 1;
@@ -486,7 +486,7 @@ public:
 				}
 			}
 			else if (CheckFront() == 3) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_front_down = true;
 					playerstate.zPos -= 1;
@@ -510,7 +510,7 @@ public:
 			break;
 		case GLUT_KEY_DOWN:
 			if (playerstate.hold) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					if (HoldCheckBack() == true) {
 						moving_back_hold = true;
 						playerstate.zPos += 1;
@@ -529,13 +529,13 @@ public:
 			}
 			else if (CheckBack() == 1) {
 				player.changeStatus(PLAYER_MOVING);
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					moving_back = true;
 					playerstate.zPos += 1;
 				}
 			}
 			else if (CheckBack() == 2) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_up = true;
 					playerstate.zPos += 1;
@@ -543,7 +543,7 @@ public:
 				}
 			}
 			else if (CheckBack() == 3) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_down = true;
 					playerstate.zPos += 1;
@@ -565,7 +565,7 @@ public:
 			break;
 		case GLUT_KEY_LEFT:
 			if (playerstate.hold) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					if (HoldCheckLeft() == true) {
 						moving_left_hold = true;
 						playerstate.xPos -= 1;
@@ -583,14 +583,14 @@ public:
 				}
 			}
 			else if (CheckLeft() == 1) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_MOVING);
 					moving_left = true;
 					playerstate.xPos -= 1;
 				}
 			}
 			else if (CheckLeft() == 2) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_up = true;
 					playerstate.xPos -= 1;
@@ -598,7 +598,7 @@ public:
 				}
 			}
 			else if (CheckLeft() == 3) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_down = true;
 					playerstate.xPos -= 1;
@@ -620,7 +620,7 @@ public:
 			break;
 		case GLUT_KEY_RIGHT:
 			if (playerstate.hold) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					if (HoldCheckRight() == true) {
 						moving_right_hold = true;
 						playerstate.xPos += 1;
@@ -638,14 +638,14 @@ public:
 				}
 			}
 			else if (CheckRight() == 1) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_MOVING);
 					moving_right = true;
 					playerstate.xPos += 1;
 				}
 			}
 			else if (CheckRight() == 2) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_up = true;
 					playerstate.xPos += 1;
@@ -653,7 +653,7 @@ public:
 				}
 			}
 			else if (CheckRight() == 3) {
-				if (moving_time == 0) {
+				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_down = true;
 					playerstate.xPos += 1;
