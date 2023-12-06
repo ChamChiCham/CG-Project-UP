@@ -142,15 +142,12 @@ class CLava
 {
 	std::array<CShape, 49> shapes;
 	glm::vec3 pos = {0.f, -10.f, 0.f};
-	bool moving = false;
-	int speed = 5;
+	int speed = 0;
 
 public:
 	void updateBuffer();
 	void reset();
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
-	void changeMoving(const bool _moving);
-	void changeMoving();
 	void move(const float _dx, const float _dz);
 	const int getY();
 	void setSpeed(const int _speed);
