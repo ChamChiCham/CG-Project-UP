@@ -357,73 +357,75 @@ public:
 			}
 			break;
 		case 'a':
-			if (playerstate.hold == true) {
-				player.changeStatus(PLAYER_STAND);
-				playerstate.hold = false;
-				playerstate.hard = false;
-			}
-			else {
-				if (playerstate.way == front) {
-					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
-						player.changeStatus(PLAYER_HOLD);
-						playerstate.hold = true;
-						playerstate.hold_brick_xPos = playerstate.xPos;
-						playerstate.hold_brick_yPos = playerstate.yPos + 1;
-						playerstate.hold_brick_zPos = playerstate.zPos - 1;
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 1) {
-							playerstate.hard = true;
-						}
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 2) {
-							playerstate.hold = false;
-							player.changeStatus(PLAYER_STAND);
+			if (moving_time == 0) {
+				if (playerstate.hold == true) {
+					player.changeStatus(PLAYER_STAND);
+					playerstate.hold = false;
+					playerstate.hard = false;
+				}
+				else {
+					if (playerstate.way == front) {
+						if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1)) {
+							player.changeStatus(PLAYER_HOLD);
+							playerstate.hold = true;
+							playerstate.hold_brick_xPos = playerstate.xPos;
+							playerstate.hold_brick_yPos = playerstate.yPos + 1;
+							playerstate.hold_brick_zPos = playerstate.zPos - 1;
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 1) {
+								playerstate.hard = true;
+							}
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1).getType() == 2) {
+								playerstate.hold = false;
+								player.changeStatus(PLAYER_STAND);
+							}
 						}
 					}
-				}
-				else if (playerstate.way == back) {
-					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
-						player.changeStatus(PLAYER_HOLD);
-						playerstate.hold = true;
-						playerstate.hold_brick_xPos = playerstate.xPos;
-						playerstate.hold_brick_yPos = playerstate.yPos + 1;
-						playerstate.hold_brick_zPos = playerstate.zPos + 1;
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 1) {
-							playerstate.hard = true;
-						}
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 2) {
-							playerstate.hold = false;
-							player.changeStatus(PLAYER_STAND);
-						}
-					}
-				}
-				else if (playerstate.way == right) {
-					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
-						player.changeStatus(PLAYER_HOLD);
-						playerstate.hold = true;
-						playerstate.hold_brick_xPos = playerstate.xPos + 1;
-						playerstate.hold_brick_yPos = playerstate.yPos + 1;
-						playerstate.hold_brick_zPos = playerstate.zPos;
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 1) {
-							playerstate.hard = true;
-						}
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 2) {
-							playerstate.hold = false;
-							player.changeStatus(PLAYER_STAND);
+					else if (playerstate.way == back) {
+						if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1)) {
+							player.changeStatus(PLAYER_HOLD);
+							playerstate.hold = true;
+							playerstate.hold_brick_xPos = playerstate.xPos;
+							playerstate.hold_brick_yPos = playerstate.yPos + 1;
+							playerstate.hold_brick_zPos = playerstate.zPos + 1;
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 1) {
+								playerstate.hard = true;
+							}
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1).getType() == 2) {
+								playerstate.hold = false;
+								player.changeStatus(PLAYER_STAND);
+							}
 						}
 					}
-				}
-				else if (playerstate.way == left) {
-					if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
-						player.changeStatus(PLAYER_HOLD);
-						playerstate.hold = true;
-						playerstate.hold_brick_xPos = playerstate.xPos - 1;
-						playerstate.hold_brick_yPos = playerstate.yPos + 1;
-						playerstate.hold_brick_zPos = playerstate.zPos;
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 1) {
-							playerstate.hard = true;
+					else if (playerstate.way == right) {
+						if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos)) {
+							player.changeStatus(PLAYER_HOLD);
+							playerstate.hold = true;
+							playerstate.hold_brick_xPos = playerstate.xPos + 1;
+							playerstate.hold_brick_yPos = playerstate.yPos + 1;
+							playerstate.hold_brick_zPos = playerstate.zPos;
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 1) {
+								playerstate.hard = true;
+							}
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos).getType() == 2) {
+								playerstate.hold = false;
+								player.changeStatus(PLAYER_STAND);
+							}
 						}
-						if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 2) {
-							playerstate.hold = false;
-							player.changeStatus(PLAYER_STAND);
+					}
+					else if (playerstate.way == left) {
+						if (maps[current_map].isPosition(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos)) {
+							player.changeStatus(PLAYER_HOLD);
+							playerstate.hold = true;
+							playerstate.hold_brick_xPos = playerstate.xPos - 1;
+							playerstate.hold_brick_yPos = playerstate.yPos + 1;
+							playerstate.hold_brick_zPos = playerstate.zPos;
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 1) {
+								playerstate.hard = true;
+							}
+							if (maps[current_map](playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos).getType() == 2) {
+								playerstate.hold = false;
+								player.changeStatus(PLAYER_STAND);
+							}
 						}
 					}
 				}
