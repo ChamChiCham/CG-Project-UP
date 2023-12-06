@@ -181,6 +181,9 @@ public:
 		for (int i = 0; i < MAP_MAX; ++i)
 			maps[i].init(i);
 
+		// 스테이지 테스트용 코드
+		//current_map = 0;
+
 		map_ptr = &maps[current_map];
 
 		player.updateBuffer();
@@ -229,6 +232,8 @@ public:
 		std::cout << "8/5: 카메라 y 강제 이동" << std::endl;
 		std::cout << "1/3: 카메라 z 강제 이동" << std::endl;
 		std::cout << "=/-: 스테이지 강제 변환" << std::endl;
+		std::cout << "s: 강제 아이템 발동" << std::endl;
+		std::cout << "`: 강제 사망" << std::endl;
 	}
 
 	// --
@@ -425,11 +430,13 @@ public:
 			}
 			PrintPos();
 			break;
-		case 'm':
+		case 's':
 			playerstate.item = true;
 			break;
 		case ']':
-			
+			break;
+		case '`':
+			playerstate.dead = true;
 			break;
 		}
 	}
@@ -1344,13 +1351,14 @@ public:
 				maps[current_map].updateBuffer();
 			}
 			// 다시 조명 켜기
-			if (ending_time == 200) {
+			if (ending_time == 198) {
 				ending_time = 0;
 				ending = false;
+				playerstate.dead = false;
+				playerstate.hold = false;
 				if (current_map != 4) {
 					lava.setSpeed(5);
 				}
-				playerstate.dead = false;
 			}
 			ending_time++;
 		}
