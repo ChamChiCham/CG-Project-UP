@@ -76,6 +76,9 @@
     <Text Include="coordinates\map3.txt">
       <Filter>coordinates</Filter>
     </Text>
+    <Text Include="coordinates\map4.txt">
+      <Filter>coordinates</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="glsl\Fragment_common.glsl">

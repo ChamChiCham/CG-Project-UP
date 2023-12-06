@@ -352,29 +352,17 @@ const int CBrick::getType()
 
 void CMap::init(const int _idx)
 {
-
-	std::ifstream inputFile;
-	bricks.clear();
-	bricks.reserve(150);
-	switch (_idx)
-	{
-	case 0:
-		inputFile.open("coordinates\\map0.txt");
-		break;
-	case 1:
-		inputFile.open("coordinates\\map1.txt");
-		break;
-	case 2:
-		inputFile.open("coordinates\\map2.txt");
-		break;
-	case 3:
-		inputFile.open("coordinates\\map3.txt");
-		break;
-	default:
+	if (_idx >= MAP_MAX) {
 		std::cerr << "CMap()::init(): invaild index." << std::endl;
 		return;
 	}
 
+	std::string filename = "coordinates\\map" + std::to_string(_idx) + ".txt";
+	std::ifstream inputFile;
+	bricks.clear();
+	bricks.reserve(150);
+
+	inputFile.open(filename);
 	if (!inputFile.is_open()) {
 		std::cerr << "CMap()::init(): cannot open file." << std::endl;
 		return;
@@ -395,7 +383,6 @@ void CMap::init(const int _idx)
 	}
 
 	inputFile.close();
-
 }
 
 void CMap::updateBuffer()
