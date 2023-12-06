@@ -130,6 +130,7 @@ public:
 	void init(const int _idx);
 	void updateBuffer();
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
+	const bool createBrick(const int _y, const int _x, const int _z, const int _type);
 
 	CBrick& operator()(const glm::ivec3 _pos);
 	CBrick& operator()(const int _y, const int _x, const int _z);
@@ -140,6 +141,8 @@ public:
 
 class CLava
 {
+private:
+
 	std::array<CShape, 49> shapes;
 	glm::vec3 pos = {0.f, -10.f, 0.f};
 	bool moving = false;

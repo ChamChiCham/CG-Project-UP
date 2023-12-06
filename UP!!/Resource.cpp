@@ -410,6 +410,18 @@ void CMap::draw(const SView& _view, const glm::mat4& _proj, const int _mode, con
 		brick.draw(_view, _proj, _mode, _light);
 }
 
+const bool CMap::createBrick(const int _y, const int _x, const int _z, const int _type)
+{
+	if (!isPosition(_y, _x, _z))
+		return false;
+	CBrick brick_new;
+	brick_new.setPos(_y, _x, _z);
+	brick_new.setType(_type);
+	brick_new.updateBuffer();
+	bricks.push_back(brick_new);
+	return true;
+}
+
 CBrick& CMap::operator()(const glm::ivec3 _pos)
 {
 	if (bricks.empty()) {
