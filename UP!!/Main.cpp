@@ -129,6 +129,7 @@ private:
 		int way;
 		bool hold;
 		bool hard;
+		bool dead;
 		int hold_brick_xPos;
 		int hold_brick_yPos;
 		int hold_brick_zPos;
@@ -409,7 +410,7 @@ public:
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			lava.changeMoving(true);
+			
 			break;
 		}
 	}
@@ -1255,10 +1256,18 @@ public:
 		}
 	}
 
+	// 사망 조건
+	void Dead()
+	{
+		if (lava.getY() >= playerstate.yPos) {
+			playerstate.dead = true;
+		}
+	}
+
 	// 엔딩 애니메이션
 	void EndingAnimation()
 	{
-		if (ending) {
+		if (ending || playerstate.dead) {
 			if (ending_time < 100) {
 				light.r -= 0.1f;
 				light.g -= 0.1f;
@@ -1274,8 +1283,12 @@ public:
 				for (int i = 0; i < 4; i++) {
 					player.getShape().clearMatrix(i);
 				}
-				current_map++;
-				map_ptr = &maps[current_map];
+				if (playerstate.dead == false) {
+					current_map++;
+					map_ptr = &maps[current_map];
+				}
+				ending = true;
+
 				playerstate.xPos = 0;
 				playerstate.yPos = 0;
 				playerstate.zPos = 0;
@@ -1295,11 +1308,21 @@ public:
 				s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 				view.eye.x = view.at.x + d * cos(s + glm::radians(-20.f));
 				view.eye.z = view.at.z + d * sin(s + glm::radians(-20.f));
+
+				lava.reset();
+				lava.setSpeed(0);
+
+				maps[current_map].init(current_map);
+				maps[current_map].updateBuffer();
 			}
 			// 다시 조명 켜기
 			if (ending_time == 200) {
 				ending_time = 0;
 				ending = false;
+				if (current_map != 4) {
+					lava.setSpeed(5);
+				}
+				playerstate.dead = false;
 			}
 			ending_time++;
 		}
@@ -1356,6 +1379,8 @@ public:
 		EndingAnimation();
 
 		LandingAnimation();
+
+		Dead();
 
 		lava.update();
 	}

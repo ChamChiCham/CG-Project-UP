@@ -555,7 +555,7 @@ void CLava::updateBuffer()
 void CLava::reset()
 {
 	pos = { 0.f, -10.f, 0.f };
-	speed = 1;
+	speed = 0;
 }
 
 
@@ -566,16 +566,6 @@ void CLava::draw(const SView& _view, const glm::mat4& _proj, const int _mode, co
 		shape.draw(_view, _proj, _mode, _light);
 		shape.popMatrix();
 	}
-}
-
-void CLava::changeMoving(const bool _moving)
-{
-	moving = _moving;
-}
-
-void CLava::changeMoving()
-{
-	moving = !moving;
 }
 
 void CLava::move(const float _dx, const float _dz)
@@ -596,8 +586,5 @@ void CLava::setSpeed(const int _speed)
 
 void CLava::update()
 {
-	if (!moving)
-		return;
-
 	pos.y += 0.001f * static_cast<float>(speed);
 }
