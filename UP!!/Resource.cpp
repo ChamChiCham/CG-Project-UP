@@ -412,7 +412,7 @@ void CMap::draw(const SView& _view, const glm::mat4& _proj, const int _mode, con
 
 const bool CMap::createBrick(const int _y, const int _x, const int _z, const int _type)
 {
-	if (!isPosition(_y, _x, _z))
+	if (isPosition(_y, _x, _z))
 		return false;
 	CBrick brick_new;
 	brick_new.setPos(_y, _x, _z);

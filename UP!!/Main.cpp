@@ -130,6 +130,7 @@ private:
 		bool hold;
 		bool hard;
 		bool dead;
+		bool item;
 		int hold_brick_xPos;
 		int hold_brick_yPos;
 		int hold_brick_zPos;
@@ -332,6 +333,24 @@ public:
 				std::cout << "Current Map: " << current_map << std::endl;
 				break;
 			}
+			break;
+		case 'd':
+			if (playerstate.item) {
+				if (playerstate.way == front) {
+					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1, BRICK_TYPE_NORMAL);
+				}
+				else if (playerstate.way == back) {
+					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1, BRICK_TYPE_NORMAL);
+				}
+				else if (playerstate.way == left) {
+					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos, BRICK_TYPE_NORMAL);
+				}
+				else if (playerstate.way == right) {
+					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos, BRICK_TYPE_NORMAL);
+				}
+				playerstate.item = false;
+			}
+			break;
 		case 'a':
 			if (playerstate.hold == true) {
 				player.changeStatus(PLAYER_STAND);
@@ -407,7 +426,7 @@ public:
 			PrintPos();
 			break;
 		case 'm':
-			player.changeStatus(PLAYER_HANG);
+			playerstate.item = true;
 			break;
 		case ']':
 			
