@@ -121,6 +121,7 @@ public:
 	CItem(const glm::ivec3& _pos);
 	void updateBuffer() override;
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+	const glm::ivec3& getPos() const;
 	void update();
 };
 
@@ -160,6 +161,8 @@ public:
 
 
 	const bool isPosition(const int _y, const int _x, const int _z) const;
+	const bool isPositionItem(const int _y, const int _x, const int _z) const;
+	void deleteItem(const int _y, const int _x, const int _z);
 
 };
 

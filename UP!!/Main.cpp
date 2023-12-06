@@ -1427,6 +1427,11 @@ public:
 
 		lava.update();
 		maps[current_map].update();
+
+		if (maps[current_map].isPositionItem(playerstate.yPos, playerstate.xPos, playerstate.zPos)) {
+			maps[current_map].deleteItem(playerstate.yPos, playerstate.xPos, playerstate.zPos);
+			playerstate.item = true;
+		}
 	}
 
 

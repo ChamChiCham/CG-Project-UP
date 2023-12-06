@@ -462,6 +462,26 @@ const bool CMap::isPosition(const int _y, const int _x, const int _z) const
 	return false;
 }
 
+const bool CMap::isPositionItem(const int _y, const int _x, const int _z) const
+{
+	for (const auto& item : items) {
+		if (item.getPos() == glm::ivec3(_x, _y, _z)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void CMap::deleteItem(const int _y, const int _x, const int _z)
+{
+	for (std::list<CItem>::iterator iter = items.begin(); iter != items.end(); ++iter) {
+		if (iter->getPos() == glm::ivec3(_x, _y, _z)) {
+			items.erase(iter);
+			return;
+		}
+	}
+}
+
 // -----
 // CPlayer member function
 // -----
@@ -619,9 +639,14 @@ void CItem::updateBuffer()
 
 void CItem::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
-	translate(getMatrixSize(), static_cast<float>(pos.x), static_cast<float>(pos.y), static_cast<float>(pos.z));
+	translate(getMatrixSize(), static_cast<float>(pos.x), static_cast<float>(pos.y + 1), static_cast<float>(pos.z));
 	CShape::draw(_view, _proj, _mode, _light);
 	popMatrix();
+}
+
+const glm::ivec3& CItem::getPos() const
+{
+	return pos;
 }
 
 void CItem::update()
