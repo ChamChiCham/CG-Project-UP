@@ -83,6 +83,7 @@ private:
 	CMap*				map_ptr = nullptr;
 	std::array<CMap, 4> maps;
 	CBackground			background_image;
+	CLava				lava;
 	
 	// 전역 변수
 	float d = 0.f;
@@ -181,7 +182,7 @@ public:
 		map_ptr = &maps[current_map];
 
 		player.updateBuffer();
-
+		lava.updateBuffer();
 		background_image.updateBuffer();
 
 		for (auto& map : maps)
@@ -259,6 +260,8 @@ public:
 		map_ptr->draw(view, proj, mode, light);
 
 		player.draw(view, proj, mode, light);
+
+		lava.draw(view, proj, mode, light);
 
 		glutSwapBuffers();
 	}
@@ -406,7 +409,7 @@ public:
 			player.changeStatus(PLAYER_HANG);
 			break;
 		case ']':
-			maps[current_map](0, 0, 0).setType(BRICK_TYPE_ENDING);
+			lava.changeMoving(true);
 			break;
 		}
 	}
@@ -895,6 +898,7 @@ public:
 			player.getShape().translate(3, 0.f, 0.f, -0.1f);
 			view.eye.z -= 0.1f;
 			view.at.z -= 0.1f;
+			lava.move(0.f, -0.1f);
 			EndMove();
 		}
 	}
@@ -906,6 +910,7 @@ public:
 			view.at.z -= 0.1f;
 			view.eye.y += 0.1f;
 			view.at.y += 0.1f;
+			lava.move(0.f, -0.1f);
 			EndMove();
 		}
 	}
@@ -917,6 +922,7 @@ public:
 			view.at.z -= 0.1f;
 			view.eye.y -= 0.1f;
 			view.at.y -= 0.1f;
+			lava.move(0.f, -0.1f);
 			EndMove();
 		}
 	}
@@ -927,11 +933,13 @@ public:
 				player.getShape().translate(3, 0.f, 0.f, -0.01f);
 				view.eye.z -= 0.01f;
 				view.at.z -= 0.01f;
+				lava.move(0.f, -0.01f);
 			}
 			else {
 				player.getShape().translate(3, 0.f, 0.f, -0.1f);
 				view.eye.z -= 0.1f;
 				view.at.z -= 0.1f;
+				lava.move(0.f, -0.1f);
 			}
 			for (int i = 0; i < 5; i++) {
 				if (maps[current_map].isPosition(playerstate.yPos - i, playerstate.xPos, playerstate.zPos - 1)) {
@@ -949,6 +957,7 @@ public:
 			player.getShape().translate(3, 0.f, 0.f, 0.1f);
 			view.eye.z += 0.1f;
 			view.at.z += 0.1f;
+			lava.move(0.f, 0.1f);
 			EndMove();
 		}
 	}
@@ -960,6 +969,7 @@ public:
 			view.at.z += 0.1f;
 			view.eye.y += 0.1f;
 			view.at.y += 0.1f;
+			lava.move(0.f, 0.1f);
 			EndMove();
 		}
 	}
@@ -971,6 +981,7 @@ public:
 			view.at.z += 0.1f;
 			view.eye.y -= 0.1f;
 			view.at.y -= 0.1f;
+			lava.move(0.f, 0.1f);
 			EndMove();
 		}
 	}
@@ -981,11 +992,13 @@ public:
 				player.getShape().translate(3, 0.f, 0.f, 0.01f);
 				view.eye.z += 0.01f;
 				view.at.z += 0.01f;
+				lava.move(0.f, 0.01f);
 			}
 			else {
 				player.getShape().translate(3, 0.f, 0.f, 0.1f);
 				view.eye.z += 0.1f;
 				view.at.z += 0.1f;
+				lava.move(0.f, 0.1f);
 			}
 			EndMove();
 		}
@@ -998,6 +1011,7 @@ public:
 			player.getShape().translate(3, -0.1f, 0.f, 0.f);
 			view.eye.x -= 0.1f;
 			view.at.x -= 0.1f;
+			lava.move(-0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1009,6 +1023,7 @@ public:
 			view.at.x -= 0.1f;
 			view.eye.y += 0.1;
 			view.at.y += 0.1;
+			lava.move(-0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1020,6 +1035,7 @@ public:
 			view.at.x -= 0.1f;
 			view.eye.y -= 0.1;
 			view.at.y -= 0.1;
+			lava.move(-0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1030,11 +1046,13 @@ public:
 				player.getShape().translate(3, -0.01f, 0.f, 0.f);
 				view.eye.x -= 0.01f;
 				view.at.x -= 0.01f;
+				lava.move(-0.01f, 0.f);
 			}
 			else {
 				player.getShape().translate(3, -0.1f, 0.f, 0.f);
 				view.eye.x -= 0.1f;
 				view.at.x -= 0.1f;
+				lava.move(-0.1f, 0.f);
 			}
 			EndMove();
 		}
@@ -1047,6 +1065,7 @@ public:
 			player.getShape().translate(3, 0.1f, 0.f, 0.f);
 			view.eye.x += 0.1f;
 			view.at.x += 0.1f;
+			lava.move(0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1058,6 +1077,7 @@ public:
 			view.at.x += 0.1f;
 			view.eye.y += 0.1;
 			view.at.y += 0.1;
+			lava.move(0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1069,6 +1089,7 @@ public:
 			view.at.x += 0.1f;
 			view.eye.y -= 0.1;
 			view.at.y -= 0.1;
+			lava.move(0.1f, 0.f);
 			EndMove();
 		}
 	}
@@ -1079,11 +1100,13 @@ public:
 				player.getShape().translate(3, 0.01f, 0.f, 0.f);
 				view.eye.x += 0.01f;
 				view.at.x += 0.01f;
+				lava.move(0.01f, 0.f);
 			}
 			else {
 				player.getShape().translate(3, 0.1f, 0.f, 0.f);
 				view.eye.x += 0.1f;
 				view.at.x += 0.1f;
+				lava.move(0.1f, 0.f);
 			}
 			EndMove();
 		}
@@ -1333,6 +1356,8 @@ public:
 		EndingAnimation();
 
 		LandingAnimation();
+
+		lava.update();
 	}
 
 

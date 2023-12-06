@@ -514,3 +514,78 @@ void CBackground::draw(const SView& _view, const glm::mat4& _proj, const int _mo
 
 	drawBuffer(_mode);
 }
+
+// -----
+// CLava member function
+// -----
+
+void CLava::updateBuffer()
+{
+	for (int i = 1; i < 8; ++i) {
+		for (int j = 0; j < 7; ++j) {
+			int idx = (i - 1) * 7 + j;
+			float x =
+				i % 2 ?
+				(j - 3) * 2.f :
+				(j - 3) * 2.f + 1.f;
+			float z = (i - 4) * 2.f;
+			shapes[idx].setData(SHAPE_SPHERE);
+			shapes[idx].setColor(0.7f, 0.f, 0.f);
+			shapes[idx].translate(0, 0.f, -0.05f, 0.f);
+			shapes[idx].scale(0, 0.392837782f, 0.392837782f, 0.392837782f);
+			shapes[idx].scale(0, 2.f, 2.f, 2.f);
+			shapes[idx].translate(0, x, 0.f, z);
+			shapes[idx].updateBuffer();
+		}
+	}
+}
+
+void CLava::reset()
+{
+	pos = { 0.f, -10.f, 0.f };
+	speed = 1;
+}
+
+
+void CLava::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	for (auto& shape : shapes) {
+		shape.translate(shape.getMatrixSize(), pos);
+		shape.draw(_view, _proj, _mode, _light);
+		shape.popMatrix();
+	}
+}
+
+void CLava::changeMoving(const bool _moving)
+{
+	moving = _moving;
+}
+
+void CLava::changeMoving()
+{
+	moving = !moving;
+}
+
+void CLava::move(const float _dx, const float _dz)
+{
+	pos.x += _dx;
+	pos.z += _dz;
+}
+
+const int CLava::getY()
+{
+	return static_cast<int>(floorf(pos.y));
+}
+
+void CLava::setSpeed(const int _speed)
+{
+	speed = _speed;
+}
+
+void CLava::update()
+{
+	if (!moving)
+		return;
+
+	pos.y += 0.001f * static_cast<float>(speed);
+}
