@@ -311,12 +311,14 @@ public:
 			view.at.z -= 0.1;
 			break;
 		case 'q':
+		case 'Q':
 			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
 			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 			view.eye.x = view.at.x + d * cos(s + glm::radians(2.f));
 			view.eye.z = view.at.z + d * sin(s + glm::radians(2.f));
 			break;
 		case 'e':
+		case 'E':
 			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
 			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
 			view.eye.x = view.at.x + d * cos(s + glm::radians(-2.f));
@@ -340,6 +342,7 @@ public:
 			}
 			break;
 		case 'd':
+		case 'D':
 			if (playerstate.item) {
 				if (playerstate.way == front) {
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1, BRICK_TYPE_NORMAL);
@@ -357,6 +360,7 @@ public:
 			}
 			break;
 		case 'a':
+		case 'A':
 			if (moving_time == 0) {
 				if (playerstate.hold == true) {
 					player.changeStatus(PLAYER_STAND);
@@ -433,6 +437,7 @@ public:
 			PrintPos();
 			break;
 		case 's':
+		case 'S':
 			playerstate.item = true;
 			break;
 		case ']':
