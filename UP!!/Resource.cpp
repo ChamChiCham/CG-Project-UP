@@ -488,7 +488,7 @@ void CMap::deleteItem(const int _y, const int _x, const int _z)
 
 void CPlayer::updateBuffer()
 {
-	glm::vec3 color(0.647f, 0.4f, 1.f);
+	glm::vec3 color(PLAYER_COLOR_NORMAL);
 	shapes[PLAYER_STAND].setData(SHAPE_PLAYER_STAND);
 	shapes[PLAYER_STAND].setColor(color);
 	shapes[PLAYER_STAND].updateBuffer();
@@ -525,6 +525,18 @@ CShape& CPlayer::getShape()
 int& CPlayer::getstatus()
 {
 	return status;
+}
+
+void CPlayer::setColor(const float _r, const float _g, const float _b)
+{
+	for (auto& shape : shapes)
+		shape.setColor(_r, _g, _b);
+}
+
+void CPlayer::setColor(const glm::vec3& _color)
+{
+	for (auto& shape : shapes)
+		shape.setColor(_color);
 }
 
 

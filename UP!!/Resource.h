@@ -137,6 +137,8 @@ public:
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light);
 	void changeStatus(const int _status);
 	int& getstatus();
+	void setColor(const float _r, const float _g, const float _b);
+	void setColor(const glm::vec3& _color);
 	CShape& getShape();
 };
 

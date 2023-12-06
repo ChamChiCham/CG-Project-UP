@@ -45,6 +45,9 @@
     <ClCompile Include="Resource.cpp">
       <Filter>resource</Filter>
     </ClCompile>
+    <ClCompile Include="Define.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CShaderMgr.h">

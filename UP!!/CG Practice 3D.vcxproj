@@ -131,6 +131,7 @@
   <ItemGroup>
     <ClCompile Include="CShaderMgr.cpp" />
     <ClCompile Include="CShapeDataMgr.cpp" />
+    <ClCompile Include="Define.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="Struct.cpp" />

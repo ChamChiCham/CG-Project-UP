@@ -357,6 +357,7 @@ public:
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos, BRICK_TYPE_NORMAL);
 				}
 				playerstate.item = false;
+				player.setColor(PLAYER_COLOR_NORMAL);
 			}
 			break;
 		case 'a':
@@ -1431,6 +1432,7 @@ public:
 		if (maps[current_map].isPositionItem(playerstate.yPos, playerstate.xPos, playerstate.zPos)) {
 			maps[current_map].deleteItem(playerstate.yPos, playerstate.xPos, playerstate.zPos);
 			playerstate.item = true;
+			player.setColor(PLAYER_COLOR_ITEM);
 		}
 	}
 

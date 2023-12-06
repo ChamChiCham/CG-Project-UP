@@ -3,6 +3,10 @@
 #include <gl/freeglut.h>
 #include <gl/freeglut_ext.h>
 
+#include <glm/glm/glm.hpp>
+#include <glm/glm/ext.hpp>
+#include <glm/glm/gtc/matrix_transform.hpp>
+
 // --
 // Define variable
 // --
@@ -69,5 +73,8 @@ constexpr const char* BRICK_IMAGE[4] = {
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
 
+
+extern const glm::vec3 PLAYER_COLOR_NORMAL;
+extern const glm::vec3 PLAYER_COLOR_ITEM;
 
 
