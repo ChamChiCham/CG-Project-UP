@@ -1273,6 +1273,15 @@ public:
 				}
 			}
 		}
+		else if (current_map == 4) {
+			if (playerstate.yPos == 3) {
+				if (playerstate.xPos == 2) {
+					if (playerstate.zPos == -1) {
+						exit(0);
+					}
+				}
+			}
+		}
 	}
 
 	// 사망 조건
