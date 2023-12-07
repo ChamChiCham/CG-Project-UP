@@ -437,10 +437,6 @@ public:
 			}
 			PrintPos();
 			break;
-		case 's':
-		case 'S':
-			playerstate.item = true;
-			break;
 		case ']':
 			break;
 		case '`':
