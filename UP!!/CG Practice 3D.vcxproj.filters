@@ -97,4 +97,9 @@
       <Filter>GLSL</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\example.png">
+      <Filter>resource</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

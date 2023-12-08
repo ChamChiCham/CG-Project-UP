@@ -73,7 +73,7 @@ constexpr const char* BRICK_IMAGE[4] = {
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
 
-constexpr const char* EFFECT_IMAGE = "image\\up.png";
+constexpr const char* EFFECT_IMAGE = "image\\example.png";
 
 
 extern const glm::vec3 PLAYER_COLOR_NORMAL;
