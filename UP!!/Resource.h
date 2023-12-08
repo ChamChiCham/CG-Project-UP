@@ -20,6 +20,9 @@
 #include "Define.h"
 #include "Struct.h"
 
+#include <fmod.hpp>
+#include <fmod_errors.h>
+
 unsigned int createTexture(const char* _name);
 
 class CShape
