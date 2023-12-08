@@ -98,6 +98,8 @@ private:
 
 	bool ending;
 
+	bool true_ending;
+
 	bool moving_left;
 	bool moving_right;
 	bool moving_front;
@@ -355,15 +357,19 @@ public:
 			if (playerstate.item) {
 				if (playerstate.way == front) {
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos - 1, BRICK_TYPE_NORMAL);
+					SoundMgr->playSound(SOUND_ITEM_USE);
 				}
 				else if (playerstate.way == back) {
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos, playerstate.zPos + 1, BRICK_TYPE_NORMAL);
+					SoundMgr->playSound(SOUND_ITEM_USE);
 				}
 				else if (playerstate.way == left) {
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos - 1, playerstate.zPos, BRICK_TYPE_NORMAL);
+					SoundMgr->playSound(SOUND_ITEM_USE);
 				}
 				else if (playerstate.way == right) {
 					maps[current_map].createBrick(playerstate.yPos + 1, playerstate.xPos + 1, playerstate.zPos, BRICK_TYPE_NORMAL);
+					SoundMgr->playSound(SOUND_ITEM_USE);
 				}
 				playerstate.item = false;
 				player.setColor(PLAYER_COLOR_NORMAL);
@@ -482,6 +488,7 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 0;
 						movewait_brick_zPos = -1;
+						SoundMgr->playSound(SOUND_PUSH);
 					}
 				}
 				// 블럭 당기면 적절한 위치에 착지
@@ -541,6 +548,7 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 0;
 						movewait_brick_zPos = 1;
+						SoundMgr->playSound(SOUND_PUSH);
 					}
 				}
 				// 블럭 당기면 적절한 위치에 착지
@@ -598,6 +606,7 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = -1;
 						movewait_brick_zPos = 0;
+						SoundMgr->playSound(SOUND_PUSH);
 					}
 				}
 				// 블럭 당기면 적절한 위치에 착지
@@ -655,6 +664,7 @@ public:
 						movewait_brick_yPos = 0;
 						movewait_brick_xPos = 1;
 						movewait_brick_zPos = 0;
+						SoundMgr->playSound(SOUND_PUSH);
 					}
 				}
 				// 블럭 당기면 적절한 위치에 착지
@@ -1325,7 +1335,7 @@ public:
 			if (playerstate.yPos == 3) {
 				if (playerstate.xPos == 2) {
 					if (playerstate.zPos == -1) {
-						exit(0);
+						true_ending = true;
 					}
 				}
 			}
@@ -1336,6 +1346,9 @@ public:
 	void Dead()
 	{
 		if (lava.getY() >= playerstate.yPos) {
+			if (playerstate.dead == false) {
+				SoundMgr->playSound(SOUND_DEAD);
+			}
 			playerstate.dead = true;
 		}
 	}
@@ -1405,6 +1418,23 @@ public:
 		}
 	}
 
+	// 진엔딩 애니메이션
+	void TrueEndingAnimation()
+	{
+		if (true_ending) {
+			if (ending_time < 300) {
+				light.r -= 0.01f;
+				light.g -= 0.01f;
+				light.b -= 0.01f;
+			}
+			// 다시 조명 켜기
+			if (ending_time == 300) {
+				exit(0);
+			}
+			ending_time++;
+		}
+	}
+
 	// 플레이어 위치 확인용 코드
 	void PrintPos() {
 		std::cout << "-------------" << std::endl;
@@ -1458,6 +1488,8 @@ public:
 		LandingAnimation();
 
 		Dead();
+
+		TrueEndingAnimation();
 
 		lava.update();
 		maps[current_map].update();

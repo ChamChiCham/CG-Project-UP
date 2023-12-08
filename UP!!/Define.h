@@ -58,8 +58,12 @@ enum
 	SOUND_ITEM = 0,
 	SOUND_JUMP,
 	SOUND_PORTAL,
-	SOUND_MAX
+	SOUND_DEAD,
+	SOUND_PUSH,
+	SOUND_MAX,
 
+	SOUND_ITEM_USE = 0
+	
 };
 
 
@@ -77,11 +81,12 @@ constexpr const char* BRICK_IMAGE[4] = {
 	"image\\ending_brick_con.png"
 };
 
-constexpr const char* SOUND_NAME[3] = {
+constexpr const char* SOUND_NAME[SOUND_MAX] = {
 	"sound\\item_get.mp3",
 	"sound\\jump.mp3",
-	"sound\\potal.mp3"
-
+	"sound\\potal.mp3",
+	"sound\\dead.mp3",
+	"sound\\push.mp3",
 };
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
