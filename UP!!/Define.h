@@ -55,7 +55,9 @@ enum
 
 	LAVA_SIZE = 7,
 
-	SOUND_0 = 0,
+	SOUND_ITEM = 0,
+	SOUND_JUMP,
+	SOUND_PORTAL,
 	SOUND_MAX
 
 };
@@ -75,8 +77,11 @@ constexpr const char* BRICK_IMAGE[4] = {
 	"image\\ending_brick_con.png"
 };
 
-constexpr const char* SOUND_NAME[1] = {
-	"sound\\background.mp3"
+constexpr const char* SOUND_NAME[3] = {
+	"sound\\item_get.mp3",
+	"sound\\jump.mp3",
+	"sound\\potal.mp3"
+
 };
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";

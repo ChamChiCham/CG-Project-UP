@@ -16,6 +16,7 @@
 #include "Define.h"
 #include "Struct.h"
 #include "Resource.h"
+#include "CSoundMgr.h"
 
 
 // --
@@ -86,6 +87,7 @@ private:
 	CBackground			background_image;
 	CLava				lava;
 	std::array<CEffect, 20>	effects;
+	CSoundMgr*			SoundMgr = CSoundMgr::getInst();
 	
 	// 전역 변수
 	float d = 0.f;
@@ -503,6 +505,7 @@ public:
 					moving_front_up = true;
 					playerstate.zPos -= 1;
 					playerstate.yPos += 1;
+					SoundMgr->playSound(SOUND_JUMP);
 				}
 			}
 			else if (CheckFront() == 3) {
@@ -511,6 +514,7 @@ public:
 					moving_front_down = true;
 					playerstate.zPos -= 1;
 					playerstate.yPos -= 1;
+					SoundMgr->playSound(SOUND_JUMP);
 				}
 			}
 			if (playerstate.hold == false) {
@@ -558,6 +562,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_up = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.zPos += 1;
 					playerstate.yPos += 1;
 				}
@@ -566,6 +571,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_back_down = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.zPos += 1;
 					playerstate.yPos -= 1;
 				}
@@ -613,6 +619,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_up = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.xPos -= 1;
 					playerstate.yPos += 1;
 				}
@@ -621,6 +628,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_left_down = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.xPos -= 1;
 					playerstate.yPos -= 1;
 				}
@@ -668,6 +676,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_up = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.xPos += 1;
 					playerstate.yPos += 1;
 				}
@@ -676,6 +685,7 @@ public:
 				if (moving_time == 0 && landing == 0) {
 					player.changeStatus(PLAYER_HANG);
 					moving_right_down = true;
+					SoundMgr->playSound(SOUND_JUMP);
 					playerstate.xPos += 1;
 					playerstate.yPos -= 1;
 				}
@@ -1276,6 +1286,7 @@ public:
 				if (playerstate.xPos == 3) {
 					if (playerstate.zPos == -3) {
 						ending = true;
+						SoundMgr->playSound(SOUND_PORTAL);
 					}
 				}
 			}
@@ -1285,6 +1296,7 @@ public:
 				if (playerstate.xPos == 2) {
 					if (playerstate.zPos == -11) {
 						ending = true;
+						SoundMgr->playSound(SOUND_PORTAL);
 					}
 				}
 			}
@@ -1294,6 +1306,7 @@ public:
 				if (playerstate.xPos == 6) {
 					if (playerstate.zPos == -8) {
 						ending = true;
+						SoundMgr->playSound(SOUND_PORTAL);
 					}
 				}
 			}
@@ -1303,6 +1316,7 @@ public:
 				if (playerstate.xPos == 2) {
 					if (playerstate.zPos == -11) {
 						ending = true;
+						SoundMgr->playSound(SOUND_PORTAL);
 					}
 				}
 			}
@@ -1452,6 +1466,7 @@ public:
 			maps[current_map].deleteItem(playerstate.yPos, playerstate.xPos, playerstate.zPos);
 			playerstate.item = true;
 			player.setColor(PLAYER_COLOR_ITEM);
+			SoundMgr->playSound(SOUND_ITEM);
 		}
 
 		for (auto& effect : effects)

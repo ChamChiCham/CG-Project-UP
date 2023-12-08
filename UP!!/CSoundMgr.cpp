@@ -14,10 +14,11 @@ CSoundMgr::CSoundMgr()
 	system->createSound("sound\\background.mp3", FMOD_LOOP_NORMAL, 0, &bgm);
 
 	for (int i = 0; i < SOUND_MAX; ++i) {
-		system->createSound(SOUND_NAME[i], FMOD_LOOP_OFF, 0, &sounds[0]);
+		system->createSound(SOUND_NAME[i], FMOD_LOOP_OFF, 0, &sounds[i]);
 	}
 
 	system->playSound(bgm, 0, false, &channels[0]);
+	channels[0]->setVolume(0.3);
 }
 
 CSoundMgr* CSoundMgr::getInst()
