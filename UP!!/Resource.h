@@ -13,6 +13,7 @@
 #include <string>
 #include <array>
 #include <list>
+#include <random>
 
 #include "CShaderMgr.h"
 #include "CShapeDataMgr.h"
@@ -72,12 +73,28 @@ class CBackground : public CShape
 {
 private:
 	unsigned int texture;
+	int y;
 
 public:
 	~CBackground();
 
 	void updateBuffer() override;
+	void setPosY(const int _y);
 	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+};
+
+class CEffect : public CShape
+{
+private:
+	unsigned int texture;
+	glm::vec3 pos = {0, 0, 0};
+
+public:
+	~CEffect();
+	void updateBuffer() override;
+	void draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light) override;
+	void update();
+
 };
 
 class CBrick : public CShape
