@@ -31,6 +31,7 @@ namespace cham
 	GLvoid Keyboard(unsigned char key, int x, int y);
 	GLvoid SpecialKeys(int key, int x, int y);
 	GLvoid Motion(int x, int y);
+	GLvoid KeyboardUp(unsigned char key, int x, int y);
 }
 
 
@@ -84,6 +85,7 @@ private:
 	std::array<CMap, MAP_MAX> maps;
 	CBackground			background_image;
 	CLava				lava;
+	std::array<CEffect, 20>	effects;
 	
 	// 전역 변수
 	float d = 0.f;
@@ -136,6 +138,8 @@ private:
 		int hold_brick_zPos;
 	};
 	CurrentState playerstate;
+
+	int mode_y = 0;
 public:
 
 	// --
@@ -172,6 +176,7 @@ public:
 		glutTimerFunc(10, cham::GameLoop, 1);
 		glutMotionFunc(cham::Motion);
 		glutSpecialFunc(cham::SpecialKeys);
+		glutKeyboardUpFunc(cham::KeyboardUp);
 
 		// --
 		// create shape data
@@ -192,6 +197,9 @@ public:
 
 		for (auto& map : maps)
 			map.updateBuffer();
+
+		for (auto& effect : effects)
+			effect.updateBuffer();
 
 		
 		// --
@@ -252,10 +260,7 @@ public:
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		int mode = GL_TRIANGLES;
-		float angle = std::atan2f(view.at.z - view.eye.z, view.eye.x - view.at.x);
-		background_image.clearMatrix(1);
-		background_image.rotate(1, glm::degrees(angle) + 90.f, 0.f, 1.f, 0.f);
-		background_image.translate(1, 0.f, playerstate.yPos, 0.f);
+		background_image.setPosY(playerstate.yPos);
 		background_image.draw(view, proj, mode, light);
 
 		glEnable(GL_DEPTH_TEST);
@@ -269,6 +274,11 @@ public:
 		player.draw(view, proj, mode, light);
 
 		lava.draw(view, proj, mode, light);
+
+		if (current_map == 0) {
+			for (auto& effect : effects)
+				effect.draw(view, proj, mode, light);
+		}
 
 		glutSwapBuffers();
 	}
@@ -312,17 +322,15 @@ public:
 			break;
 		case 'q':
 		case 'Q':
-			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
-			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
-			view.eye.x = view.at.x + d * cos(s + glm::radians(2.f));
-			view.eye.z = view.at.z + d * sin(s + glm::radians(2.f));
+			if (mode_y == -1)
+				break;
+			mode_y -= 1;
 			break;
 		case 'e':
 		case 'E':
-			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
-			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
-			view.eye.x = view.at.x + d * cos(s + glm::radians(-2.f));
-			view.eye.z = view.at.z + d * sin(s + glm::radians(-2.f));
+			if (mode_y == 1)
+				break;
+			mode_y += 1;
 			break;
 		case '=':
 			if (current_map < MAP_MAX - 1) {
@@ -441,6 +449,22 @@ public:
 			break;
 		case '`':
 			playerstate.dead = true;
+			break;
+		}
+	}
+
+	void KeyboardUp(const unsigned char _key, const int _x, const int _y)
+	{
+		switch (_key) {
+		case 'q':
+		case 'Q':
+			mode_y += 1;
+			break;
+		case 'e':
+		case 'E':
+			mode_y -= 1;
+			break;
+		default:
 			break;
 		}
 	}
@@ -1430,6 +1454,16 @@ public:
 			playerstate.item = true;
 			player.setColor(PLAYER_COLOR_ITEM);
 		}
+
+		for (auto& effect : effects)
+			effect.update();
+
+		if (mode_y != 0) {
+			d = sqrtf(powf(view.eye.x - view.at.x, 2) + powf(view.eye.z - view.at.z, 2));
+			s = atan2f(view.eye.z - view.at.z, view.eye.x - view.at.x);
+			view.eye.x = view.at.x + d * cos(s + glm::radians(1.f * -mode_y));
+			view.eye.z = view.at.z + d * sin(s + glm::radians(1.f * -mode_y));
+		}
 	}
 
 
@@ -1476,6 +1510,10 @@ GLvoid cham::SpecialKeys(int key, int x, int y)
 	CWindowMgr::getInst()->SpecialKeys(key, x, y);
 }
 
+GLvoid cham::KeyboardUp(unsigned char key, int x, int y)
+{
+	CWindowMgr::getInst()->KeyboardUp(key, x, y);
+}
 // (CALLBACK) Main Loop
 // FPS : 100
 GLvoid cham::GameLoop(int value)

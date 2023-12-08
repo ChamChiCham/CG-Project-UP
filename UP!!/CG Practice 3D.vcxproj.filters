@@ -97,9 +97,4 @@
       <Filter>GLSL</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="image\normal_brick.png">
-      <Filter>resource</Filter>
-    </Image>
-  </ItemGroup>
 </Project>

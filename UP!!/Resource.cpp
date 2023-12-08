@@ -560,10 +560,20 @@ void CBackground::updateBuffer()
 	CShape::updateTextureBuffer();
 }
 
+void CBackground::setPosY(const int _y)
+{
+	y = _y;
+}
+
 void CBackground::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
 {
 	GLuint _program = CShaderMgr::getInst()->getProgram(SHADER_TEXTURE_PROGRAM);
 	glUseProgram(_program);
+
+	float angle = std::atan2f(_view.at.z - _view.eye.z, _view.eye.x - _view.at.x);
+	clearMatrix(1);
+	rotate(1, glm::degrees(angle) + 90.f, 0.f, 1.f, 0.f);
+	translate(1, 0.f, y, 0.f);
 
 	setUniform(_view, _proj, _light, _program);
 
@@ -676,4 +686,55 @@ void CItem::update()
 		size_time = 100;
 		size_dir = !size_dir;
 	}
+}
+
+//
+// CEffect
+//
+
+CEffect::~CEffect()
+{
+	glDeleteTextures(1, &texture);
+}
+
+void CEffect::updateBuffer()
+{
+	texture = createTexture(EFFECT_IMAGE);
+	setData(SHAPE_SQUARE);
+	setColor(1.f, 1.f, 1.f);
+	scale(0, 2.f, 2.f, 2.f);
+	rotate(0, 90.f, 1.f, 0.f, 0.f);
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<float> rand_angle(0.f, static_cast<float>(std::_Pi) * 2.f);
+	std::uniform_real_distribution<float> rand_y(-10.f, 20.f);
+	pos.x = std::cosf(rand_angle(gen)) * 10.f;
+	pos.z = std::sinf(rand_angle(gen)) * 10.f;
+	pos.y = rand_y(gen);
+	CShape::updateTextureBuffer();
+}
+
+void CEffect::draw(const SView& _view, const glm::mat4& _proj, const int _mode, const SLight& _light)
+{
+	GLuint _program = CShaderMgr::getInst()->getProgram(SHADER_TEXTURE_PROGRAM);
+	glUseProgram(_program);
+	
+	float angle = std::atan2f(_view.at.z - _view.eye.z, _view.eye.x - _view.at.x);
+	clearMatrix(1);
+	rotate(1, glm::degrees(angle) + 90.f, 0.f, 1.f, 0.f);
+	translate(getMatrixSize(), pos);
+
+	setUniform(_view, _proj, _light, _program);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	drawBuffer(_mode);
+	popMatrix();
+}
+
+void CEffect::update()
+{
+	pos.y += 0.05f;
+	if (pos.y >= 20.f)
+		pos.y = -10.f;
 }
