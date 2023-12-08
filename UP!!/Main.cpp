@@ -240,7 +240,6 @@ public:
 		std::cout << "8/5: 카메라 y 강제 이동" << std::endl;
 		std::cout << "1/3: 카메라 z 강제 이동" << std::endl;
 		std::cout << "=/-: 스테이지 강제 변환" << std::endl;
-		std::cout << "s: 강제 아이템 발동" << std::endl;
 		std::cout << "`: 강제 사망" << std::endl;
 	}
 
@@ -443,7 +442,7 @@ public:
 					}
 				}
 			}
-			PrintPos();
+			// printPos();
 			break;
 		case ']':
 			break;
@@ -1211,7 +1210,7 @@ public:
 				bottom_adjustment = 0;
 			}
 
-			PrintPos();
+			// PrintPos();
 		}
 	}
 
