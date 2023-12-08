@@ -706,7 +706,7 @@ void CEffect::updateBuffer()
 	rotate(0, 90.f, 1.f, 0.f, 0.f);
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> rand_angle(0.f, static_cast<float>(std::_Pi) * 2.f);
+	std::uniform_real_distribution<float> rand_angle(0.f, glm::pi<float>() * 2.f);
 	std::uniform_real_distribution<float> rand_y(-10.f, 20.f);
 	pos.x = std::cosf(rand_angle(gen)) * 10.f;
 	pos.z = std::sinf(rand_angle(gen)) * 10.f;
