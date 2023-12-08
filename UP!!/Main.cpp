@@ -140,6 +140,7 @@ private:
 	CurrentState playerstate;
 
 	int mode_y = 0;
+
 public:
 
 	// --
@@ -246,7 +247,6 @@ public:
 	// --
 	// process function
 	// --
-
 
 	// --
 	// define cb func

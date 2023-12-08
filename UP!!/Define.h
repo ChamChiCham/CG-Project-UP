@@ -53,7 +53,11 @@ enum
 
 	MAP_MAX = 5,
 
-	LAVA_SIZE = 7
+	LAVA_SIZE = 7,
+
+	SOUND_0 = 0,
+	SOUND_MAX
+
 };
 
 
@@ -69,6 +73,10 @@ constexpr const char* BRICK_IMAGE[4] = {
 	"image\\hard_brick_con.png",
 	"image\\motionless_brick_con.png",
 	"image\\ending_brick_con.png"
+};
+
+constexpr const char* SOUND_NAME[1] = {
+	"sound\\background.mp3"
 };
 
 constexpr const char* BACKGROUND_IMAGE = "image\\background.jpg";
