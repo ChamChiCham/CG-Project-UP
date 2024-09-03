@@ -1,0 +1,132 @@
+﻿  CShaderMgr.cpp
+  CShapeDataMgr.cpp
+  CSoundMgr.cpp
+  Define.cpp
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\CSoundMgr.cpp(21,25): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  Main.cpp
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(131,17): warning C4091: 'typedef ': 변수를 선언하지 않으면 'CWindowMgr::CurrentState' 왼쪽은 무시됩니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(303,18): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(303,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(303,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(303,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(303,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(304,17): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(304,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(304,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(304,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(304,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(307,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(307,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(307,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(307,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(307,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(308,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(308,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(308,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(308,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(308,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(311,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(311,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(311,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(311,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(311,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(312,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(312,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(312,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(312,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(312,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(315,18): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(315,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(315,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(315,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(315,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(316,17): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(316,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(316,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(316,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(316,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(319,18): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(319,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(319,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(319,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(319,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(320,17): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(320,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(320,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(320,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(320,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(323,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(323,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(323,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(323,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(323,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(324,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(324,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(324,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(324,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(324,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1098,18): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1098,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1098,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1098,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1098,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1099,17): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1099,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1099,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1099,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1099,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1110,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1110,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1110,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1110,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1110,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1111,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1111,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1111,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1111,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1111,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1152,18): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1152,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1152,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1152,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1152,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1153,17): warning C4305: '+=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1153,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1153,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1153,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1153,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1164,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1164,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1164,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1164,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1164,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1165,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1165,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1165,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1165,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1165,17): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1240,15): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1247,40): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1248,18): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1248,18): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1248,18): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1248,18): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1248,18): warning C4305:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1249,17): warning C4305: '-=': 'double'에서 'T'(으)로 잘립니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1249,17): warning C4305:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1249,17): warning C4305:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1249,17): warning C4305:             T=float
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Main.cpp(1249,17): warning C4305:         ]
+  Resource.cpp
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(277,62): warning C4838: 'int'에서 '_Ty'(으)로의 변환에는 축소 변환이 필요합니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(277,62): warning C4838:         with
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(277,62): warning C4838:         [
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(277,62): warning C4838:             _Ty=unsigned int
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(277,62): warning C4838:         ]
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(576,20): warning C4244: '인수': 'int'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(620,38): warning C4267: '인수': 'size_t'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(664,25): warning C4267: '인수': 'size_t'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\Resource.cpp(725,25): warning C4267: '인수': 'size_t'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Struct.cpp
+  코드를 생성하고 있습니다...
+  CG Practice 3D.vcxproj -> C:\Users\민경원\OneDrive\바탕 화면\자료\2학년 2학기\CG-Project-UP\UP!!\x64\Debug\CG Practice 3D.exe
